@@ -19,6 +19,8 @@ function commaStringToArray(str) {
 	}
 	return arr;
 }
+
+
 function findValueInJson(json, paths) {
 	var value = null;
 	var pathLength = paths.length;
@@ -26,18 +28,33 @@ function findValueInJson(json, paths) {
 
 	for (var i = 0; i < pathLength; i++) {
 		if ( paths[i] ) {
-			jsonPath = 'json.data["' + paths[i] + '"]'; // Wrap property so we can have dashes in it
-			if ( eval(jsonPath) ) {
+			jsonPath = 'json.data["' + paths[i].split('.').join('"]["') + '"]'; // Wrap property so we can have dashes in it
+			try {
 				value = eval(jsonPath);
+			} catch(e) {
+				// Noop
+			}
+			if(value) {
 				if (value.trim() === "")
 					value = null; // Reset value if empty string (skip empties)
 				else
 					break; // Expect the first property in the string is the most important one to use
-			}
-		}
-	}
+			} // if value
+		} // if paths[i]
+	} // for
 	return value;
+} // function findValueInJson
+
+
+function isString(o) {
+	return typeof o === 'string' || o instanceof String;
 }
+
+
+function stringOrNull(o) {
+	return isString(o) ? o : null;
+}
+
 
 exports.getBlockRobots = function(content) {
 	var setInMixin = content.x[appNamePath]
@@ -55,14 +72,16 @@ exports.getPageTitle = function(content, site) {
 
 	var userDefinedPaths = siteConfig.pathsTitles;
 	var userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
-	var userDefinedValue = userDefinedPaths ? findValueInJson(content,userDefinedArray) : null;
+	var userDefinedValue = userDefinedPaths ? findValueInJson(content, userDefinedArray) : null;
 
-	var metaTitle = setInMixin ? content.x[appNamePath][mixinPath].seoTitle // Get from mixin
-			: userDefinedValue // json property defined by user as important
-			|| content.data.title || content.data.heading || content.data.header // Use other typical content titles (overrides displayName)
-			|| content.displayName // Use content's display name
-			|| siteConfig.seoTitle // Use default og-title for site
-			|| site.displayName; // Use site default
+
+	var metaTitle = setInMixin ? stringOrNull(content.x[appNamePath][mixinPath].seoTitle) // Get from mixin
+			: stringOrNull(userDefinedValue) // json property defined by user as important
+			|| stringOrNull(content.data.title) || stringOrNull(content.data.heading) || stringOrNull(content.data.header) // Use other typical content titles (overrides displayName)
+			|| stringOrNull(content.displayName) // Use content's display name
+			|| stringOrNull(siteConfig.seoTitle) // Use default og-title for site
+			|| stringOrNull(site.displayName) // Use site default
+			|| ''
 
 	return metaTitle;
 };
