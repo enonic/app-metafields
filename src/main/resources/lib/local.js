@@ -108,10 +108,9 @@ function stringOrNull(o) {
 }
 
 // Concat site title? Trigger if set to true in settings, or if not set at all (default = true)
-exports.getAppendix = function(site, siteConfig, isFrontpage) {
+exports.getAppendix = function(site, isFrontpage) {
+	var siteConfig = getConfig(site);
 	var titleAppendix = '';
-	log.info(siteConfig.titleBehaviour);
-	log.info(!siteConfig.hasOwnProperty("titleBehaviour"));
 	if (siteConfig.titleBehaviour || !siteConfig.hasOwnProperty("titleBehaviour") ) {
 		 var separator = siteConfig.titleSeparator || '-';
 		 var titleRemoveOnFrontpage = siteConfig.hasOwnProperty("titleFrontpageBehaviour") ? siteConfig.titleFrontpageBehaviour : true; // Default true needs to be respected

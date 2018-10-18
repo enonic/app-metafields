@@ -14,7 +14,7 @@ exports.responseFilter = function(req, res) {
 
     var isFrontpage = site._path === content._path;
     var pageTitle = libs.local.getPageTitle(content, site);
-    var titleAppendix = libs.local.getAppendix(site, siteConfig, isFrontpage);
+    var titleAppendix = libs.local.getAppendix(site, isFrontpage);
 
     var siteVerification = siteConfig.siteVerification || null;
 
