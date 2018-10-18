@@ -21,8 +21,6 @@ function getConfig(site) {
 			config[prop] = value;
 		}
 	}
-
-	log.info(JSON.stringify(config, null, 2));
 	return config;
 }
 exports.getLang = function(content, site) {
