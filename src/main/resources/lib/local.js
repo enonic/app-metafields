@@ -14,9 +14,15 @@ function getConfig(site) {
 	}
 	if(app.config && !config.disableAppConfig) {
 		for (var prop in app.config) {
-			config[prop] = app.config[prop];
+			var value = app.config[prop];
+			if (value === 'true' || value === 'false') {
+				value = value === 'true';
+			}
+			config[prop] = value;
 		}
 	}
+
+	log.info(JSON.stringify(config, null, 2));
 	return config;
 }
 exports.getLang = function(content, site) {
@@ -106,6 +112,8 @@ function stringOrNull(o) {
 // Concat site title? Trigger if set to true in settings, or if not set at all (default = true)
 exports.getAppendix = function(site, siteConfig, isFrontpage) {
 	var titleAppendix = '';
+	log.info(siteConfig.titleBehaviour);
+	log.info(!siteConfig.hasOwnProperty("titleBehaviour"));
 	if (siteConfig.titleBehaviour || !siteConfig.hasOwnProperty("titleBehaviour") ) {
 		 var separator = siteConfig.titleSeparator || '-';
 		 var titleRemoveOnFrontpage = siteConfig.hasOwnProperty("titleFrontpageBehaviour") ? siteConfig.titleFrontpageBehaviour : true; // Default true needs to be respected
