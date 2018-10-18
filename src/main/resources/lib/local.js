@@ -12,6 +12,11 @@ function getConfig(site) {
 	if (!config) {
 		config = exports.getSiteConfig(site, app.name);
 	}
+	if(app.config && !config.disableAppConfig) {
+		for (var prop in app.config) {
+			config[prop] = app.config[prop];
+		}
+	}
 	return config;
 }
 exports.getLang = function(content, site) {

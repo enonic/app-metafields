@@ -20,6 +20,12 @@
 					<help-text>Caution: Use this to ask search engines to ignore your entire site!</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
+				<input name="disableAppConfig" type="CheckBox">
+					<label>Don't overwrite values from app.config</label>
+					<help-text></help-text>
+					<default>false</default>
+					<occurrences minimum="0" maximum="1"/>
+				</input>
 			</items>
 		</field-set>
 		<field-set name="twitter">
