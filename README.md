@@ -74,7 +74,11 @@ We only evaluate for matches in the JSON `data`-node for each content. So if you
 
 You can put a file on the server to configure all running instances of the app across one server. This is a feature that you can turn on and off per site through the app setting interface when adding the app. This means you can have the cake and eat it too!
 
-Locate your `$XP_HOME/config/` folder and create a file called `app-metafields.cfg` and fill it with data like this, changing variables as needed (comment out the ones you don't need).
+Locate your `$XP_HOME/config/` folder and create a file called `app-metafields.cfg` and fill it with data like this, changing variables as needed (comment out the ones you don't need):
+
+```
+canonical=true
+```
 
 ## Waterfall logic for meta fields
 
