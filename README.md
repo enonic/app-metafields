@@ -13,6 +13,7 @@ This app will add the following functionality to your site:
 7. Canonical meta tag
 8. Robots.txt exclude setting
 9. **New in 1.6**: Widget for Content Studio that displays all the SEO data!
+10. **New in 1.7**: Configure the app through config-files on the server.
 
 ## Installation
 
@@ -69,6 +70,12 @@ Add field names as comma separated strings, like `field1, field2, long-fieldname
 
 We only evaluate for matches in the JSON `data`-node for each content. So if you fill in `myField`, we'll look for `data.myField` in the content JSON (refer to Enonic XP's documentation on `getContent()` function).
 
+### Advanced: configuration files
+
+You can put a file on the server to configure all running instances of the app across one server. This is a feature that you can turn on and off per site through the app setting interface when adding the app. This means you can have the cake and eat it too!
+
+Locate your `$XP_HOME/config/` folder and create a file called `app-metafields.cfg` and fill it with data like this, changing variables as needed (comment out the ones you don't need).
+
 ## Waterfall logic for meta fields
 
 We will always add the meta fields for title and description, and most of the meta fields for Open Graph. However, if we cannot find any image to use, we won't add the meta fields for Open Graph image or Twitter Cards image.
@@ -107,6 +114,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 | Version | XP version |
 | ------------- | ------------- |
+| 1.7.0 | 6.15.0 |
 | 1.6.0 | 6.15.0 |
 | 1.5.0 | 6.15.0 |
 | 1.4.0 | 6.7.0 |
@@ -124,6 +132,10 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 | 0.5.0 | 6.3.0 |
 
 ## Changelog
+
+### Version 1.7.0
+
+* New: configure the app from configuration files on the server. Credit @edwardgronroos of TINE AS.
 
 ### Version 1.6.0
 

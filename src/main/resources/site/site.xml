@@ -22,7 +22,7 @@
 				</input>
 				<input name="disableAppConfig" type="CheckBox">
 					<label>Don't overwrite values from app.config</label>
-					<help-text></help-text>
+					<help-text>It's possible to configure this app for all your site through a file on the server, here you can disable this behavior.</help-text>
 					<default>false</default>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
