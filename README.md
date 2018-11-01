@@ -156,7 +156,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 ### Version 1.7.0
 
-* New: configure the app from configuration files on the server. Credit @edwardgronroos of TINE AS.
+* New: configure the app from configuration files on the server. Credit @edwardgronroos of TINE SA.
 * Fix: Inject the `og:` namespace prefix definition in the `<html>`-tag automatically.
 
 ### Version 1.6.0
