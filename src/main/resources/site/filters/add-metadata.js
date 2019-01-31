@@ -10,7 +10,7 @@ var view = resolve('add-metadata.html');
 exports.responseFilter = function(req, res) {
     var site = libs.portal.getSite();
     var content = libs.portal.getContent();
-	 var siteConfig = libs.common.getTheConfig(site);
+	var siteConfig = libs.common.getTheConfig(site);
 
     var isFrontpage = site._path === content._path;
     var pageTitle = libs.common.getPageTitle(content, site);
@@ -18,7 +18,9 @@ exports.responseFilter = function(req, res) {
 
     var siteVerification = siteConfig.siteVerification || null;
 
-    var url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
+	var url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
+	var contentForCanonicalUrl = libs.common.getContentForCanonicalUrl(content);
+    var canonicalUrl = contentForCanonicalUrl ? libs.portal.pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" }) : url;
     var fallbackImage = siteConfig.seoImage;
     var fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
     if (isFrontpage && siteConfig.frontpageImage) {
@@ -34,6 +36,7 @@ exports.responseFilter = function(req, res) {
         locale: libs.common.getLang(content,site),
         type: isFrontpage ? 'website' : 'article',
         url: url,
+        canonicalUrl: canonicalUrl,
         image: image,
         imageWidth: 1200, // Twice of 600x315, for retina
         imageHeight: 630,
