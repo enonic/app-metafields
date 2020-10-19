@@ -68,8 +68,6 @@ When figuring out what data to put in your meta fields, this app analyzes the cu
 
 Add field names as comma separated strings, like `field1, field2, long-fieldname3`. It will remove spaces and it will handle dashes and other special characters in your field names. These custom fields will be checked before any other fields. If you add more than one field here, we'll let the first one overwrite any other fields on its right hand side. So if we find data in `field2` we won't look in `long-fieldname3`. This gives you powerful control over your SEO!
 
-We only evaluate for matches in the JSON `data`-node for each content. So if you fill in `myField`, we'll look for `data.myField` in the content JSON (refer to Enonic XP's documentation on `getContent()` function).
-
 ### Advanced: default configuration files
 
 You can put a file on the server to configure all running instances of the app across one server. This is a feature that you can turn on and off per site through the app's configuration when adding the app (through the `Don't overwrite values from app.config` setting). This means you can have the cake and eat it too!
@@ -112,7 +110,7 @@ It's important to understand the waterfall logic we use when evaluating which da
 
 1. Current content's `SEO` mixin's `title` field.
 2. The app config's custom JSON paths, if any (in the order defined).
-3. Check in some commonly used fields: `title`, `header`, `heading`.
+3. Check in some commonly used fields: `data.title`, `data.header`, `data.heading`.
 4. The content's `displayName` field (all content has this field).
 5. See if the site itself has the `SEO` field `title` filled out.
 6. As a last resort, we default to the site's `displayName` field.
@@ -123,7 +121,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 1. Current content's `SEO` mixin's `description` field.
 2. The app config's custom JSON paths, if any (in the order defined).
-3. Check in some commonly used fields: `preface`, `description`, `summary`.
+3. Check in some commonly used fields: `data.preface`, `data.description`, `data.summary`.
 4. See if the site itself has the `SEO` field `description` filled out.
 5. As a last resort, we default to the site's `description` field (default Enonic XP data).
 6. An empty description is created.
@@ -132,7 +130,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 1. Current content's `SEO` mixin's `image` field.
 2. The app config's custom JSON paths, if any (in the order defined).
-3. Check in some commonly used fields: `image`, `images`.
+3. Check in some commonly used fields: `data.image`, `data.images`.
 4. Resort to the fallback image set on the app itself.
 5. If nothing is found the meta fields for the image are not created.
 
@@ -140,6 +138,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 | Version | XP version |
 | ------------- | ------------- |
+| 1.9.0 | 7.4.0 |
 | 1.8.0-1.8.3 | 7.0.0 |
 | 1.5.0-1.7.0 | 6.15.0 |
 | 1.1.4-1.4.0 | 6.7.0 |
@@ -148,6 +147,12 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 | 0.5.0 | 6.3.0 |
 
 ## Changelog
+
+## Version 1.9.0
+
+* Check whole content, not just `data`. This breaks backwards compatability.
+* Fix crash when `key` passed to `content.get` was not string when fetching OG image. 
+* Upgrade XP dependancy versions to 7.4.0
 
 ### Version 1.8.3
 
