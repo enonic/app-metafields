@@ -138,7 +138,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 | Version | XP version |
 | ------------- | ------------- |
-| 1.9.0 | 7.4.0 |
+| 1.9.0 | 7.4.1 |
 | 1.8.0-1.8.3 | 7.0.0 |
 | 1.5.0-1.7.0 | 6.15.0 |
 | 1.1.4-1.4.0 | 6.7.0 |
@@ -152,7 +152,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 * Check whole content, not just `data`. This breaks backwards compatability.
 * Fix crash when `key` passed to `content.get` was not string when fetching OG image. 
-* Upgrade XP dependancy versions to 7.4.0
+* Upgrade XP dependancy versions to 7.4.1
 
 ### Version 1.8.3
 
