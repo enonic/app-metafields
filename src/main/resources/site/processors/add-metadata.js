@@ -1,113 +1,128 @@
-var libs = {
-    portal: require('/lib/xp/portal'),
-    thymeleaf: require('/lib/thymeleaf'),
-    util: require('/lib/util'),
-    common: require('/lib/common')
+const libs = {
+  portal: require('/lib/xp/portal'),
+  util: require('/lib/util'),
+  common: require('/lib/common'),
+  cache: require('/lib/cache')
 };
 
-var view = resolve('add-metadata.html');
+const renderTemplate = (model) => `
+${model.blockRobots ? `<meta name="robots" content="noindex,nofollow" />` : ""}
+${model.canonical ? `<link rel="canonical" href="${model.url}" />` : ""}
+${model.siteVerification ? `<meta name="google-site-verification" content="${model.siteVerification}" />` : ""}
+<meta name="description" content="${model.description}" />
+<meta property="og:title" content="${model.title}" />
+<meta property="og:description" content="${model.description}" />
+<meta property="og:site_name" content="${model.siteName}" />
+<meta property="og:url" content="${model.url}" />
+<meta property="og:type" content="${model.type}" />
+<meta property="og:locale" content="${model.locale}" />
+${model.image ? `
+<meta property="og:image" content="${model.image}" />
+<meta property="og:image:width" content="${model.imageWidth}" />
+<meta property="og:image:height" content="${model.imageHeight}" />
+` : ""}
+${model.twitterUserName ? `
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${model.title}" />
+<meta name="twitter:description" content="${model.description}"/>
+${model.image ? `
+<meta name="twitter:image:src" content="${model.image}"/>
+` : ""}
+<meta name="twitter:site" content="${model.twitterUserName}"/>
+` : ""}
+`;
 
-exports.responseProcessor = function(req, res) {
-    var site = libs.portal.getSite();
-    var content = libs.portal.getContent();
-	 var siteConfig = libs.common.getTheConfig(site);
-
-    var isFrontpage = site._path === content._path;
-    var pageTitle = libs.common.getPageTitle(content, site);
-    var titleAppendix = libs.common.getAppendix(site, isFrontpage);
-
-    var siteVerification = siteConfig.siteVerification || null;
-
-    var url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
-    var fallbackImage = siteConfig.seoImage;
-    var fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
-    if (isFrontpage && siteConfig.frontpageImage) {
-        fallbackImage = siteConfig.frontpageImage;
-        fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
-    }
-    var image = libs.common.getOpenGraphImage(content, site, fallbackImage, fallbackImageIsPrescaled);
-
-    var params = {
-        title: pageTitle,
-        description: libs.common.getMetaDescription(content, site),
-        siteName: site.displayName,
-        locale: libs.common.getLang(content,site),
-        type: isFrontpage ? 'website' : 'article',
-        url: url,
-        image: image,
-        imageWidth: 1200, // Twice of 600x315, for retina
-        imageHeight: 630,
-        blockRobots: siteConfig.blockRobots || libs.common.getBlockRobots(content),
-        siteVerification: siteVerification,
-        canonical: siteConfig.canonical,
-        twitterUserName : siteConfig.twitterUsername
-    };
-
-    var metadata = libs.thymeleaf.render(view, params);
-
-    // Force arrays since single values will be return as string instead of array
-    res.pageContributions.headEnd = libs.util.data.forceArray(res.pageContributions.headEnd);
-    res.pageContributions.headEnd.push(metadata);
-
-    // Handle injection of title - use any existing tag by replacing its content.
-	 // Also - Locate the <html> tag and make sure the "og" namespace is added.
-    var titleHtml = '<title>' + pageTitle + titleAppendix + '</title>';
-	 var ogAttribute = 'og: http://ogp.me/ns#';
-    var titleAdded = false, ogAdded = false;
-    if (res.contentType === 'text/html') {
-         if (res.body) {
-            if (typeof res.body === 'string') {
-                // Find a title in the html and use that instead of adding our own title
-                var titleHasIndex = res.body.indexOf('<title>') > -1;
-                if (titleHasIndex) {
-                    res.body = res.body.replace(/(<title>)(.*?)(<\/title>)/i, titleHtml);
-                    titleAdded = true;
-                }
-					 // Find <html> and if it does not have proper "og"-prefix - inject it!
-					 var htmlIndex = res.body.toLowerCase().indexOf('<html');
-					 var endHtmlIndex = res.body.indexOf('>', htmlIndex);
-					 var thereIsAnAttributeThere = false;
-					 var tagAttributes = res.body.indexOf('=', htmlIndex);
-					 var prefixFound = false;
-					 if (tagAttributes) { thereIsAnAttributeThere = true; }
-					 if (thereIsAnAttributeThere) {
-						 var htmlTagContents = res.body.substr(htmlIndex+5, endHtmlIndex-htmlIndex-5).trim(); // Inside <html XX> - 5 is number of characters for <html
-						 var htmlTagAttributes = htmlTagContents.split("="); // Split on = so we can locate all the attributes.
-
-						 for (var i = 0; i < htmlTagAttributes.length; i++) {
-							if (htmlTagAttributes[i].toLowerCase().trim() === 'prefix') {
-								prefixFound = true;
-								if (htmlTagAttributes[i+1].indexOf(ogAttribute) === -1) {
-									//log.info("Before join - " + htmlTagAttributes[i+1]);
-									htmlTagAttributes[i+1] = htmlTagAttributes[i+1].substr(0,htmlTagAttributes[i+1].length-1) + ' ' + ogAttribute + htmlTagAttributes[i+1].substr(-1);
-									//log.info("After join - " + htmlTagAttributes[i+1]);
-								} else {
-									//log.info("Already in the tag!");
-								}
-							}
-						 }
-					 }
-					 // Join the new html element string, and create the new body to return.
-					 var fixedHtmlTag = htmlTagAttributes.join("=");
-					 if (!prefixFound) {
-						 fixedHtmlTag += ' prefix="' + ogAttribute + '"';
-					 }
-					 res.body = res.body.substr(0, htmlIndex+5)
-					 			 + ' '
-					 			 + fixedHtmlTag
-					 			 + res.body.substr(endHtmlIndex);
-            }
+const ogAttribute = 'og: http://ogp.me/ns#';
+const injectAttribute = (match, p1) => {
+  const htmlTag = match;
+  if (p1.length > 0) {
+    const prefixIndex = p1.indexOf("prefix=");
+    if (prefixIndex !== -1) {
+      htmlTag.replace(/prefix=\"([^"]*)"/, (match, p1) => {
+        if (p1 && p1.indexOf(ogAttribute) === -1) {
+          return `prefix="${p1} ${ogAttribute}"`
         }
+        return match;
+      });
+      return htmlTag;
     }
-    if (!titleAdded) {
-        res.pageContributions.headEnd.push(titleHtml);
-    }
+  }
+  return `<html${p1} prefix="${ogAttribute}">`;
+};
 
-    if (req.params) {
-        if (req.params.debug === 'true') {
-            res.applyFilters = false; // Skip other filters
+const siteConfigCache = libs.cache.newCache({
+  size: 20,
+  expire: 10 * 60 // 10 minute cache
+});
+
+exports.responseProcessor = (req, res) => {
+  const site = libs.portal.getSite();
+  const content = libs.portal.getContent();
+  const siteConfig = siteConfigCache.get(`${site._path}_${req.branch}`, () => libs.common.getTheConfig(site));
+
+  const isFrontpage = site._path === content._path;
+  const pageTitle = libs.common.getPageTitle(content, site, siteConfig);
+  const titleAppendix = libs.common.getAppendix(site, isFrontpage, siteConfig);
+
+  const siteVerification = siteConfig.siteVerification || null;
+
+  const url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
+  let fallbackImage = siteConfig.seoImage;
+  let fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
+  if (isFrontpage && siteConfig.frontpageImage) {
+    fallbackImage = siteConfig.frontpageImage;
+    fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
+  }
+  const image = libs.common.getOpenGraphImage(content, site, fallbackImage, fallbackImageIsPrescaled);
+
+  const params = {
+    title: pageTitle,
+    description: libs.common.getMetaDescription(content, site),
+    siteName: site.displayName,
+    locale: libs.common.getLang(content, site),
+    type: isFrontpage ? 'website' : 'article',
+    url: url,
+    image: image,
+    imageWidth: 1200, // Twice of 600x315, for retina
+    imageHeight: 630,
+    blockRobots: siteConfig.blockRobots || libs.common.getBlockRobots(content),
+    siteVerification: siteVerification,
+    canonical: siteConfig.canonical,
+    twitterUserName: siteConfig.twitterUsername
+  };
+
+  const metadata = renderTemplate(params);
+
+  // Force arrays since single values will be return as string instead of array
+  res.pageContributions.headEnd = libs.util.data.forceArray(res.pageContributions.headEnd);
+  res.pageContributions.headEnd.push(metadata);
+
+  // Handle injection of title - use any existing tag by replacing its content.
+  // Also - Locate the <html> tag and make sure the "og" namespace is added.
+  const titleHtml = '<title>' + pageTitle + titleAppendix + '</title>';
+  let titleAdded = false;
+  if (res.contentType === 'text/html') {
+    if (res.body) {
+      if (typeof res.body === 'string') {
+        // Find a title in the html and use that instead of adding our own title
+        const titleHasIndex = res.body.indexOf('<title>') > -1;
+        if (titleHasIndex) {
+          res.body = res.body.replace(/(<title>)(.*?)(<\/title>)/i, titleHtml);
+          titleAdded = true;
         }
-     }
 
-    return res;
+        // Find <html> and if it does not have proper "og"-prefix - inject it!
+        res.body = res.body.replace(/<html(.*?[^?])?>/i, injectAttribute);
+      }
+    }
+  }
+  if (!titleAdded) {
+    res.pageContributions.headEnd.push(titleHtml);
+  }
+
+  if (req.params && req.params.debug === 'true') {
+    res.applyFilters = false; // Skip other filters
+  }
+
+  return res;
 };

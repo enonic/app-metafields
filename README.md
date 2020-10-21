@@ -37,13 +37,13 @@ This app introduces a number of global settings. They're controlled on the app i
 
 ### General settings
 
-**"Generate Canonical meta?"**  
+**"Generate Canonical meta?"**
 Turn generation of canonical meta field on or off. Default is off, since most sites ship with this already. If checked, it will generate the meta tag with current URL. The logic is simple, it will use the current content's path as value, something we know in Enonic XP always is unique.
 
-**"Google Search Console (site verification code)"**  
+**"Google Search Console (site verification code)"**
 Add meta tag for Google Search Console (formerly known as Google Webmaster Tools). Just fill in your ID here to generate the proper tag on all pages. Consult your Google Search Console login for finding this ID.
 
-**"Hide site from search engines?"**  
+**"Hide site from search engines?"**
 We also introduce a setting for hiding the entire site from search engine robots. This might be handy when wanting to have a live beta site but not letting search engine index it. It's up to the search engines to respect this setting, and this setting does not hide the pages from outside visitors as links to them and direct URL's will still work.
 
 ### Twitter Cards
@@ -138,7 +138,7 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 | Version | XP version |
 | ------------- | ------------- |
-| 1.9.0 | 7.4.1 |
+| 2.0.0 | 7.4.1 |
 | 1.8.0-1.8.3 | 7.0.0 |
 | 1.5.0-1.7.0 | 6.15.0 |
 | 1.1.4-1.4.0 | 6.7.0 |
@@ -148,10 +148,10 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 
 ## Changelog
 
-## Version 1.9.0
+## Version 2.0.0
 
 * Check whole content, not just `data`. This breaks backwards compatability.
-* Fix crash when `key` passed to `content.get` was not string when fetching OG image. 
+* Fix crash when `key` passed to `content.get` was not string when fetching OG image.
 * Upgrade XP dependancy versions to 7.4.1
 
 ### Version 1.8.3
