@@ -124,7 +124,7 @@
             </items>
         </field-set>
     </form>
-    <x-data name="meta-data" />
+    <x-data name="meta-data" optional="true" />
     <processors>
         <response-processor name="add-metadata" order="10" />
     </processors>
