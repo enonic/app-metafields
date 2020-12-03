@@ -35,7 +35,7 @@ ${model.image ? `
 const ogAttribute = 'og: http://ogp.me/ns#';
 const injectAttribute = (match, p1) => {
   const htmlTag = match;
-  if (p1.length > 0) {
+  if (p1 && p1.length > 0) {
     const prefixIndex = p1.indexOf("prefix=");
     if (prefixIndex !== -1) {
       htmlTag.replace(/prefix=\"([^"]*)"/, (match, p1) => {
@@ -47,7 +47,7 @@ const injectAttribute = (match, p1) => {
       return htmlTag;
     }
   }
-  return `<html${p1} prefix="${ogAttribute}">`;
+  return `<html${p1 || ""} prefix="${ogAttribute}">`;
 };
 
 const siteConfigCache = libs.cache.newCache({
