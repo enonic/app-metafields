@@ -1,9 +1,9 @@
 var libs = {
-	portal: require('/lib/xp/portal'),
-	content: require('/lib/xp/content'),
-	thymeleaf: require('/lib/thymeleaf'),
-	util: require('/lib/util'),
-	common: require('/lib/common')
+    portal: require('/lib/xp/portal'),
+    content: require('/lib/xp/content'),
+    thymeleaf: require('/lib/thymeleaf'),
+    util: require('/lib/util'),
+    common: require('/lib/common')
 };
 
 /*
@@ -16,91 +16,91 @@ TODO: Perhaps add (?) icons with info for each data.
 TODO: Possibility to click title, desc, image and see the water fall logic and where data is found?
 TODO: Grade each data based on amount of text etc. Red, yellow, green. And info about it (best-practise).
 */
-exports.get = function(req) {
-/*
-	TODO: Display content settings? If any, then fallbacks.
-	x": {
-     "com-enonic-app-metafields": {
-         "meta-data"
-*/
+exports.get = function (req) {
+    /*
+        TODO: Display content settings? If any, then fallbacks.
+        x": {
+         "com-enonic-app-metafields": {
+             "meta-data"
+    */
 
-	var contentId = req.params.contentId;
+    var contentId = req.params.contentId;
 
-	if (!contentId && libs.portal.getContent()) {
-		contentId = libs.portal.getContent()._id;
-	}
+    if (!contentId && libs.portal.getContent()) {
+        contentId = libs.portal.getContent()._id;
+    }
 
-	if (!contentId) {
-		return {
-			contentType: 'text/html',
-			body: '<widget class="error">No content selected</widget>'
-		};
-	}
+    if (!contentId) {
+        return {
+            contentType: 'text/html',
+            body: '<widget class="error">No content selected</widget>'
+        };
+    }
 
-	var params = {};
-	var content = libs.content.get({ key: contentId });
+    var params = {};
+    var content = libs.content.get({ key: contentId });
 
     if (content) {
-		// The first part of the content '_path' is the site's URL, make sure to fetch current site!
-		var parts = content._path.split('/');
-		var site = libs.common.getSite(parts[1]); // Send the first /x/-part of the content's path.
-		if (site) {
-			var siteConfig = libs.common.getTheConfig(site);
-			if (siteConfig) {
-				var isFrontpage = site._path === content._path;
-				var pageTitle = libs.common.getPageTitle(content, site);
-				var titleAppendix = libs.common.getAppendix(site, siteConfig, isFrontpage);
-				var description = libs.common.getMetaDescription(content, site);
-				if (description === '') description = null;
+        // The first part of the content '_path' is the site's URL, make sure to fetch current site!
+        var parts = content._path.split('/');
+        var site = libs.common.getSite(parts[1]); // Send the first /x/-part of the content's path.
+        if (site) {
+            var siteConfig = libs.common.getTheConfig(site);
+            if (siteConfig) {
+                var isFrontpage = site._path === content._path;
+                var pageTitle = libs.common.getPageTitle(content, site, siteConfig);
+                var titleAppendix = libs.common.getAppendix(site, siteConfig, isFrontpage);
+                var description = libs.common.getMetaDescription(content, site);
+                if (description === '') description = null;
 
-				var frontpageUrl = libs.portal.pageUrl({ path: site._path, type: "absolute" });
-				var url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
-				var justThePath = url.replace(frontpageUrl,'');
+                var frontpageUrl = libs.portal.pageUrl({ path: site._path, type: "absolute" });
+                var url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
+                var justThePath = url.replace(frontpageUrl, '');
 
-				var fallbackImage = siteConfig.seoImage;
-				var fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
-				if (isFrontpage && siteConfig.frontpageImage) {
-					 fallbackImage = siteConfig.frontpageImage;
-					 fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
-				}
-				var image = libs.common.getOpenGraphImage(content, site, fallbackImage, fallbackImageIsPrescaled);
+                var fallbackImage = siteConfig.seoImage;
+                var fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
+                if (isFrontpage && siteConfig.frontpageImage) {
+                    fallbackImage = siteConfig.frontpageImage;
+                    fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
+                }
+                var image = libs.common.getOpenGraphImage(content, site, fallbackImage, fallbackImageIsPrescaled);
 
-				params = {
-					summary: {
-						title: pageTitle,
-						fullTitle: (pageTitle + titleAppendix),
-						description: description,
-						image: image,
-						canonical: (siteConfig.canonical ? justThePath : null),
-						blockRobots: (siteConfig.blockRobots || libs.common.getBlockRobots(content))
-					},
-					og: {
-						type: (isFrontpage ? 'website' : 'article'),
-						title: pageTitle,
-						description: description,
-						siteName: site.displayName,
-						url: justThePath,
-						locale: libs.common.getLang(content,site),
-						image: {
-							src: image,
-							width: 1200, // Twice of 600x315, for retina
-							height: 630
-						}
-					},
-					twitter: {
-						active: (siteConfig.twitterUsername ? true : false),
-						title: pageTitle,
-						description: description,
-						image: image,
-						site: siteConfig.twitterUsername || null
-					}
-				};
-			}
-		}
-	}
+                params = {
+                    summary: {
+                        title: pageTitle,
+                        fullTitle: (pageTitle + titleAppendix),
+                        description: description,
+                        image: image,
+                        canonical: (siteConfig.canonical ? justThePath : null),
+                        blockRobots: (siteConfig.blockRobots || libs.common.getBlockRobots(content))
+                    },
+                    og: {
+                        type: (isFrontpage ? 'website' : 'article'),
+                        title: pageTitle,
+                        description: description,
+                        siteName: site.displayName,
+                        url: justThePath,
+                        locale: libs.common.getLang(content, site),
+                        image: {
+                            src: image,
+                            width: 1200, // Twice of 600x315, for retina
+                            height: 630
+                        }
+                    },
+                    twitter: {
+                        active: (siteConfig.twitterUsername ? true : false),
+                        title: pageTitle,
+                        description: description,
+                        image: image,
+                        site: siteConfig.twitterUsername || null
+                    }
+                };
+            }
+        }
+    }
 
-	return {
-		body: libs.thymeleaf.render( resolve('seo.html'), params),
-		contentType: 'text/html'
-	};
+    return {
+        body: libs.thymeleaf.render(resolve('seo.html'), params),
+        contentType: 'text/html'
+    };
 };

@@ -17,13 +17,13 @@ const stringOrNull = (o) => {
 
 // The configuration needs to be fetched first from site config (using current content if site context is not available - like for widgets), and lastly we'll check for any config files and use these to overwrite.
 exports.getTheConfig = (site) => {
-  const config = libs.portal.getSiteConfig();
+  let config = libs.portal.getSiteConfig();
   if (!config) {
     config = exports.getSiteConfig(site, app.name);
   }
   if (app.config && !config.disableAppConfig) {
     for (const prop in app.config) {
-      const value = app.config[prop];
+      let value = app.config[prop];
       if (prop !== 'config.filename' && prop !== 'service.pid') { // Default props for .cfg-files, not to use further.
         if (value === 'true' || value === 'false') {
           value = value === 'true';
@@ -64,7 +64,7 @@ exports.getSiteConfig = (site, applicationKey) => {
     if (site.data) {
       if (site.data.siteConfig) {
         const siteConfigs = libs.util.data.forceArray(site.data.siteConfig);
-        const siteConfig = {};
+        let siteConfig = {};
         siteConfigs.forEach((cfg) => {
           if (applicationKey && cfg.applicationKey == applicationKey) {
             siteConfig = cfg;

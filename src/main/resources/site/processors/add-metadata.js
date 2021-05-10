@@ -58,7 +58,7 @@ const siteConfigCache = libs.cache.newCache({
 exports.responseProcessor = (req, res) => {
   const site = libs.portal.getSite();
   const content = libs.portal.getContent();
-  const siteConfig = siteConfigCache.get(`${site._path}_${req.branch}`, () => libs.common.getTheConfig(site));
+  const siteConfig = siteConfigCache.get(`${site._id}_${req.branch}`, () => libs.common.getTheConfig(site));
 
   const isFrontpage = site._path === content._path;
   const pageTitle = libs.common.getPageTitle(content, site, siteConfig);
