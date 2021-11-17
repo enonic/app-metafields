@@ -169,7 +169,8 @@ exports.getMetaDescription = (content, site) => {
 
 exports.getOpenGraphImage = (content, site, defaultImg, defaultImgPrescaled) => {
   const siteConfig = exports.getTheConfig(site);
-
+  log.info("CONTENT");
+  log.info(JSON.stringify(content, null, 4));
   const userDefinedPaths = siteConfig.pathsImages || '';
   const userDefinedArray = libs.util.data.forceArray(userDefinedPaths);
   const userDefinedValue = userDefinedPaths ? findValueInJson(content, userDefinedArray) : null;
@@ -187,6 +188,14 @@ exports.getOpenGraphImage = (content, site, defaultImg, defaultImgPrescaled) => 
       || content.data.image
       || content.data.images
       || []);
+
+  if (content.data.cover.type.video && content.data.cover.type.video.id) {
+    const video = libs.content.get({ key: content.data.cover.type.video.id });
+    if (video && video.data.image) {
+      const image = libs.content.get({ key: video.data.image });
+      defaultImg = image._path;
+    }
+  }
 
   if (imageArray.length || (defaultImg && !defaultImgPrescaled)) {
 
