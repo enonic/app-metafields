@@ -20,7 +20,6 @@ exports.responseProcessor = function (req, res) {
     const isFrontpage = site._path === content._path;
     const pageTitle = libs.common.getPageTitle(content, site);
     const titleAppendix = libs.common.getAppendix(site, isFrontpage);
-
     const siteVerification = siteConfig.siteVerification || null;
 
     let url = !appOrSiteConfig.removeOpenGraphUrl ?
@@ -77,8 +76,9 @@ exports.responseProcessor = function (req, res) {
     const titleHtml = "<title>" + pageTitle + titleAppendix + "</title>";
     const ogAttribute = "og: http://ogp.me/ns#";
     let titleAdded = false;
+
     if (
-        res.contentType === "text/html" &&
+        res.contentType.indexOf("text/html") > -1 &&
         res.body &&
         typeof res.body === "string"
     ) {
