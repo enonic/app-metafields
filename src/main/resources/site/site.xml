@@ -7,6 +7,11 @@
 		<field-set>
 			<label>General settings</label>
 			<items>
+				<input name="headless" type="CheckBox">
+					<label>Headless mode</label>
+					<help-text>If enabled, page processor will do nothing and its logic will be available in "metadata" service.</help-text>
+					<occurrences minimum="0" maximum="1"/>
+				</input>
 				<input name="canonical" type="CheckBox">
 					<label>Use Canonical meta?</label>
 					<help-text>Generates the canonical page URL meta data for all content. You can also overwrite canonical page from current content configuration.</help-text>
