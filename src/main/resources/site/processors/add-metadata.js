@@ -44,13 +44,15 @@ exports.responseProcessor = function (req, res) {
         }
 
         // Find <html> and if it does not have proper "og"-prefix - inject it!
-        const fixedHtmlTagInnerContent = libs.metadata.getFixedHtmlAttrsAsString(res.body);
+        if (htmlIndex >= 0 && endHtmlIndex >= 0) {
+            const fixedHtmlTagInnerContent = libs.metadata.getFixedHtmlAttrsAsString(res.body);
 
-        res.body = 
-            res.body.substr(0, htmlIndex + 5) +
-            " " +
-            fixedHtmlTagInnerContent +
-            res.body.substr(endHtmlIndex);
+            res.body = 
+                res.body.substr(0, htmlIndex + 5) +
+                " " +
+                fixedHtmlTagInnerContent +
+                res.body.substr(endHtmlIndex);
+        }
     }
 
     if (!titleAdded) {
