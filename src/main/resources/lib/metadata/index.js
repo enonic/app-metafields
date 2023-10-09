@@ -2,12 +2,13 @@ const libs = {
     portal: require("/lib/xp/portal"),
     content: require("/lib/xp/content"),
     thymeleaf: require("/lib/thymeleaf"),
-    common: require("/lib/common")
+    common: require("/lib/common"),
+    parser: require("/lib/htmlparser")
 };
 
 const OG_ATTRIBUTE = "og: http://ogp.me/ns#";
 
-function getMetaData(site, siteConfig, content=undefined, returnType="json") {
+function getMetaData(site, siteConfig, content=undefined, returnType="json", selfClosingTags=false) {   
     if (!content) {
         return undefined;
     }
@@ -63,7 +64,7 @@ function getMetaData(site, siteConfig, content=undefined, returnType="json") {
     }
 
     if (returnType === 'html') {
-        return libs.thymeleaf.render(resolve("metadata.html"), params);
+        return resolveMetadata(params, selfClosingTags);
     }
 
     return undefined;
@@ -117,13 +118,6 @@ function getFixedHtmlAttrsAsString(htmlTag) {
     return innerHtmlTagText;
 }
 
-module.exports = {
-    getReusableData,
-    getMetaData,
-    getTitle,
-    getFixedHtmlAttrsAsString
-}
-
 function getReusableData(contentPath=undefined) {
     let site, content, siteConfig;
     
@@ -138,4 +132,38 @@ function getReusableData(contentPath=undefined) {
     }
 
     return { site, content, siteConfig };
+}
+
+module.exports = {
+    getReusableData,
+    getMetaData,
+    getTitle,
+    getFixedHtmlAttrsAsString
+}
+
+// Functions below module.exports are only used internally
+
+function resolveMetadata(params, selfClosingTags=false) {
+    const metadataWithNonClosingTags = libs.thymeleaf.render(resolve("metadata.html"), params);
+
+    if ( !selfClosingTags ) {
+        return metadataWithNonClosingTags;
+    }
+
+    let metadataWithClosingTags = "";
+
+    libs.parser.HTMLParser(metadataWithNonClosingTags, {
+        start: function( tag, attrs ) {
+          metadataWithClosingTags += "<" + tag;
+          
+          for ( var i = 0; i < attrs.length; i++ ) {
+            metadataWithClosingTags += " " + attrs[i].name + '="' + attrs[i].escaped + '"';
+          }
+       
+          metadataWithClosingTags += selfClosingTags ? "/>" : ">";
+        },
+        chars: function( text ) { metadataWithClosingTags += text; }
+      });
+
+    return metadataWithClosingTags;
 }
