@@ -3,7 +3,6 @@ const libs = {
     content: require("/lib/xp/content"),
     thymeleaf: require("/lib/thymeleaf"),
     common: require("/lib/common"),
-    parser: require("/lib/htmlparser")
 };
 
 const OG_ATTRIBUTE = "og: http://ogp.me/ns#";
@@ -144,26 +143,7 @@ module.exports = {
 // Functions below module.exports are only used internally
 
 function resolveMetadata(params, selfClosingTags=false) {
-    const metadataWithNonClosingTags = libs.thymeleaf.render(resolve("metadata.html"), params);
-
-    if ( !selfClosingTags ) {
-        return metadataWithNonClosingTags;
-    }
-
-    let metadataWithClosingTags = "";
-
-    libs.parser.HTMLParser(metadataWithNonClosingTags, {
-        start: function( tag, attrs ) {
-          metadataWithClosingTags += "<" + tag;
-          
-          for ( var i = 0; i < attrs.length; i++ ) {
-            metadataWithClosingTags += " " + attrs[i].name + '="' + attrs[i].escaped + '"';
-          }
-       
-          metadataWithClosingTags += selfClosingTags ? "/>" : ">";
-        },
-        chars: function( text ) { metadataWithClosingTags += text; }
-      });
-
-    return metadataWithClosingTags;
+    return selfClosingTags
+        ? libs.thymeleaf.render(resolve("metadata-self-closed.html"), params) 
+        : libs.thymeleaf.render(resolve("metadata.html"), params);
 }
