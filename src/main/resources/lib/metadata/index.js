@@ -144,6 +144,6 @@ module.exports = {
 
 function resolveMetadata(params, selfClosingTags=false) {
     return selfClosingTags
-        ? libs.thymeleaf.render(resolve("metadata-self-closed.html"), params) 
+        ? libs.thymeleaf.render(resolve("metadata-self-closing.html"), params) 
         : libs.thymeleaf.render(resolve("metadata.html"), params);
 }
