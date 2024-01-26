@@ -1,8 +1,12 @@
+import {
+	getSiteConfig as libsContentGetSiteConfig,
+} from '/lib/xp/content';
+import {
+	getFixedHtmlAttrsAsString,
+	getMetaData,
+	getReusableData,
+} from '/lib/metadata';
 
-const libs = {
-    content: require("/lib/xp/content"),
-    metadata: require("/lib/metadata")
-};
 
 const ERRORS = {
     content_path: "Missing contentPath in query parameters.",
@@ -10,7 +14,7 @@ const ERRORS = {
     not_in_headless_mode: "App is not configured to run in headless mode. Please check your app config."
 }
 
-exports.get = function(req) {  
+export const get = (req) => {
     const params = req.params;
     const status400 = { status: 400 };
 
@@ -19,9 +23,9 @@ exports.get = function(req) {
         return status400;
     }
 
-    const siteConfig = libs.content.getSiteConfig({ 
-        key: params.contentPath, 
-        applicationKey: app.name 
+    const siteConfig = libsContentGetSiteConfig({
+        key: params.contentPath,
+        applicationKey: app.name
     });
 
     if (!siteConfig) {
@@ -36,18 +40,19 @@ exports.get = function(req) {
 
     const body = getData(params.contentPath, params.htmlTag);
 
-    return { body, contentType: 'application/json' }; 
+    return { body, contentType: 'application/json' };
 };
 
 function getData(contentPath, htmlTag="<html>") {
-    const reusableData = libs.metadata.getReusableData(contentPath);
+    const reusableData = getReusableData(contentPath);
+    // log.info(`Reusable data: ${JSON.stringify(reusableData, null, 4)}`);
     const site = reusableData.site;
     const content = reusableData.content;
     const siteConfig = reusableData.siteConfig;
 
     return {
-        metadata: libs.metadata.getMetaData(site, siteConfig, content, "json"),
-        htmlTagAttributes: getHtmlTagAttributes(libs.metadata.getFixedHtmlAttrsAsString(htmlTag))
+        metadata: getMetaData(site, siteConfig, content, "json"),
+        htmlTagAttributes: getHtmlTagAttributes(getFixedHtmlAttrsAsString(htmlTag))
     };
 }
 

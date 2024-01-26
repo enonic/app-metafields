@@ -1,21 +1,61 @@
-var libs = {
-	portal: require('/lib/xp/portal'),
-	content: require('/lib/xp/content'),
-	util: require('/lib/util')
-};
+import type {Content} from '/lib/xp/content';
+import type {
+	ImageUrlParams,
+	Site,
+} from '/lib/xp/portal';
 
-var appNamePath = libs.util.app.getJsonName();
-var mixinPath = 'meta-data';
+
+import {forceArray} from '@enonic/js-utils/array/forceArray';
+import {
+	attachmentUrl,
+	getSiteConfig as libPortalGetSiteConfig,
+	imageUrl
+} from '/lib/xp/portal';
+import {
+	get as getContentByKey,
+	query
+} from '/lib/xp/content';
+// @ts-expect-error // No types yet
+import {app as libUtilApp} from '/lib/util';
+
+interface MetafieldsSiteConfig {
+	blockRobots?: boolean
+	canonical?: boolean
+	disableAppConfig?: boolean
+	frontpageImage?: string
+	frontpageImageIsPrescaled?: boolean
+	fullPath?: boolean
+	headless?: boolean
+	pathsDescriptions?: string // with comma
+	pathsImages?: string // with comma
+	pathsTitles?: string // with comma
+	seoDescription?: string
+	seoImage?: string
+	seoImageIsPrescaled?: boolean
+	seoTitle?: string
+	siteVerification?: string
+	removeOpenGraphImage?: boolean
+	removeOpenGraphUrl?: boolean
+	removeTwitterImage?: boolean
+	titleBehaviour?: boolean
+	titleFrontpageBehaviour?: boolean
+	titleSeparator?: string
+	twitterUsername?: string
+}
+
+
+let appNamePath = libUtilApp.getJsonName();
+let mixinPath = 'meta-data';
 
 // The configuration needs to be fetched first from site config (using current content if site context is not available - like for widgets), and lastly we'll check for any config files and use these to overwrite.
-exports.getTheConfig = function (site) {
-	var config = libs.portal.getSiteConfig();
+export const getTheConfig = (site: Site<MetafieldsSiteConfig>) => {
+	let config = libPortalGetSiteConfig<MetafieldsSiteConfig>();
 	if (!config) {
-		config = exports.getSiteConfig(site, app.name);
+		config = getSiteConfig(site, app.name);
 	}
 	if (app.config && !config.disableAppConfig) {
-		for (var prop in app.config) {
-			var value = app.config[prop];
+		for (let prop in app.config) {
+			let value: string|boolean = app.config[prop];
 			if (prop !== 'config.filename' && prop !== 'service.pid') { // Default props for .cfg-files, not to use further.
 				if (value === 'true' || value === 'false') {
 					value = value === 'true';
@@ -27,7 +67,7 @@ exports.getTheConfig = function (site) {
 	return config;
 };
 
-exports.getLang = function (content, site) {
+export const getLang = (content, site) => {
 	// Format locale into the ISO format that Open Graph wants.
 	let locale = 'en_US';
 	if (content.language || site.language) {
@@ -36,9 +76,9 @@ exports.getLang = function (content, site) {
 	return locale;
 }
 
-exports.getSite = function (siteUrl) {
+export const getSite = (siteUrl: string) => {
 	// Code courtesy of PVMerlo at Enonic Discuss - https://discuss.enonic.com/u/PVMerlo
-	var sitesResult = libs.content.query({
+	const sitesResult = query<Site<MetafieldsSiteConfig>>({
 		query: "_path LIKE '/content/*' AND _name LIKE '" + siteUrl + "' AND data.siteConfig.applicationKey = '" + app.name + "'",
 		contentTypes: ["portal:site"]
 	});
@@ -46,14 +86,14 @@ exports.getSite = function (siteUrl) {
 }
 
 // Find the site config even when the context is not known.
-exports.getSiteConfig = function (site, applicationKey) {
+export const getSiteConfig = (site: Site<MetafieldsSiteConfig>, applicationKey: string) => {
 	// Code courtesy of PVMerlo at Enonic Discuss - https://discuss.enonic.com/u/PVMerlo
 	if (site) {
 		if (site.data) {
 			if (site.data.siteConfig) {
-				var siteConfigs = libs.util.data.forceArray(site.data.siteConfig);
-				var siteConfig = {};
-				siteConfigs.forEach(function (cfg) {
+				var siteConfigs = forceArray(site.data.siteConfig);
+				let siteConfig: Partial<typeof siteConfigs[0]> = {};
+				siteConfigs.forEach((cfg) => {
 					if (applicationKey && cfg.applicationKey == applicationKey) {
 						siteConfig = cfg;
 					} else if (!applicationKey && cfg.applicationKey == app.name) {
@@ -73,7 +113,7 @@ function commaStringToArray(str) {
 	if (arr) {
 		arr = arr.map(function (s) { return s.trim() });
 	} else {
-		arr = libs.util.data.forceArray(str); // Make sure we always work with an array
+		arr = forceArray(str); // Make sure we always work with an array
 	}
 	return arr;
 }
@@ -86,8 +126,10 @@ function findValueInJson(json, paths, fullPath) {
 	for (var i = 0; i < pathLength; i++) {
 		if (paths[i]) {
 			jsonPath = (fullPath) ? 'json["' + paths[i].split('.').join('"]["') + '"]' : 'json.data["' + paths[i].split('.').join('"]["') + '"]'; // Wrap property so we can have dashes in it
+			// log.info('jsonPath: %s', jsonPath);
 			try {
-				value = eval(jsonPath);
+				// value = eval(jsonPath); // https://esbuild.github.io/link/direct-eval
+				value = (0, eval)(jsonPath);
 			} catch (e) {
 				// Noop
 			}
@@ -111,9 +153,9 @@ function stringOrNull(o) {
 }
 
 // Concat site title? Trigger if set to true in settings, or if not set at all (default = true)
-exports.getAppendix = function (site, isFrontpage) {
-	var siteConfig = exports.getTheConfig(site);
-	var titleAppendix = '';
+export const getAppendix = (site, isFrontpage?: boolean) => {
+	const siteConfig = getTheConfig(site);
+	let titleAppendix = '';
 	if (siteConfig.titleBehaviour || !siteConfig.hasOwnProperty("titleBehaviour")) {
 		var separator = siteConfig.titleSeparator || '-';
 		var titleRemoveOnFrontpage = siteConfig.hasOwnProperty("titleFrontpageBehaviour") ? siteConfig.titleFrontpageBehaviour : true; // Default true needs to be respected
@@ -122,27 +164,27 @@ exports.getAppendix = function (site, isFrontpage) {
 		}
 	}
 	return titleAppendix;
-}
+};
 
-exports.getBlockRobots = function (content) {
+export const getBlockRobots = (content) => {
 	var setWithMixin = content.x[appNamePath]
 		&& content.x[appNamePath][mixinPath]
 		&& content.x[appNamePath][mixinPath].blockRobots;
 	return setWithMixin;
 };
 
-exports.getContentForCanonicalUrl = function (content) {
+export const getContentForCanonicalUrl = (content) => {
 	var setWithMixin = content.x[appNamePath]
 		&& content.x[appNamePath][mixinPath]
 		&& content.x[appNamePath][mixinPath].seoContentForCanonicalUrl
-		&& libs.content.get({
+		&& getContentByKey({
 			key: content.x[appNamePath][mixinPath].seoContentForCanonicalUrl
 		});
 	return setWithMixin;
 };
 
-exports.getPageTitle = function (content, site) {
-	var siteConfig = exports.getTheConfig(site);
+export const getPageTitle = (content, site) => {
+	var siteConfig = getTheConfig(site);
 
 	var userDefinedPaths = siteConfig.pathsTitles || '';
 	var userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
@@ -163,8 +205,8 @@ exports.getPageTitle = function (content, site) {
 	return metaTitle;
 };
 
-exports.getMetaDescription = function (content, site) {
-	var siteConfig = exports.getTheConfig(site);
+export const getMetaDescription = (content, site) => {
+	var siteConfig = getTheConfig(site);
 
 	var userDefinedPaths = siteConfig.pathsDescriptions || '';
 	var userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
@@ -188,8 +230,8 @@ exports.getMetaDescription = function (content, site) {
 	return metaDescription;
 };
 
-exports.getImage = function (content, site, defaultImg, defaultImgPrescaled) {
-	const siteConfig = exports.getTheConfig(site);
+export const getImage = (content, site, defaultImg: string, defaultImgPrescaled?: boolean) => {
+	const siteConfig = getTheConfig(site);
 	const userDefinedPaths = siteConfig.pathsImages || '';
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findValueInJson(content, userDefinedArray, siteConfig.fullPath) : null;
@@ -200,7 +242,7 @@ exports.getImage = function (content, site, defaultImg, defaultImgPrescaled) {
 	let image;
 
 	// Try to find an image in the content's image or images properties
-	const imageArray = libs.util.data.forceArray(
+	const imageArray = forceArray(
 		setWithMixin ? stringOrNull(content.x[appNamePath][mixinPath].seoImage)
 			: userDefinedValue
 			|| content.data.image
@@ -210,26 +252,28 @@ exports.getImage = function (content, site, defaultImg, defaultImgPrescaled) {
 	if (imageArray.length || (defaultImg && !defaultImgPrescaled)) {
 
 		// Set basic image options
-		const imageOpts = {
-			scale: 'block(1200,630)', // Open Graph requires 600x315 for landscape format. Double that for retina display.
-			quality: 85,
+		const imageOpts: ImageUrlParams = {
+			// Set the ID to either the first image in the set or use the default image ID
+			id: imageArray.length ? (imageArray[0].image || imageArray[0]) : defaultImg,
+
 			format: 'jpg',
+			quality: 85,
+			scale: 'block(1200,630)', // Open Graph requires 600x315 for landscape format. Double that for retina display.
 			type: 'absolute'
 		};
 
-		// Set the ID to either the first image in the set or use the default image ID
-		imageOpts.id = imageArray.length ? (imageArray[0].image || imageArray[0]) : defaultImg;
-
 		// Fetch actual image, make sure not to force it into .jpg if it's a SVG-file.
-		const imageContent = libs.content.get({
+		const imageContent = getContentByKey<Content<{
+			media: {
+				attachment: string;
+			}
+		}>>({
 			key: imageOpts.id
 		});
 		let mimeType = null;
 		if (imageContent) {
-			if (imageContent.data.media.attachment) {
+			if (imageContent.data.media) {
 				mimeType = imageContent.attachments[imageContent.data.media.attachment].mimeType; // Get the actual mimeType
-			} else if (imageContent.data.media) {
-				mimeType = imageContent.attachments[imageContent.data.media].mimeType;
 			}
 		}
 		// Reset forced format on SVG to make them servable through portal.imageUrl().
@@ -238,11 +282,11 @@ exports.getImage = function (content, site, defaultImg, defaultImgPrescaled) {
 			imageOpts.format = null;
 		}
 
-		image = imageOpts.id ? libs.portal.imageUrl(imageOpts) : null;
+		image = imageOpts.id ? imageUrl(imageOpts) : null;
 	}
 	else if (defaultImg && defaultImgPrescaled) {
 		// Serve pre-optimized image directly
-		image = libs.portal.attachmentUrl({
+		image = attachmentUrl({
 			id: defaultImg,
 			type: 'absolute'
 		});

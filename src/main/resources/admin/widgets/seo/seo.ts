@@ -1,10 +1,24 @@
-var libs = {
-	portal: require('/lib/xp/portal'),
-	content: require('/lib/xp/content'),
-	thymeleaf: require('/lib/thymeleaf'),
-	util: require('/lib/util'),
-	common: require('/lib/common')
-};
+import {
+	get as getContentByKey,
+} from '/lib/xp/content';
+import {
+	getContent as getCurrentContent,
+	pageUrl,
+} from '/lib/xp/portal';
+// @ts-expect-error // No types yet
+import {render} from '/lib/thymeleaf';
+import {
+	getAppendix,
+	getBlockRobots,
+	getContentForCanonicalUrl,
+	getImage,
+	getLang,
+	getMetaDescription,
+	getSite,
+	getTheConfig,
+	getPageTitle,
+} from '/lib/common';
+
 
 /*
 TODO: Refactoring of code in JS ... perhaps create entire ojects for each social media in common.js?
@@ -16,7 +30,7 @@ TODO: Perhaps add (?) icons with info for each data.
 TODO: Possibility to click title, desc, image and see the water fall logic and where data is found?
 TODO: Grade each data based on amount of text etc. Red, yellow, green. And info about it (best-practise).
 */
-exports.get = function(req) {
+export const get = (req) => {
 /*
 	TODO: Display content settings? If any, then fallbacks.
 	x": {
@@ -26,8 +40,8 @@ exports.get = function(req) {
 
 	var contentId = req.params.contentId;
 
-	if (!contentId && libs.portal.getContent()) {
-		contentId = libs.portal.getContent()._id;
+	if (!contentId && getCurrentContent()) {
+		contentId = getCurrentContent()._id;
 	}
 
 	if (!contentId) {
@@ -38,35 +52,35 @@ exports.get = function(req) {
 	}
 
 	var params = {};
-	var content = libs.content.get({ key: contentId });
+	var content = getContentByKey({ key: contentId });
 
-    if (content) {
+	if (content) {
 		// The first part of the content '_path' is the site's URL, make sure to fetch current site!
-		var parts = content._path.split('/');
-		var site = libs.common.getSite(parts[1]); // Send the first /x/-part of the content's path.
+		const parts = content._path.split('/');
+		const site = getSite(parts[1]); // Send the first /x/-part of the content's path.
 		if (site) {
-			var siteConfig = libs.common.getTheConfig(site);
+			const siteConfig = getTheConfig(site);
 			if (siteConfig) {
-				var isFrontpage = site._path === content._path;
-				var pageTitle = libs.common.getPageTitle(content, site);
-				var titleAppendix = libs.common.getAppendix(site, siteConfig, isFrontpage);
-				var description = libs.common.getMetaDescription(content, site);
+				const isFrontpage = site._path === content._path;
+				const pageTitle = getPageTitle(content, site);
+				const titleAppendix = getAppendix(site, isFrontpage);
+				let description = getMetaDescription(content, site);
 				if (description === '') description = null;
 
-				var frontpageUrl = libs.portal.pageUrl({ path: site._path, type: "absolute" });
-				var url = libs.portal.pageUrl({ path: content._path, type: "absolute" });
-				var contentForCanonicalUrl = libs.common.getContentForCanonicalUrl(content);
-				var canonicalUrl = contentForCanonicalUrl ? libs.portal.pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" }) : url;
-				var justThePath = url.replace(frontpageUrl,'');
-				var canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
+				const frontpageUrl = pageUrl({ path: site._path, type: "absolute" });
+				const url = pageUrl({ path: content._path, type: "absolute" });
+				const contentForCanonicalUrl = getContentForCanonicalUrl(content);
+				const canonicalUrl = contentForCanonicalUrl ? pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" }) : url;
+				const justThePath = url.replace(frontpageUrl,'');
+				const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
 
-				var fallbackImage = siteConfig.seoImage;
-				var fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
+				let fallbackImage = siteConfig.seoImage;
+				let fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
 				if (isFrontpage && siteConfig.frontpageImage) {
 					 fallbackImage = siteConfig.frontpageImage;
 					 fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
 				}
-				var image = libs.common.getImage(content, site, fallbackImage, fallbackImageIsPrescaled);
+				var image = getImage(content, site, fallbackImage, fallbackImageIsPrescaled);
 
 				params = {
 					summary: {
@@ -75,7 +89,7 @@ exports.get = function(req) {
 						description: description,
 						image: image,
 						canonical: (siteConfig.canonical ? canonicalJustThePath : null),
-						blockRobots: (siteConfig.blockRobots || libs.common.getBlockRobots(content))
+						blockRobots: (siteConfig.blockRobots || getBlockRobots(content))
 					},
 					og: {
 						type: (isFrontpage ? 'website' : 'article'),
@@ -83,7 +97,7 @@ exports.get = function(req) {
 						description: description,
 						siteName: site.displayName,
 						url: justThePath,
-						locale: libs.common.getLang(content,site),
+						locale: getLang(content,site),
 						image: {
 							src: image,
 							width: 1200, // Twice of 600x315, for retina
@@ -103,7 +117,7 @@ exports.get = function(req) {
 	}
 
 	return {
-		body: libs.thymeleaf.render( resolve('seo.html'), params),
+		body: render( resolve('seo.html'), params),
 		contentType: 'text/html'
 	};
 };
