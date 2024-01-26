@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"/lib/xp/*": ["node_modules/@enonic-types/lib-*"],
+			"/*": ["src/main/resources/*"],
+		},
+		"skipLibCheck": true,
+		"types": [
+			"@enonic-types/global"
+		]
+	},
+	"include": [
+		"src/main/resources/**/*.ts"
+	],
+	"exclude": []
+}
