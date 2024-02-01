@@ -7,17 +7,15 @@ import {
 } from '/lib/xp/portal';
 // @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
-import {
-	getAppendix,
-	getBlockRobots,
-	getContentForCanonicalUrl,
-	getImage,
-	getLang,
-	getMetaDescription,
-	getSite,
-	getTheConfig,
-	getPageTitle,
-} from '/lib/common';
+import {getAppendix} from '/lib/common/getAppendix';
+import {getBlockRobots} from '/lib/common/getBlockRobots';
+import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
+import {getImage} from '/lib/common/getImage';
+import {getLang} from '/lib/common/getLang';
+import {getMetaDescription} from '/lib/common/getMetaDescription';
+import {getPageTitle} from '/lib/common/getPageTitle';
+import {getSite} from '/lib/common/getSite';
+import {getTheConfig} from '/lib/common/getTheConfig';
 
 
 /*

@@ -1,14 +1,13 @@
 import {forceArray} from '@enonic/js-utils/array/forceArray';
-import {
-	getFixedHtmlAttrsAsString,
-	getMetaData,
-	getTitle,
-	getReusableData,
-} from '/lib/metadata'
+import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
+import {getMetaData} from '/lib/metadata/getMetaData'
+import {getReusableData} from '/lib/metadata/getReusableData';
+import {getTitle} from '/lib/metadata/getTitle';
 
 
 const HTML_MEDIA_TYPE = 'text/html';
 const XML_MEDIA_TYPES = ['application/xhtml+xml', 'application/xml', 'text/xml'];
+
 
 export const responseProcessor = (req, res) => {
     const reusableData = getReusableData();

@@ -1,11 +1,7 @@
-import {
-	getSiteConfig as libsContentGetSiteConfig,
-} from '/lib/xp/content';
-import {
-	getFixedHtmlAttrsAsString,
-	getMetaData,
-	getReusableData,
-} from '/lib/metadata';
+import {getSiteConfig as libsContentGetSiteConfig} from '/lib/xp/content';
+import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
+import {getMetaData} from '/lib/metadata/getMetaData';
+import {getReusableData} from '/lib/metadata/getReusableData';
 
 
 const ERRORS = {

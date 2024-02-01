@@ -1,192 +1,199 @@
+import type {Extensions, GraphQL} from '/guillotine/guillotine.d';
+import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig.d';
+
+
 import {
-	getFixedHtmlAttrsAsString,
-	getMetaData,
-	getReusableData,
-} from '/lib/metadata';
-
-const TYPE_CONTENT = 'Content';
-const TYPE_METAFIELDS = 'MetaFields';
-const TYPE_METADATA = `${TYPE_METAFIELDS}_MetaData`;
-
-const ENUM_METADATA_TYPE = `${TYPE_METADATA}_Type`;
-
-const FIELD_METAFIELDS = 'metaFields';
-const FIELD_METADATA = 'metadata';
-const FIELD_HTMLTAGATTRIBUTES = 'htmlTagAttributes';
-
-
-function getHtmlTagAttributes(attrString) {
-    function clean(str) {
-      return str.replaceAll('"', "").trim();
-    }
-
-    let arr = [];
-    let attrsObj = {};
-
-    const splittedString = attrString.split("=");
-
-    for (let i = 0; i < splittedString.length; i += 1) {
-        if (i % 2 === 0) {
-            arr.push(splittedString[i]); // attribute
-        } else {
-            const regex = new RegExp(splittedString[i].indexOf('"') >= 0 ? '" ' : " ");
-            arr = arr.concat(splittedString[i].split(regex)); // attribute + value
-        }
-    }
-
-    if (arr.length % 2 !== 0) {
-        return {}
-    }
-
-    for (let i = 0; i < arr.length; i += 2) {
-        const key = clean(arr[i]);
-        const value = clean(arr[i+1]);
-        attrsObj[key] = value;
-    }
-
-    return attrsObj;
-}
-
-function getData(contentPath, htmlTag="<html>") {
-    const reusableData = getReusableData(contentPath);
-    // log.info(`Reusable data: ${JSON.stringify(reusableData, null, 4)}`);
-    const site = reusableData.site;
-    const content = reusableData.content;
-    const siteConfig = reusableData.siteConfig;
-
-    return {
-        metadata: getMetaData(site, siteConfig, content, "json"),
-        htmlTagAttributes: getHtmlTagAttributes(getFixedHtmlAttrsAsString(htmlTag))
-    };
-}
+	get as getContentByKey,
+	getSite as libsContentGetSite,
+	getSiteConfig as libsContentGetSiteConfig,
+} from '/lib/xp/content';
+import {
+	get as getContext,
+	run as runInContext
+} from '/lib/xp/context';
+import {getBlockRobots} from '/lib/common/getBlockRobots';
+import {getLang} from '/lib/common/getLang';
+import {getMetaDescription} from '/lib/common/getMetaDescription';
+import {getPageTitle} from '/lib/common/getPageTitle';
+import {getTheConfig} from '/lib/common/getTheConfig';
+import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
+import {commaStringToArray} from '/lib/common/commaStringToArray';
+import {findStringValueInObject} from '/lib/common/findStringValueInObject';
+import {GraphQLFieldName, GraphQLTypeName} from '/guillotine/guillotine.d';
 
 
-export const extensions = (graphQL) => {
-    return {
-        inputTypes: {
-            // input type definitions ...
-        },
-        enums: {
-            [ENUM_METADATA_TYPE]: {
-                description: 'Meta data type',
-                values: {
-                    website: 'website',
-                    article: 'article',
-                },
-            },
-        },
-        interfaces: {
-            // interfaces type definitions ...
-        },
-        unions: {
-            // unions type definitions ...
-        },
-        types: {
-            [TYPE_METADATA]: {
-                description: 'Meta data for a content',
-                fields: {
-                    title: {
-                        type: graphQL.nonNull(graphQL.GraphQLString),
-                    },
-                    description: {
-                        type: graphQL.GraphQLString,
-                    },
-                    siteName: {
-                        type: graphQL.nonNull(graphQL.GraphQLString),
-                    },
-                    locale: {
-                        type: graphQL.GraphQLString,
-                    },
-                    type: {
-                        type: graphQL.GraphQLString,
-                    },
-                    url: {
-                        type: graphQL.GraphQLString,
-                    },
-                    canonicalUrl: {
-                        type: graphQL.GraphQLString,
-                    },
-                    imageUrl: {
-                        type: graphQL.GraphQLString,
-                    },
-                    imageWidth: {
-                        type: graphQL.GraphQLInt,
-                    },
-                    imageHeight: {
-                        type: graphQL.GraphQLInt,
-                    },
-                    blockRobots: {
-                        type: graphQL.GraphQLBoolean,
-                    },
-                    siteVerification: {
-                        type: graphQL.GraphQLString,
-                    },
-                    canonical: {
-                        type: graphQL.GraphQLBoolean,
-                    },
-                    twitterUserName: {
-                        type: graphQL.GraphQLString,
-                    },
-                    twitterImageUrl: {
-                        type: graphQL.GraphQLString,
-                    },
-                }
-            },
-            [TYPE_METAFIELDS]: {
-                description: 'Meta fields for a content',
-                fields: {
-                    [FIELD_METADATA]: {
-                        type: graphQL.reference(TYPE_METADATA),
-                    },
-                    [FIELD_HTMLTAGATTRIBUTES]: {
-                        type: graphQL.GraphQLString,
-                    },
-                }
-            }
-        },
-        creationCallbacks: {
-            [TYPE_CONTENT]: function (params) {
-                params.addFields({
-                    [FIELD_METAFIELDS]: {
-                        type: graphQL.reference(TYPE_METAFIELDS)
-                    }
-                });
-            }
-        },
-        resolvers: {
-            [TYPE_CONTENT]: {
-                [FIELD_METAFIELDS]: function (env) {
-                    // log.info(`resolvers content metafields ${JSON.stringify(env, null, 4)}`);
-                    const {args, localContext, source} = env;
-                    // const {branch,project} = localContext;
-                    const {_id,_path} = source;
-                    // log.info(`resolvers content metafields _id:${_id} _path:${_path}`);
-                    return getData(_path);
-                    // return {
-                    //     [FIELD_METADATA]: {
-                    //         title: 'title',
-                    //         description: 'description',
-                    //         siteName: 'siteName',
-                    //         locale: 'locale',
-                    //         type: 'website',
-                    //         url: 'url',
-                    //         canonicalUrl: 'canonicalUrl',
-                    //         imageUrl: 'imageUrl',
-                    //         imageWidth: 1,
-                    //         imageHeight: 2,
-                    //         blockRobots: true,
-                    //         siteVerification: 'siteVerification',
-                    //         canonical: true,
-                    //         twitterUserName: 'twitterUserName',
-                    //         twitterImageUrl: 'twitterImageUrl',
-                    //     },
-                    //     [FIELD_HTMLTAGATTRIBUTES]: 'htmlTagAttributes',
-                    // };
-                }
-            }
-        },
-        typeResolvers: {
-            // type resolver definitions ...
-        }
-    }
+export const extensions = (graphQL: GraphQL): Extensions => {
+	return {
+		types: {
+			[GraphQLTypeName.METAFIELDS]: {
+				description: 'Meta fields for a content',
+				fields: {
+					alternates: {
+						type: graphQL.Json,
+					},
+					description: {
+						type: graphQL.GraphQLString,
+					},
+					images: {
+						type: graphQL.list(graphQL.reference(GraphQLTypeName.CONTENT)),
+					},
+					openGraph: {
+						type: graphQL.Json,
+					},
+					robots: {
+						type: graphQL.Json,
+					},
+					title: {
+						type: graphQL.nonNull(graphQL.GraphQLString),
+					},
+					twitter: {
+						type: graphQL.Json,
+					},
+					verification: {
+						type: graphQL.Json,
+					},
+				}
+			}
+		},
+		creationCallbacks: {
+			[GraphQLTypeName.CONTENT]: function (params) {
+				params.addFields({
+					[GraphQLFieldName.METAFIELDS]: {
+						type: graphQL.reference(GraphQLTypeName.METAFIELDS)
+					}
+				});
+			}
+		},
+		resolvers: {
+			[GraphQLTypeName.CONTENT]: {
+				[GraphQLFieldName.METAFIELDS]: function (env) {
+					// log.info(`resolvers content metafields ${JSON.stringify(env, null, 4)}`);
+					const {
+						// args,
+						localContext,
+						source: content
+					} = env;
+					const {
+						branch,
+						project,
+						// siteKey // NOTE: Can be undefined when x-guillotine-sitekey is missing
+					} = localContext;
+					const {_path} = content;
+					const context = getContext();
+					const {
+						authInfo: {
+							user: {
+								login: userLogin,
+								idProvider: userIdProvider
+							},
+							principals
+						}
+					} = context;
+					// log.info(`resolvers content metafields context ${JSON.stringify(context, null, 4)}`);
+					return runInContext({
+						branch,
+						repository: `com.enonic.cms.${project}`,
+						user: {
+							idProvider: userIdProvider,
+							login: userLogin,
+						},
+						principals
+					}, () => {
+						const site = libsContentGetSite({ key: _path });
+						const description = getMetaDescription(content, site);
+						const title = getPageTitle(content, site);
+						const appOrSiteConfig = getTheConfig(site);
+						const isFrontpage = site._path === _path;
+						const siteConfig = libsContentGetSiteConfig<MetafieldsSiteConfig>({ key: _path, applicationKey: app.name });
+						const blockRobots = siteConfig.blockRobots || getBlockRobots(content)
+						const images = [];
+						if (siteConfig.seoImage) {
+							const imageContent = getContentByKey({ key: siteConfig.seoImage });
+							if (imageContent) {
+								images.push(imageContent);
+							} else {
+								log.error(`siteConfig.seoImage for site with _path:${site._path} references a non-existing image with key:${siteConfig.seoImage}`);
+							}
+						} else {
+							// Try to find image contentKey in content
+							const userDefinedPaths = siteConfig.pathsImages || '';
+							const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
+							const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
+							if (userDefinedValue) {
+								const imageContent = getContentByKey({ key: userDefinedValue });
+								if (imageContent) {
+									images.push(imageContent);
+								} else {
+									log.error(`content with _path:${_path} references a non-existing image with key:${userDefinedValue}}`);
+								}
+							} else {
+								if (content.data.image) {
+									const imageContent = getContentByKey({ key: content.data.image });
+									if (imageContent) {
+										images.push(imageContent);
+									} else {
+										log.error(`content with _path:${_path} references a non-existing image with key:${content.data.image}}`);
+									}
+								} else if (content.data.images) {
+									const imageContent = getContentByKey({ key: content.data.images });
+									if (imageContent) {
+										images.push(imageContent);
+									} else {
+										log.error(`content with _path:${_path} references a non-existing image with key:${content.data.images}}`);
+									}
+								}
+							}
+						}
+						if (siteConfig.frontpageImage) {
+							const imageContent = getContentByKey({ key: siteConfig.frontpageImage });
+							if (imageContent) {
+								images.push(imageContent);
+							} else {
+								log.error(`siteConfig.frontpageImage for site with _path:${site._path} references a non-existing image with key:${siteConfig.frontpageImage}`);
+							}
+						}
+						let canonical = null;
+						if (content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoContentForCanonicalUrl) {
+							const canonicalContent = getContentByKey({ key: content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl });
+							if (canonicalContent) {
+								canonical = canonicalContent._path;
+							} else {
+								log.error(`content.x.${APP_NAME_PATH}.${MIXIN_PATH}.seoContentForCanonicalUrl for content with _path:${_path} references a non-existing content with key:${content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl}`);
+							}
+						}
+						return {
+							alternates: {
+								canonical
+							},
+							description,
+							images,
+							openGraph: {
+								// description, // NOTE: Also available on toplevel
+								// images: appOrSiteConfig.removeOpenGraphImage ? [] : images
+								locale: getLang(content, site),
+								siteName: site.displayName,
+								// title, // NOTE: Also available on toplevel
+								type: isFrontpage ? 'website' : 'article',
+								url: appOrSiteConfig.removeOpenGraphUrl ? null : _path,
+							},
+							robots: {
+								follow: !blockRobots,
+								index: !blockRobots,
+							},
+							title,
+							twitter: {
+								// description, // NOTE: Also available on toplevel
+								// images: appOrSiteConfig.removeTwitterImage ? [] : images
+								// title, // NOTE: Also available on toplevel
+								creator: appOrSiteConfig.twitterUsername
+							},
+							verification: {
+								google: siteConfig.siteVerification || null
+							}
+						};
+					});
+				}
+			}
+		},
+	}
 };

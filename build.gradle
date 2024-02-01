@@ -65,3 +65,31 @@ tasks.register('npmBuild', NpmTask) {
 }
 
 jar.dependsOn npmBuild
+
+tasks.register('npmCheck', NpmTask) {
+	dependsOn npmInstall
+	args = [
+		'run',
+		'check'
+	]
+	environment = [
+		'FORCE_COLOR': 'true',
+	]
+}
+
+tasks.register('npmTest', NpmTask) {
+	args = [
+		'run',
+		'test'
+	]
+	dependsOn npmInstall
+	environment = [
+		'FORCE_COLOR': 'true',
+	]
+}
+
+// If you ALWAYS want to SKIP `test` and `check` tasks on development build, wrap this inside an 'if...'
+// if (!(project.hasProperty('dev') || project.hasProperty('development'))) {
+check.dependsOn npmCheck
+test.dependsOn npmTest
+// }
