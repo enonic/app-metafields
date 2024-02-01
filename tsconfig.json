@@ -1,9 +1,11 @@
 {
 	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
+		"esModuleInterop": true,
 		"paths": {
-			"/lib/xp/*": ["node_modules/@enonic-types/lib-*"],
-			"/*": ["src/main/resources/*"],
+			"/lib/xp/*": ["./node_modules/@enonic-types/lib-*"],
+			"/*": ["./src/main/resources/*"],
 		},
 		"skipLibCheck": true,
 		"types": [
@@ -11,7 +13,7 @@
 		]
 	},
 	"include": [
-		"src/main/resources/**/*.ts"
+		"./src/main/resources/**/*.ts"
 	],
 	"exclude": []
 }

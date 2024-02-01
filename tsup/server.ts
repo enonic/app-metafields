@@ -103,8 +103,8 @@ export default function buildServerConfig(): Options {
 			// }) // ReferenceError: "navigator" is not defined
 		],
 		external: [
-			'/lib/common',
-			'/lib/metadata',
+			/^\/lib\/common/,
+			/^\/lib\/metadata/,
 
 			'/lib/cache',
 			'/lib/enonic/static',
