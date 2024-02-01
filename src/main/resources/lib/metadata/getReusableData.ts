@@ -10,7 +10,13 @@ import {
 } from '/lib/xp/portal';
 
 
-export function getReusableData(contentPath=undefined) {
+export function getReusableData({
+	applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context
+	contentPath = undefined
+}: {
+	applicationKey: string
+	contentPath?: string
+}) {
 	let site, content, siteConfig;
 
 	if (!contentPath) {
@@ -20,7 +26,10 @@ export function getReusableData(contentPath=undefined) {
 	} else {
 		content = getContentByKey({ key: contentPath });
 		site = libsContentGetSite({ key: contentPath });
-		siteConfig = libsContentGetSiteConfig({ key: contentPath, applicationKey: app.name });
+		siteConfig = libsContentGetSiteConfig({
+			applicationKey,
+			key: contentPath
+		});
 	}
 
 	return { site, content, siteConfig };

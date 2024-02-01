@@ -1,15 +1,17 @@
-// import type {Content} from '@enonic-types/lib-content';
+import type {Content} from '@enonic-types/lib-content';
 import type {Branded} from '/lib/brand.d';
 
 export const enum GraphQLTypeName {
 	CONTENT = 'Content',
 	// IMAGE = 'Image',
 	// IMAGE_STYLE = 'ImageStyle',
-	METAFIELDS = 'MetaFields'
+	MEDIA_IMAGE = 'media_Image',
+	METAFIELDS = 'MetaFields',
 }
 
 export const enum GraphQLFieldName {
-	METAFIELDS = 'metaFields'
+	IMAGES = 'images',
+	METAFIELDS = 'metaFields',
 }
 
 type PartialRecord<K extends keyof any, T> = {
@@ -91,18 +93,24 @@ interface XpXDataMetaData {
 	seoTitle?: string
 }
 
-interface Content {
-	_id: string
-	_path: string
-	data?: Record<string, any>
-	x: Record<string, {
-		'meta-data': XpXDataMetaData
-	}>
-}
+// type Content = Omit<ImportedContent,'x'> & {
+// 	x: Record<string, {
+// 		'meta-data': XpXDataMetaData
+// 	}>
+// }
+
+// interface Content extends ImportedContent {
+// 	// _id: string
+// 	// _path: string
+// 	data?: Record<string, any>
+// 	x: Record<string, {
+// 		'meta-data': XpXDataMetaData
+// 	}>
+// }
 
 interface Env <
 	ARGS extends Record<string, any> = Record<string, any>,
-	SOURCE extends Record<string, any> = Content
+	SOURCE extends Record<string, any> = Record<string, any> // Content
 > {
 	args: ARGS
 	localContext: LocalContext
@@ -120,7 +128,7 @@ interface MetafieldsResolverReturnType {
 
 interface Resolver<
 	ARGS extends Record<string, any> = Record<string, any>,
-	SOURCE extends Record<string, any> = Content,
+	SOURCE extends Record<string, any> = Record<string, any>, // Content,
 	RETURN = any
 > {
 	(env: Env<ARGS,SOURCE>): RETURN
