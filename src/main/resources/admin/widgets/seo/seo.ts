@@ -55,14 +55,36 @@ export const get = (req) => {
 	if (content) {
 		// The first part of the content '_path' is the site's URL, make sure to fetch current site!
 		const parts = content._path.split('/');
-		const site = getSite(parts[1]); // Send the first /x/-part of the content's path.
+		const site = getSite({
+			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+			siteUrl: parts[1]
+		}); // Send the first /x/-part of the content's path.
 		if (site) {
-			const siteConfig = getTheConfig(site);
+			const siteConfig = getTheConfig({
+				applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
+				applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+				site
+			});
 			if (siteConfig) {
 				const isFrontpage = site._path === content._path;
-				const pageTitle = getPageTitle(content, site);
-				const titleAppendix = getAppendix(site, isFrontpage);
-				let description = getMetaDescription(content, site);
+				const pageTitle = getPageTitle({
+					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
+					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					content,
+					site
+				});
+				const titleAppendix = getAppendix({
+					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
+					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					isFrontpage,
+					site,
+				});
+				let description = getMetaDescription({
+					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
+					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					content,
+					site
+				});
 				if (description === '') description = null;
 
 				const frontpageUrl = pageUrl({ path: site._path, type: "absolute" });

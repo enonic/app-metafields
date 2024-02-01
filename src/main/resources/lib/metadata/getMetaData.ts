@@ -1,3 +1,8 @@
+import type {Content} from '/lib/xp/content';
+import type {Site} from '/lib/xp/portal';
+import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig.d';
+
+
 import {pageUrl} from '/lib/xp/portal';
 // @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
@@ -17,15 +22,40 @@ function _resolveMetadata(params, selfClosingTags=false) {
 }
 
 
-export function getMetaData(site, siteConfig, content=undefined, returnType="json", selfClosingTags=false) {
+export function getMetaData({
+	applicationConfig,
+	applicationKey,
+	site,
+	siteConfig,
+	content=undefined,
+	returnType="json",
+	selfClosingTags=false
+}: {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	site: Site<MetafieldsSiteConfig>
+	siteConfig: MetafieldsSiteConfig
+	content?: Content
+	returnType?: 'json'|'html'
+	selfClosingTags?: boolean
+}) {
 	if (!content) {
 		return undefined;
 	}
 
-	const appOrSiteConfig = getTheConfig(site);
+	const appOrSiteConfig = getTheConfig({
+		applicationConfig,
+		applicationKey,
+		site
+	});
 
 	const isFrontpage = site._path === content._path;
-	const pageTitle = getPageTitle(content, site);
+	const pageTitle = getPageTitle({
+		applicationConfig,
+		applicationKey,
+		content,
+		site
+	});
 	const siteVerification = siteConfig.siteVerification || null;
 
 	let url = !appOrSiteConfig.removeOpenGraphUrl
@@ -52,7 +82,12 @@ export function getMetaData(site, siteConfig, content=undefined, returnType="jso
 
 	const params = {
 		title: pageTitle,
-		description: getMetaDescription(content, site),
+		description: getMetaDescription({
+			applicationConfig,
+			applicationKey,
+			content,
+			site
+		}),
 		siteName: site.displayName,
 		locale: getLang(content, site),
 		type: isFrontpage ? "website" : "article",

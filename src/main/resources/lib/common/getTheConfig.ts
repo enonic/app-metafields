@@ -3,18 +3,29 @@ import type { MetafieldsSiteConfig } from '/lib/common/MetafieldsSiteConfig.d';
 
 
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
-import {getSiteConfig} from '/lib/common/getSiteConfig';
+import {getSiteConfigFromSite} from './getSiteConfigFromSite';
 
 
 // The configuration needs to be fetched first from site config (using current content if site context is not available - like for widgets), and lastly we'll check for any config files and use these to overwrite.
-export const getTheConfig = (site: Site<MetafieldsSiteConfig>) => {
+export const getTheConfig = ({
+	applicationConfig,
+	applicationKey,
+	site,
+}: {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	site: Site<MetafieldsSiteConfig>
+}) => {
 	let config = libPortalGetSiteConfig<MetafieldsSiteConfig>();
 	if (!config) {
-		config = getSiteConfig(site, app.name);
+		config = getSiteConfigFromSite({
+			applicationKey,
+			site,
+		});
 	}
-	if (app.config && !config.disableAppConfig) {
-		for (let prop in app.config) {
-			let value: string|boolean = app.config[prop];
+	if (applicationConfig && !config.disableAppConfig) {
+		for (let prop in applicationConfig) {
+			let value: string|boolean = applicationConfig[prop];
 			if (prop !== 'config.filename' && prop !== 'service.pid') { // Default props for .cfg-files, not to use further.
 				if (value === 'true' || value === 'false') {
 					value = value === 'true';
