@@ -73,11 +73,24 @@ export function getMetaData({
 	}
 
 	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
-		? getImage(content, site, fallbackImage, fallbackImageIsPrescaled)
+		? getImage({
+			applicationConfig,
+			applicationKey,
+			content,
+			site,
+			defaultImg: fallbackImage,
+			defaultImgPrescaled: fallbackImageIsPrescaled
+		})
 		: null;
 
 	const twitterImageUrl = !appOrSiteConfig.removeTwitterImage
-		? getImage(content, site, fallbackImage)
+		? getImage({
+			applicationConfig,
+			applicationKey,
+			content,
+			site,
+			defaultImg: fallbackImage
+		})
 		: null;
 
 	const params = {

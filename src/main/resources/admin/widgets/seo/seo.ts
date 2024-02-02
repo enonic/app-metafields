@@ -100,7 +100,14 @@ export const get = (req) => {
 					 fallbackImage = siteConfig.frontpageImage;
 					 fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
 				}
-				var image = getImage(content, site, fallbackImage, fallbackImageIsPrescaled);
+				const image = getImage({
+					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
+					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					content,
+					site,
+					defaultImg: fallbackImage,
+					defaultImgPrescaled: fallbackImageIsPrescaled
+				});
 
 				params = {
 					summary: {

@@ -1,5 +1,7 @@
-import type {Content} from '/lib/xp/content';
+import type {Content, Site} from '/lib/xp/content';
 import type {ImageUrlParams} from '/lib/xp/portal';
+// import type {MediaImage} from '/guillotine/guillotine.d';
+import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
@@ -15,8 +17,26 @@ import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {stringOrNull} from '/lib/common/stringOrNull';
 
 
-export const getImage = (content, site, defaultImg: string, defaultImgPrescaled?: boolean) => {
-	const siteConfig = getTheConfig(site);
+export const getImage = ({
+	applicationConfig,
+	applicationKey,
+	content,
+	defaultImg,
+	defaultImgPrescaled,
+	site,
+}: {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	content: Content
+	defaultImg?: string
+	defaultImgPrescaled?: boolean
+	site: Site<MetafieldsSiteConfig>
+}) => {
+	const siteConfig = getTheConfig({
+		applicationConfig,
+		applicationKey,
+		site
+	});
 	const userDefinedPaths = siteConfig.pathsImages || '';
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;

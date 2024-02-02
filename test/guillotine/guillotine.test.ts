@@ -41,6 +41,7 @@ import {
 	test as it,
 } from '@jest/globals';
 import {brand} from '/lib/brand';
+import {mockLibUtil} from '../mocks/mockLibUtil';
 
 // @ts-ignore
 globalThis.log = {
@@ -135,7 +136,7 @@ const imageContent: MediaImage = {
 	hasChildren: false,
 	valid: true,
 	x: {},
-}
+};
 
 jest.mock(
 	'/lib/xp/context',
@@ -168,15 +169,7 @@ jest.mock(
 	{virtual: true}
 );
 
-jest.mock(
-	'/lib/util',
-	() => ({
-		app: {
-			getJsonName: () => 'com-enonic-app-metafields',
-		}
-	}),
-	{virtual: true}
-);
+mockLibUtil();
 
 // const siteMetaFields: MetaFields = {
 // 	alternates: {
@@ -242,7 +235,7 @@ const graphQL: GraphQL = {
 	nonNull: (type) => type,
 	list: (type) => type,
 	reference: (typeName) => {
-		console.debug('reference typeName', typeName);
+		// console.debug('reference typeName', typeName);
 		if (typeName === 'media_Image') {
 			return brand<GraphQLMediaImage>().from(imageContent);
 		}
