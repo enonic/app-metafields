@@ -2,7 +2,7 @@
 <site xmlns="urn:enonic:xp:model:1.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="urn:enonic:xp:model:1.0 https://raw.githubusercontent.com/enonic/xp/master/modules/core/core-api/src/main/resources/META-INF/xsd/model.xsd">
-	<x-data name="meta-data" />
+	<x-data name="meta-data" allowContentTypes="^(?!media:image|portal:template-folder$).*"/>
 	<form>
 		<field-set>
 			<label>General settings</label>
