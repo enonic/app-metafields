@@ -9,7 +9,7 @@
 			<items>
 				<input name="headless" type="CheckBox">
 					<label>Headless mode</label>
-					<help-text>If enabled, page processor will do nothing and its logic will be available in "metadata" service.</help-text>
+					<help-text>If enabled, page processor will do nothing.</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
 				<input name="canonical" type="CheckBox">
