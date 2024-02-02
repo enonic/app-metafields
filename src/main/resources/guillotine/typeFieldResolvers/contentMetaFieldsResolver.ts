@@ -13,7 +13,7 @@ import {
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
-import {getPageTitle} from '/lib/common/getPageTitle';
+import {getFullTitle} from '/lib/common/getFullTitle';
 import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
 import {getTheConfig} from '/lib/common/getTheConfig';
 import {APP_CONFIG, APP_NAME, APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
@@ -62,7 +62,7 @@ export const contentMetaFieldsResolver: Resolver<
 			content,
 			site
 		});
-		const title = getPageTitle({
+		const title = getFullTitle({
 			applicationConfig: APP_CONFIG,
 			applicationKey: APP_NAME,
 			content,
@@ -77,7 +77,7 @@ export const contentMetaFieldsResolver: Resolver<
 		const siteConfig = getSiteConfigFromSite({
 			applicationKey: APP_NAME,
 			site
-		})
+		});
 		const blockRobots = siteConfig.blockRobots || getBlockRobots(content)
 
 		let canonical = null;
@@ -105,19 +105,19 @@ export const contentMetaFieldsResolver: Resolver<
 			// },{
 			// 	_id: '358cd06c-d97b-4088-963c-e32170bd7866'
 			// }],
+			locale: getLang(content, site),
 			openGraph: {
 				// description, // NOTE: Also available on toplevel
 				// images: appOrSiteConfig.removeOpenGraphImage ? [] : images
-				locale: getLang(content, site),
-				siteName: site.displayName,
 				// title, // NOTE: Also available on toplevel
-				type: isFrontpage ? 'website' : 'article',
-				url: appOrSiteConfig.removeOpenGraphUrl ? null : _path,
+				type: isFrontpage ? 'website' : 'article', // TODO could be expanded to support more types, see https://ogp.me/
+				// url: appOrSiteConfig.removeOpenGraphUrl ? null : _path,
 			},
 			robots: {
 				follow: !blockRobots,
 				index: !blockRobots,
 			},
+			siteName: site.displayName,
 			title,
 			twitter: {
 				// description, // NOTE: Also available on toplevel

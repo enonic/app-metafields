@@ -1,4 +1,7 @@
-import type {Extensions, GraphQL} from '/guillotine/guillotine.d';
+import type {
+	Extensions,
+	GraphQL,
+} from '/guillotine/guillotine.d';
 
 
 import {GraphQLFieldName, GraphQLTypeName} from '/guillotine/guillotine.d';
@@ -18,6 +21,9 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 					description: {
 						type: graphQL.GraphQLString,
 					},
+					locale: {
+						type: graphQL.GraphQLString,
+					},
 					images: {
 						type: graphQL.list(graphQL.reference(GraphQLTypeName.MEDIA_IMAGE)),
 					},
@@ -26,6 +32,9 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 					},
 					robots: {
 						type: graphQL.Json,
+					},
+					siteName: {
+						type: graphQL.GraphQLString,
 					},
 					title: {
 						type: graphQL.nonNull(graphQL.GraphQLString),

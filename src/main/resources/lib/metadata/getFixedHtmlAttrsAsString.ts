@@ -13,7 +13,7 @@ export function getFixedHtmlAttrsAsString(htmlTag) {
 		if (htmlTagAttributes[i].toLowerCase().trim() === "prefix") {
 			prefixFound = true;
 			if (htmlTagAttributes[i + 1].indexOf(OG_ATTRIBUTE) === -1) {
-				//log.info("Before join - " + htmlTagAttributes[i+1]);
+				// log.info("Before join - " + htmlTagAttributes[i+1]);
 				htmlTagAttributes[i + 1] =
 					htmlTagAttributes[i + 1].substr(
 						0,
@@ -22,9 +22,9 @@ export function getFixedHtmlAttrsAsString(htmlTag) {
 					" " +
 					OG_ATTRIBUTE +
 					htmlTagAttributes[i + 1].substr(-1);
-				//log.info("After join - " + htmlTagAttributes[i+1]);
+				// log.info("After join - " + htmlTagAttributes[i+1]);
 			} else {
-				//log.info("Already in the tag!");
+				// log.info("Already in the tag!");
 			}
 		}
 	}

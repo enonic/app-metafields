@@ -2,7 +2,7 @@ import {forceArray} from '@enonic/js-utils/array/forceArray';
 import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/metadata/getMetaData'
 import {getReusableData} from '/lib/metadata/getReusableData';
-import {getTitle} from '/lib/metadata/getTitle';
+import {getTitleHtml} from '../../lib/metadata/getTitleHtml';
 
 
 const HTML_MEDIA_TYPE = 'text/html';
@@ -36,7 +36,7 @@ export const responseProcessor = (req, res) => {
 		// Handle injection of title - use any existing tag by replacing its content.
 		// Svg are text/html can have a <title>
 		if (titleHasIndex && htmlIndex > -1) {
-			const titleHtml = getTitle({
+			const titleHtml = getTitleHtml({
 				applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 				applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 				content,
@@ -72,7 +72,7 @@ export const responseProcessor = (req, res) => {
 	}
 
 	if ( !titleAdded ) {
-		const titleHtml = getTitle({
+		const titleHtml = getTitleHtml({
 			applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 			content,
