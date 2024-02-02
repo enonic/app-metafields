@@ -1,38 +1,17 @@
 import type {
 	attachmentUrl,
 	getSiteConfig,
-	imageUrl
+	imageUrl,
+	pageUrl,
 } from '/lib/xp/portal';
 import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
+
 
 import {jest} from '@jest/globals';
 
 
 export function mocklibXpPortal({
-	siteConfig = {
-		blockRobots: true,
-		canonical: true,
-		disableAppConfig: true,
-		frontpageImage: 'frontpageImage',
-		frontpageImageIsPrescaled: true,
-		fullPath: true,
-		headless: true,
-		pathsDescriptions: 'pathsDescriptions', // with comma
-		pathsImages: 'pathsImages', // with comma
-		pathsTitles: 'pathsTitles', // with comma
-		seoDescription: 'seoDescription',
-		seoImage: 'seoImage',
-		seoImageIsPrescaled: true,
-		seoTitle: 'seoTitle',
-		siteVerification: 'siteVerification',
-		removeOpenGraphImage: true,
-		removeOpenGraphUrl: true,
-		removeTwitterImage: true,
-		titleBehaviour: true,
-		titleFrontpageBehaviour: true,
-		titleSeparator: '-',
-		twitterUsername: '@twitterUsername',
-	}
+	siteConfig = {},
 }: {
 	siteConfig?: MetafieldsSiteConfig
 } = {}) {
@@ -68,6 +47,21 @@ export function mocklibXpPortal({
 					type,
 				} = imageUrlParams;
 				return `${id}${format || ''}${quality || ''}${scale}${type}ImageUrl`;
+			}),
+			pageUrl: jest.fn<typeof pageUrl>().mockImplementation((pageUrlParams) => {
+				// console.debug('pageUrl mock called with', pageUrlParams);
+				const {
+				// 	applicationKey,
+				// 	branch,
+				// 	id,
+				// 	language,
+				// 	params,
+					path,
+				// 	parts,
+				// 	secure,
+					type,
+				} = pageUrlParams;
+				return `${path}${type}PageUrl`;
 			}),
 		}),
 		{virtual: true}
