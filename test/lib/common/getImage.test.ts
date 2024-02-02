@@ -1,6 +1,4 @@
 import type {
-	Attachment,
-	Content,
 	get as GetContentByKey,
 	Site
 } from '/lib/xp/content';
@@ -17,6 +15,18 @@ import {
 } from '@jest/globals';
 import {mocklibXpPortal} from '../../mocks/mockLibXpPortal';
 import {mockLibUtil} from '../../mocks/mockLibUtil';
+import {mockContent} from '../../mocks/mockContent';
+import {mockImage} from '../../mocks/mockImage';
+
+
+// @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
+globalThis.log = {
+	error: console.error,
+	warning: console.warn,
+	info: console.info,
+	debug: console.debug,
+}
+
 
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	blockRobots: true,
@@ -65,62 +75,7 @@ const siteContent: Site<MetafieldsSiteConfig> = {
 	x: {},
 }
 
-function mockContent({
-	attachments = {},
-	data = {},
-	prefix,
-}: {
-	attachments?: Record<string, Attachment>
-	data?: Record<string, unknown>
-	prefix: string
-}): Content {
-	return {
-		_id: `${prefix}ContentId`,
-		_name: `${prefix}ContentName`,
-		_path: `${prefix}ContentPath`,
-		attachments,
-		creator: 'user:system:creator',
-		createdTime: '2021-01-01T00:00:00Z',
-		data,
-		displayName: `${prefix}ContentDisplayName`,
-		owner: 'user:system:owner',
-		type: 'portal:site',
-		hasChildren: false,
-		valid: true,
-		x: {},
-	}
-}
 
-function mockImage({
-	mimeType = 'image/jpeg',
-	name,
-	prefix
-}: {
-	mimeType?: string
-	name: string
-	prefix: string
-}) {
-	return mockContent({
-		attachments: {
-			[name]: {
-				label: `${prefix} label`,
-				mimeType,
-				name,
-				size: 12345,
-			}
-		},
-		data: {
-			media: {
-				attachment: name,
-				focalPoint: {
-					x: 25,
-					y: 50
-				},
-			}
-		},
-		prefix: `${prefix}Image`
-	}) as MediaImage;
-}
 
 const imageContent1 = mockImage({
 	name: 'image1.jpg',

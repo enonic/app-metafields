@@ -7,8 +7,12 @@ import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
-// globalThis.log = console;
-
+globalThis.log = {
+	error: console.error,
+	warning: console.warn,
+	info: console.info,
+	debug: console.debug,
+}
 
 describe('findStringValueInObject', () => {
 	it('should return null if no path is given', () => {

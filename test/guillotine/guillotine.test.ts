@@ -43,7 +43,7 @@ import {
 import {brand} from '/lib/brand';
 import {mockLibUtil} from '../mocks/mockLibUtil';
 
-// @ts-ignore
+// @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
 globalThis.log = {
 	error: console.error,
 	warning: console.warn,
