@@ -52,7 +52,6 @@ export const metaFieldsImagesResolver: Resolver<
 		}
 	} = context;
 	// log.info(`resolvers content metafields context ${JSON.stringify(context, null, 4)}`);
-	// log.info(`metaFieldsImagesResolver imageContentIds:${imageContentIds}`);
 	return runInContext({
 		branch,
 		repository: `com.enonic.cms.${project}`,
@@ -63,10 +62,8 @@ export const metaFieldsImagesResolver: Resolver<
 		principals
 	}, () => {
 
-		// const imageIds = [];
 		const images = [];
 		if (_siteConfig.seoImage) {
-			// imageIds.push(_siteConfig.seoImage);
 			const imageContent = getContentByKey({ key: _siteConfig.seoImage });
 			if (imageContent) {
 				images.push(imageContent);
@@ -79,7 +76,6 @@ export const metaFieldsImagesResolver: Resolver<
 			const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 			const userDefinedValue = userDefinedPaths ? findStringValueInObject(_content, userDefinedArray, _siteConfig.fullPath) : null;
 			if (userDefinedValue) {
-				// imageIds.push(userDefinedValue);
 				const imageContent = getContentByKey({ key: userDefinedValue });
 				if (imageContent) {
 					images.push(imageContent);
@@ -88,7 +84,6 @@ export const metaFieldsImagesResolver: Resolver<
 				}
 			} else {
 				if (_content.data.image) {
-					// imageIds.push(content.data.image);
 					const imageContent = getContentByKey({ key: _content.data.image as string });
 					if (imageContent) {
 						images.push(imageContent);
@@ -96,7 +91,6 @@ export const metaFieldsImagesResolver: Resolver<
 						log.error(`content with _path:${_content._path} references a non-existing image with key:${_content.data.image}}`);
 					}
 				} else if (_content.data.images) {
-					// imageIds.push(content.data.images);
 					const imageContent = getContentByKey({ key: _content.data.images as string });
 					if (imageContent) {
 						images.push(imageContent);
@@ -107,7 +101,6 @@ export const metaFieldsImagesResolver: Resolver<
 			}
 		}
 		if (_siteConfig.frontpageImage) {
-			// imageIds.push(_siteConfig.frontpageImage);
 			const imageContent = getContentByKey({ key: _siteConfig.frontpageImage });
 			if (imageContent) {
 				images.push(imageContent);
@@ -116,15 +109,5 @@ export const metaFieldsImagesResolver: Resolver<
 			}
 		}
 		return images;
-		// log.info(`contentMetaFieldsResolver imageIds:${imageIds}`);
-
-		// return imageContentIds.map((imageContentId) => {
-		// 	const imageContent = getContentByKey({ key: imageContentId });
-		// 	if (imageContent) {
-		// 		return imageContent;
-		// 	}
-		// 	log.error(`image content with key:${imageContentId} not found!`);
-		// 	return null;
-		// }).filter((imageContent) => imageContent !== null);
 	});
 }

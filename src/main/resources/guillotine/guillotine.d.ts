@@ -1,6 +1,24 @@
 import type {Content} from '@enonic-types/lib-content';
 import type {Branded} from '/lib/brand.d';
 
+
+export declare type BaseFolder = Content<{}, 'base:folder'>;
+
+export declare type MediaImage = Content<{
+	media: {
+		altText?: string
+		artist?: string
+		attachment: string
+		caption?: string
+		copyright?: string
+		focalPoint: {
+			x: number
+			y: number
+		}
+		tags?: string // with comma?
+	}
+}, 'media:image'>;
+
 export const enum GraphQLTypeName {
 	CONTENT = 'Content',
 	// IMAGE = 'Image',
@@ -8,6 +26,34 @@ export const enum GraphQLTypeName {
 	MEDIA_IMAGE = 'media_Image',
 	METAFIELDS = 'MetaFields',
 }
+
+export interface MetaFields {
+	alternates?: {
+		canonical?: string
+	}, // string
+	description?: string
+	images?: MediaImage[]
+	locale?: string
+	openGraph?: {
+		type?: 'website' | 'article'
+	} // string
+	robots?: {
+		follow?: boolean
+		index?: boolean
+	} // string
+	siteName: string
+	title: string
+	twitter?: {
+		creator?: string
+	} // string
+	verification?: {
+		google?: string
+	} // string
+}
+
+type GraphQLContent = Branded<Content, 'Content'>
+type GraphQLMediaImage = Branded<MediaImage, 'media_Image'>
+type GraphQLMetaFields = Branded<MetaFields, 'MetaFields'>
 
 export const enum GraphQLFieldName {
 	IMAGES = 'images',
@@ -23,11 +69,11 @@ type GraphQLInt = Branded<number, 'GraphQLInt'>
 type GraphQLID = Branded<string, 'GraphQLID'>
 type GraphQLBoolean = Branded<boolean, 'GraphQLBoolean'>
 type GraphQLFloat = Branded<number, 'GraphQLFloat'>
-type GraphJson = Branded<string, 'Json'>
-type GraphDateTime = Branded<string, 'DateTime'>
-type GraphDate = Branded<string, 'Date'>
-type GraphLocalTime = Branded<string, 'LocalTime'>
-type GraphLocalDateTime = Branded<string, 'LocalDateTime'>
+type GraphQLJson = Branded<string, 'Json'>
+type GraphQLDateTime = Branded<string, 'DateTime'>
+type GraphQLDate = Branded<string, 'Date'>
+type GraphQLLocalTime = Branded<string, 'LocalTime'>
+type GraphQLLocalDateTime = Branded<string, 'LocalDateTime'>
 
 type GraphQLType =
 	| GraphQLString
@@ -35,11 +81,15 @@ type GraphQLType =
 	| GraphQLID
 	| GraphQLBoolean
 	| GraphQLFloat
-	| GraphJson
-	| GraphDateTime
-	| GraphDate
-	| GraphLocalTime
-	| GraphLocalDateTime
+	| GraphQLJson
+	| GraphQLDateTime
+	| GraphQLDate
+	| GraphQLLocalTime
+	| GraphQLLocalDateTime
+	// Extensions:
+	| GraphQLContent
+	| GraphQLMediaImage
+	| GraphQLMetaFields
 
 type GraphQLTypes =
 	|'GraphQLString'
