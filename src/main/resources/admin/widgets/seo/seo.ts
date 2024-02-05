@@ -94,19 +94,13 @@ export const get = (req) => {
 				const justThePath = url.replace(frontpageUrl,'');
 				const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
 
-				let fallbackImage = siteConfig.seoImage;
-				let fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
-				if (isFrontpage && siteConfig.frontpageImage) {
-					 fallbackImage = siteConfig.frontpageImage;
-					 fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
-				}
 				const imageUrl = getImageUrl({
 					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 					content,
 					site,
-					defaultImg: fallbackImage,
-					defaultImgPrescaled: fallbackImageIsPrescaled
+					defaultImg: siteConfig.seoImage,
+					defaultImgPrescaled: siteConfig.seoImageIsPrescaled
 				});
 
 				params = {

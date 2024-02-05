@@ -1,5 +1,6 @@
 import type {Content} from '@enonic-types/lib-content';
-import type {Branded} from '/lib/brand.d';
+import type {Branded} from '/lib/types/Branded';
+import type {MediaImage} from '/lib/types/Content';
 
 
 export const enum GraphQLTypeName {
@@ -34,9 +35,9 @@ export interface MetaFields {
 	} // string
 }
 
-type GraphQLContent = Branded<Content, 'Content'>
-type GraphQLMediaImage = Branded<MediaImage, 'media_Image'>
-type GraphQLMetaFields = Branded<MetaFields, 'MetaFields'>
+export type GraphQLContent = Branded<Content, 'Content'>
+export type GraphQLMediaImage = Branded<MediaImage, 'media_Image'>
+export type GraphQLMetaFields = Branded<MetaFields, 'MetaFields'>
 
 export const enum GraphQLFieldName {
 	IMAGES = 'images',
@@ -47,16 +48,16 @@ type PartialRecord<K extends keyof any, T> = {
 	[P in K]?: T;
 };
 
-type GraphQLString = Branded<string, 'GraphQLString'>
-type GraphQLInt = Branded<number, 'GraphQLInt'>
-type GraphQLID = Branded<string, 'GraphQLID'>
-type GraphQLBoolean = Branded<boolean, 'GraphQLBoolean'>
-type GraphQLFloat = Branded<number, 'GraphQLFloat'>
-type GraphQLJson = Branded<string, 'Json'>
-type GraphQLDateTime = Branded<string, 'DateTime'>
-type GraphQLDate = Branded<string, 'Date'>
-type GraphQLLocalTime = Branded<string, 'LocalTime'>
-type GraphQLLocalDateTime = Branded<string, 'LocalDateTime'>
+export type GraphQLString = Branded<string, 'GraphQLString'>
+export type GraphQLInt = Branded<number, 'GraphQLInt'>
+export type GraphQLID = Branded<string, 'GraphQLID'>
+export type GraphQLBoolean = Branded<boolean, 'GraphQLBoolean'>
+export type GraphQLFloat = Branded<number, 'GraphQLFloat'>
+export type GraphQLJson = Branded<string, 'Json'>
+export type GraphQLDateTime = Branded<string, 'DateTime'>
+export type GraphQLDate = Branded<string, 'Date'>
+export type GraphQLLocalTime = Branded<string, 'LocalTime'>
+export type GraphQLLocalDateTime = Branded<string, 'LocalDateTime'>
 
 type GraphQLType =
 	| GraphQLString
@@ -159,7 +160,7 @@ interface MetafieldsResolverReturnType {
 	verification?: any
 }
 
-interface Resolver<
+export interface Resolver<
 	ARGS extends Record<string, any> = Record<string, any>,
 	SOURCE extends Record<string, any> = Record<string, any>, // Content,
 	RETURN = any

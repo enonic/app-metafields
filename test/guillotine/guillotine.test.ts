@@ -12,11 +12,10 @@ import type {
 } from '/lib/xp/portal';
 import type {
 	GraphQL,
-	MetaFields
-} from '/lib/types/Guillotine';
+	MetaFields,
+} from '/lib/types/guillotine';
 import type {
 	BaseFolder,
-	MediaImage,
 } from '/lib/types'
 
 
@@ -42,7 +41,9 @@ import {
 	GraphQLMetaFieldsBuilder,
 	GraphQLStringBuilder,
 } from '/lib/types';
+import {mockImage} from '../mocks/mockImage';
 import {mockLibUtil} from '../mocks/mockLibUtil';
+import {mockLibXpContext} from '../mocks/mockLibXpContext';
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
 globalThis.log = {
@@ -56,8 +57,6 @@ const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	blockRobots: true,
 	canonical: true,
 	disableAppConfig: true,
-	frontpageImage: 'frontpageImage',
-	frontpageImageIsPrescaled: true,
 	fullPath: true,
 	headless: true,
 	pathsDescriptions: 'pathsDescriptions', // with comma
@@ -115,52 +114,12 @@ const folderContent: BaseFolder = {
 	x: {},
 }
 
-const imageContent: MediaImage = {
-	_id: 'imageContentId',
-	_name: 'imageContentName',
-	_path: 'imageContentPath',
-	attachments: {},
-	creator: 'user:system:creator',
-	createdTime: '2021-01-01T00:00:00Z',
-	data: {
-		media: {
-			attachment: 'image.jpg',
-			focalPoint: {
-				x: 25,
-				y: 50
-			},
-		}
-	},
-	displayName: 'imageContentDisplayName',
-	owner: 'user:system:owner',
-	type: 'media:image',
-	hasChildren: false,
-	valid: true,
-	x: {},
-};
+const imageContent = mockImage({
+	name: 'image.jpg',
+	prefix: 'image'
+});
 
-jest.mock(
-	'/lib/xp/context',
-	() => ({
-		get: jest.fn<typeof getContext>().mockReturnValue({
-			attributes: {},
-			authInfo: {
-				principals: [],
-				user: {
-					login: 'login',
-					idProvider: 'idProvider',
-					type: 'user',
-					key: 'user:idProvder:name',
-					displayName: 'userDisplayName',
-				},
-			},
-			branch: 'master',
-			repository: 'repository'
-		}),
-		run: jest.fn<typeof run>((_context, callback) => callback())
-	}),
-	{virtual: true}
-);
+mockLibXpContext();
 
 jest.mock(
 	'/lib/xp/portal',
@@ -252,7 +211,13 @@ describe('guillotine extensions', () => {
 		jest.mock(
 			'/lib/xp/content',
 			() => ({
-				getSite: jest.fn<typeof ContentGetSite>().mockReturnValue(siteContent)
+				getSite: jest.fn<typeof ContentGetSite>().mockReturnValue(siteContent),
+				getOutboundDependencies: jest.fn().mockReturnValue([]),
+				query: jest.fn().mockReturnValue({
+					count: 0,
+					hits: [],
+					total: 0,
+				})
 			}),
 			{virtual: true}
 		);

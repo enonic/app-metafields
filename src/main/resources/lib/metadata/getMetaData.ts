@@ -65,12 +65,6 @@ export function getMetaData({
 	const canonicalUrl = canonicalContent
 		? pageUrl({ path: canonicalContent._path, type: "absolute"})
 		: url;
-	let fallbackImage = siteConfig.seoImage;
-	let fallbackImageIsPrescaled = siteConfig.seoImageIsPrescaled;
-	if (isFrontpage && siteConfig.frontpageImage) {
-		fallbackImage = siteConfig.frontpageImage;
-		fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
-	}
 
 	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
 		? getImageUrl({
@@ -78,8 +72,8 @@ export function getMetaData({
 			applicationKey,
 			content,
 			site,
-			defaultImg: fallbackImage,
-			defaultImgPrescaled: fallbackImageIsPrescaled
+			defaultImg: siteConfig.seoImage,
+			defaultImgPrescaled: siteConfig.seoImageIsPrescaled
 		})
 		: null;
 
@@ -89,7 +83,7 @@ export function getMetaData({
 			applicationKey,
 			content,
 			site,
-			defaultImg: fallbackImage
+			defaultImg: siteConfig.seoImage
 		})
 		: null;
 

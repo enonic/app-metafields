@@ -1,8 +1,9 @@
 //──────────────────────────────────────────────────────────────────────────────
 // Type imports
 //──────────────────────────────────────────────────────────────────────────────
-import type {Content} from '@enonic-types/lib-content';
-import type {Branded} from '/lib/types/Branded';
+import type {
+	ImageId,
+} from '/lib/types/Content';
 import type {
 	GraphQLBoolean,
 	GraphQLContent,
@@ -17,7 +18,7 @@ import type {
 	GraphQLMediaImage,
 	GraphQLMetaFields,
 	GraphQLString,
-} from '/lib/types/Guillotine';
+} from '/lib/types/guillotine';
 
 
 //──────────────────────────────────────────────────────────────────────────────
@@ -27,28 +28,15 @@ import {brand} from '/lib/types/brand';
 
 
 //──────────────────────────────────────────────────────────────────────────────
-// ExportedtTypes
+// Exported types
 //──────────────────────────────────────────────────────────────────────────────
+export type {
+	BaseFolder,
+	ImageId,
+	MediaImage,
+} from '/lib/types/Content';
 export type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
-export declare type BaseFolder = Content<{}, 'base:folder'>;
-
-export declare type ImageId = Branded<string, 'ImageId'>;
-
-export declare type MediaImage = Content<{
-	media: {
-		altText?: string
-		artist?: string
-		attachment: string
-		caption?: string
-		copyright?: string
-		focalPoint: {
-			x: number
-			y: number
-		}
-		tags?: string // with comma?
-	}
-}, 'media:image'>;
 
 //──────────────────────────────────────────────────────────────────────────────
 // Exported values
