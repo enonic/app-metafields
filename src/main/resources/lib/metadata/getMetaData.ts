@@ -8,7 +8,7 @@ import {pageUrl} from '/lib/xp/portal';
 import {render} from '/lib/thymeleaf';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
-import {getImage} from '/lib/common/getImage';
+import {getImageUrl} from '../common/getImageUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getPageTitle} from '/lib/common/getPageTitle';
@@ -73,7 +73,7 @@ export function getMetaData({
 	}
 
 	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
-		? getImage({
+		? getImageUrl({
 			applicationConfig,
 			applicationKey,
 			content,
@@ -84,7 +84,7 @@ export function getMetaData({
 		: null;
 
 	const twitterImageUrl = !appOrSiteConfig.removeTwitterImage
-		? getImage({
+		? getImageUrl({
 			applicationConfig,
 			applicationKey,
 			content,

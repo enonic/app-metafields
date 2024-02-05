@@ -128,8 +128,8 @@ describe('getImage', () => {
 		mockLibUtil();
 	});
 	it('should return undefined when no image found', () => {
-		import('/lib/common/getImage').then(({getImage}) => {
-			expect(getImage({
+		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+			expect(getImageUrl({
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
@@ -141,8 +141,8 @@ describe('getImage', () => {
 	}); // it
 
 	it('should return attachmentUrl when defaultImg and defaultImgPrescaled provided', () => {
-		import('/lib/common/getImage').then(({getImage}) => {
-			expect(getImage({
+		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+			expect(getImageUrl({
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
@@ -156,8 +156,8 @@ describe('getImage', () => {
 	}); // it
 
 	it('should handle svgs', () => {
-		import('/lib/common/getImage').then(({getImage}) => {
-			expect(getImage({
+		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+			expect(getImageUrl({
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
@@ -172,8 +172,8 @@ describe('getImage', () => {
 	}); // it
 
 	it('should return an url when content has data.image', () => {
-		import('/lib/common/getImage').then(({getImage}) => {
-			expect(getImage({
+		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+			expect(getImageUrl({
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
@@ -189,8 +189,8 @@ describe('getImage', () => {
 	}); // it
 
 	it('should return an url when content has data.images', () => {
-		import('/lib/common/getImage').then(({getImage}) => {
-			expect(getImage({
+		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+			expect(getImageUrl({
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({

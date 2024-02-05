@@ -17,7 +17,7 @@ import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {stringOrNull} from '/lib/common/stringOrNull';
 
 
-export const getImage = ({
+export const getImageUrl = ({
 	applicationConfig,
 	applicationKey,
 	content,
