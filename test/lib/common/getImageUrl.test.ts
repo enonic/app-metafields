@@ -2,8 +2,10 @@ import type {
 	get as GetContentByKey,
 	Site
 } from '/lib/xp/content';
-import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
-import type {MediaImage} from '/guillotine/guillotine.d';
+import type {
+	MetafieldsSiteConfig,
+	MediaImage
+} from '/lib/types';
 
 
 import {
@@ -98,7 +100,7 @@ const imageContent4 = mockImage({
 	prefix: 'four'
 });
 
-describe('getImage', () => {
+describe('getImageUrl', () => {
 	beforeAll(() => {
 		jest.mock(
 			'/lib/xp/content',

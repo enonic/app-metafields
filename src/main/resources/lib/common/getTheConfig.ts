@@ -1,5 +1,5 @@
 import type {Site} from '/lib/xp/portal';
-import type { MetafieldsSiteConfig } from '/lib/common/MetafieldsSiteConfig.d';
+import type { MetafieldsSiteConfig } from '../types/MetafieldsSiteConfig';
 
 
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';

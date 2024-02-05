@@ -1,6 +1,5 @@
-import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 import type {
-	Content,
 	getSite as ContentGetSite,
 	Site
 } from '/lib/xp/content';
@@ -12,25 +11,13 @@ import type {
 	getSiteConfig
 } from '/lib/xp/portal';
 import type {
-	BaseFolder,
 	GraphQL,
-	GraphQLBoolean,
-	GraphQLContent,
-	GraphQLID,
-	GraphQLInt,
-	GraphQLFloat,
-	GraphQLJson,
-	GraphQLDateTime,
-	GraphQLDate,
-	GraphQLLocalTime,
-	GraphQLLocalDateTime,
-	GraphQLMediaImage,
-	GraphQLMetaFields,
-	GraphQLString,
-	MediaImage,
 	MetaFields
-} from '/guillotine/guillotine.d';
-// import type {Brand} from '/lib/brand.d';
+} from '/lib/types/Guillotine';
+import type {
+	BaseFolder,
+	MediaImage,
+} from '/lib/types'
 
 
 import {
@@ -40,7 +27,21 @@ import {
 	jest,
 	test as it,
 } from '@jest/globals';
-import {brand} from '/lib/brand';
+import {
+	GraphQLBooleanBuilder,
+	GraphQLContentBuilder,
+	GraphQLDateBuilder,
+	GraphQLDateTimeBuilder,
+	GraphQLFloatBuilder,
+	GraphQLIDBuilder,
+	GraphQLIntBuilder,
+	GraphQLJsonBuilder,
+	GraphQLLocalDateTimeBuilder,
+	GraphQLLocalTimeBuilder,
+	GraphQLMediaImageBuilder,
+	GraphQLMetaFieldsBuilder,
+	GraphQLStringBuilder,
+} from '/lib/types';
 import {mockLibUtil} from '../mocks/mockLibUtil';
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
@@ -219,28 +220,28 @@ const folderMetaFields: MetaFields = {
 	},
 };
 
-const graphQLContent = brand<GraphQLContent>().from(siteContent);
+const graphQLContent = GraphQLContentBuilder.from(siteContent);
 
 const graphQL: GraphQL = {
-	GraphQLBoolean: brand<GraphQLBoolean>().from(true),
-	GraphQLInt: brand<GraphQLInt>().from(1),
-	GraphQLString: brand<GraphQLString>().from('string'),
-	GraphQLID: brand<GraphQLID>().from('id'),
-	GraphQLFloat: brand<GraphQLFloat>().from(1.1),
-	Json: brand<GraphQLJson>().from('{"json": "value"}'),
-	DateTime: brand<GraphQLDateTime>().from('2021-01-01T00:00:00Z'),
-	Date: brand<GraphQLDate>().from('2021-01-01'),
-	LocalTime: brand<GraphQLLocalTime>().from('00:00:00'),
-	LocalDateTime: brand<GraphQLLocalDateTime>().from('2021-01-01T00:00:00'),
+	GraphQLBoolean: GraphQLBooleanBuilder.from(true),
+	GraphQLInt: GraphQLIntBuilder.from(1),
+	GraphQLString: GraphQLStringBuilder.from('string'),
+	GraphQLID: GraphQLIDBuilder.from('id'),
+	GraphQLFloat: GraphQLFloatBuilder.from(1.1),
+	Json: GraphQLJsonBuilder.from('{"json": "value"}'),
+	DateTime: GraphQLDateTimeBuilder.from('2021-01-01T00:00:00Z'),
+	Date: GraphQLDateBuilder.from('2021-01-01'),
+	LocalTime: GraphQLLocalTimeBuilder.from('00:00:00'),
+	LocalDateTime: GraphQLLocalDateTimeBuilder.from('2021-01-01T00:00:00'),
 	nonNull: (type) => type,
 	list: (type) => type,
 	reference: (typeName) => {
 		// console.debug('reference typeName', typeName);
 		if (typeName === 'media_Image') {
-			return brand<GraphQLMediaImage>().from(imageContent);
+			return GraphQLMediaImageBuilder.from(imageContent);
 		}
 		if (typeName === 'MetaFields') {
-			return brand<GraphQLMetaFields>().from(folderMetaFields);
+			return GraphQLMetaFieldsBuilder.from(folderMetaFields);
 		}
 		return graphQLContent;
 	},

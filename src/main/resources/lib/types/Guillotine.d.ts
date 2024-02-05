@@ -2,23 +2,6 @@ import type {Content} from '@enonic-types/lib-content';
 import type {Branded} from '/lib/brand.d';
 
 
-export declare type BaseFolder = Content<{}, 'base:folder'>;
-
-export declare type MediaImage = Content<{
-	media: {
-		altText?: string
-		artist?: string
-		attachment: string
-		caption?: string
-		copyright?: string
-		focalPoint: {
-			x: number
-			y: number
-		}
-		tags?: string // with comma?
-	}
-}, 'media:image'>;
-
 export const enum GraphQLTypeName {
 	CONTENT = 'Content',
 	// IMAGE = 'Image',

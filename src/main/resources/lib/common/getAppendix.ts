@@ -1,5 +1,5 @@
 import type {Site} from '@enonic-types/lib-portal';
-import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig.d';
+import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
 
 
 import {getTheConfig} from '/lib/common/getTheConfig';

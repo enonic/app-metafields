@@ -1,9 +1,11 @@
-import type {BrandBase, BrandBuilder, BrandBuilderOptions, Branded} from '/lib/brand.d';
+import type {BrandBase, BrandBuilder, BrandBuilderOptions, Branded} from '/lib/types/Branded';
 
 
-export function brand<T extends Branded<Base, any>, Base = BrandBase<T>>({
-	validate = () => true,
-}: BrandBuilderOptions<Base> = {}): BrandBuilder<T, Base> {
+export function brand<T extends Branded<Base, any>, Base = BrandBase<T>>(
+	{
+		validate = () => true,
+	}: BrandBuilderOptions<Base> = {}
+): BrandBuilder<T, Base> {
 	function assertIsBrand(value: Base): asserts value is T {
 		const result = validate(value)
 		if (typeof result === 'string') {
