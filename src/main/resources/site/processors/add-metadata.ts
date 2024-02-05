@@ -48,7 +48,10 @@ export const responseProcessor = (req, res) => {
 
 		// Locate the <html> tag and make sure the "og" namespace is added.
 		if (htmlIndex >= 0 && endHtmlIndex >= 0) {
-			const fixedHtmlTagInnerContent = getFixedHtmlAttrsAsString(res.body);
+			const fixedHtmlTagInnerContent = getFixedHtmlAttrsAsString({
+				htmlTag: res.body,
+				isFrontpage: site._path === content._path,
+			});
 			res.body = res.body.substr(0, htmlIndex + 5) + " " + fixedHtmlTagInnerContent + res.body.substr(endHtmlIndex);
 		}
 	}

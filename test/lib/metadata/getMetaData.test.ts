@@ -115,6 +115,13 @@ describe('getMetaData', () => {
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
+				openGraph: {
+					article: {
+						expirationTime: undefined,
+						modifiedTime: undefined,
+						publishedTime: undefined
+					}
+				},
 				siteName: 'siteContentDisplayName',
 				siteVerification: null,
 				title: 'oneContentDisplayName',
@@ -151,6 +158,9 @@ describe('getMetaData', () => {
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
+				openGraph: {
+					article: null
+				},
 				siteName: 'siteContentDisplayName',
 				siteVerification: null,
 				title: 'siteContentDisplayName',
@@ -195,6 +205,13 @@ describe('getMetaData', () => {
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
+				openGraph: {
+					article: {
+						expirationTime: undefined,
+						modifiedTime: undefined,
+						publishedTime: undefined
+					}
+				},
 				siteName: 'siteContentDisplayName',
 				siteVerification: null,
 				title: 'oneContentDisplayName',
@@ -242,6 +259,13 @@ describe('getMetaData', () => {
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
+				openGraph: {
+					article: {
+						expirationTime: undefined,
+						modifiedTime: undefined,
+						publishedTime: undefined
+					}
+				},
 				siteName: 'siteContentDisplayName',
 				siteVerification: null,
 				title: 'oneContentDisplayName',
@@ -289,6 +313,13 @@ describe('getMetaData', () => {
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
+				openGraph: {
+					article: {
+						expirationTime: undefined,
+						modifiedTime: undefined,
+						publishedTime: undefined
+					}
+				},
 				siteName: 'siteContentDisplayName',
 				siteVerification: null,
 				title: 'oneContentDisplayName',
@@ -340,6 +371,11 @@ describe('getMetaData', () => {
 				'<meta property="og:image" data-th-attr="content=${imageUrl}">\n' +
 				'<meta property="og:image:width" data-th-attr="content=${imageWidth}">\n' +
 				'<meta property="og:image:height" data-th-attr="content=${imageHeight}">\n' +
+				'</th:block>\n' +
+				'<th:block data-th-if="${openGraph.article}">\n' +
+				'<meta property="article:expiration_time" data-th-attr="content=${openGraph.article.expirationTime}" data-th-if="${openGraph.article.expirationTime}">\n' +
+				'<meta property="article:modified_time" data-th-attr="content=${openGraph.article.modifiedTime}" data-th-if="${openGraph.article.modifiedTime}">\n' +
+				'<meta property="article:published_time" data-th-attr="content=${openGraph.article.publishedTime}" data-th-if="${openGraph.article.publishedTime}">\n' +
 				'</th:block>\n' +
 				'<!--/* Twitter */-->\n' +
 				'<th:block data-th-if="${twitterUserName}">\n' +
@@ -397,6 +433,11 @@ describe('getMetaData', () => {
 				'<meta property="og:image" data-th-attr="content=${imageUrl}">\n' +
 				'<meta property="og:image:width" data-th-attr="content=${imageWidth}">\n' +
 				'<meta property="og:image:height" data-th-attr="content=${imageHeight}">\n' +
+				'</th:block>\n' +
+				'<th:block data-th-if="${openGraph.article}">\n' +
+				'<meta property="article:expiration_time" data-th-attr="content=${openGraph.article.expirationTime}" data-th-if="${openGraph.article.expirationTime}">\n' +
+				'<meta property="article:modified_time" data-th-attr="content=${openGraph.article.modifiedTime}" data-th-if="${openGraph.article.modifiedTime}">\n' +
+				'<meta property="article:published_time" data-th-attr="content=${openGraph.article.publishedTime}" data-th-if="${openGraph.article.publishedTime}">\n' +
 				'</th:block>\n' +
 				'<!--/* Twitter */-->\n' +
 				'<th:block data-th-if="${twitterUserName}">\n' +

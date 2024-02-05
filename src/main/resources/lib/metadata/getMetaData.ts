@@ -21,6 +21,30 @@ function _resolveMetadata(params, selfClosingTags=false) {
 	}.html`), params)
 }
 
+interface MetaDataModel {
+	blockRobots: boolean
+	canonical: boolean
+	canonicalUrl: string
+	description: string
+	imageHeight: number
+	imageUrl: string
+	imageWidth: number
+	locale: string
+	openGraph: {
+		article: {
+			expirationTime: string
+			modifiedTime: string
+			publishedTime: string
+		}|null
+	}
+	siteName: string
+	siteVerification: string
+	title: string
+	twitterImageUrl: string
+	twitterUserName: string
+	type: string
+	url: string
+}
 
 export function getMetaData({
 	applicationConfig,
@@ -38,7 +62,7 @@ export function getMetaData({
 	content?: Content
 	returnType?: 'json'|'html'
 	selfClosingTags?: boolean
-}) {
+}): MetaDataModel|string|undefined {
 	if (!content) {
 		return undefined;
 	}
@@ -87,27 +111,34 @@ export function getMetaData({
 		})
 		: null;
 
-	const params = {
-		title: pageTitle,
+	const params: MetaDataModel = {
+		blockRobots: siteConfig.blockRobots || getBlockRobots(content),
+		canonical: siteConfig.canonical,
+		canonicalUrl,
 		description: getMetaDescription({
 			applicationConfig,
 			applicationKey,
 			content,
 			site
 		}),
-		siteName: site.displayName,
-		locale: getLang(content, site),
-		type: isFrontpage ? "website" : "article",
-		url,
-		canonicalUrl,
+		imageHeight: 630,
 		imageUrl,
 		imageWidth: 1200, // Twice of 600x315, for retina
-		imageHeight: 630,
-		blockRobots: siteConfig.blockRobots || getBlockRobots(content),
+		locale: getLang(content, site),
+		openGraph: {
+			article: isFrontpage ? null : {
+				expirationTime: content.publish?.to,
+				modifiedTime: content.publish?.from,
+				publishedTime: content.publish?.first,
+			}
+		},
+		siteName: site.displayName,
 		siteVerification,
-		canonical: siteConfig.canonical,
+		title: pageTitle,
 		twitterUserName: appOrSiteConfig.twitterUsername,
 		twitterImageUrl,
+		type: isFrontpage ? "website" : "article",
+		url,
 	};
 
 	if (returnType === 'html') {
