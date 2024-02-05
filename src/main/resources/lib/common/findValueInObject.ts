@@ -1,13 +1,13 @@
 import {isString} from '/lib/common/isString';
 
 
-export function findStringValueInObject(
+export function findValueInObject(
 	object: Record<string, any>,
 	paths: string[],
 	fullPath: boolean
-): string|null {
+): any {
 	const pathLength = paths.length;
-	let value: string|null = null;
+	let value: unknown = null;
 	let jsonPath: string;
 
 	for (let i = 0; i < pathLength; i++) {
@@ -23,7 +23,7 @@ export function findStringValueInObject(
 				// Noop
 			}
 			if (value) {
-				if (!isString(value) || value.trim() === "")
+				if (isString(value) && (value as string).trim() === "")
 					value = null; // Reset value if empty string (skip empties)
 				else
 					break; // Expect the first property in the string is the most important one to use

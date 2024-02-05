@@ -82,16 +82,6 @@
 					<help-text>Image will otherwise be scaled to 1200x630px and set to jpg with quality 85</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
-				<input name="frontpageImage" type="ImageSelector">
-					<label>Frontpage image fallback</label>
-					<help-text>Use this for a special image for the frontpage only!</help-text>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
-				<input name="frontpageImageIsPrescaled" type="CheckBox">
-					<label>Serve the frontpage image as is. No system scaling.</label>
-					<help-text>Image will otherwise be scaled to 1200x630px and set to jpg with quality 85</help-text>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
 				<input name="seoTitle" type="TextLine">
 					<label>Title fallback</label>
 					<help-text>If current content title is not found this title will be used as a fallback. If not used, the site content's displayName will be used instead.</help-text>

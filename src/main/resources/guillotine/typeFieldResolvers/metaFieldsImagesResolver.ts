@@ -3,8 +3,8 @@ import type {Content, Site} from '/lib/xp/content';
 import type {
 	// Content,
 	Resolver
-} from '../../lib/types/Guillotine';
-import type {MetafieldsSiteConfig} from '../../lib/types/MetafieldsSiteConfig';
+} from '/lib/types/guillotine';
+import type {MetafieldsSiteConfig} from '/lib/types';
 
 
 import {get as getContentByKey} from '/lib/xp/content';
@@ -74,16 +74,7 @@ export const metaFieldsImagesResolver: Resolver<
 			if (imageContent) {
 				images.push(imageContent);
 			} else {
-				log.error(`content with _path:${_content._path} or site with path: ${_site._path} references a non-existing image with key:${imageId}`);
-			}
-		}
-
-		if (_siteConfig.frontpageImage) {
-			const imageContent = getContentByKey({ key: _siteConfig.frontpageImage });
-			if (imageContent) {
-				images.push(imageContent);
-			} else {
-				log.error(`siteConfig.frontpageImage for site with _path:${_site._path} references a non-existing image with key:${_siteConfig.frontpageImage}`);
+				log.error(`content with path:${_content._path} or site with path: ${_site._path} references a non-existing image with key:${imageId}`);
 			}
 		}
 

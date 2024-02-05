@@ -15,11 +15,11 @@ import {
 	jest,
 	test as it,
 } from '@jest/globals';
+import {mockLibXpContext} from '../../mocks/mockLibXpContext';
 import {mocklibXpPortal} from '../../mocks/mockLibXpPortal';
 import {mockLibUtil} from '../../mocks/mockLibUtil';
 import {mockContent} from '../../mocks/mockContent';
 import {mockImage} from '../../mocks/mockImage';
-
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
 globalThis.log = {
@@ -34,9 +34,7 @@ const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	blockRobots: true,
 	canonical: true,
 	disableAppConfig: true,
-	frontpageImage: 'frontpageImage',
-	frontpageImageIsPrescaled: true,
-	fullPath: true,
+	// fullPath: true,
 	headless: true,
 	pathsDescriptions: 'pathsDescriptions', // with comma
 	pathsImages: 'pathsImages', // with comma
@@ -120,15 +118,23 @@ describe('getImageUrl', () => {
 						return imageContent4;
 					}
 					return null;
+				}),
+				getOutboundDependencies: jest.fn().mockReturnValue([]),
+				query: jest.fn().mockReturnValue({
+					count: 0,
+					hits: [],
+					total: 0,
 				})
 			}),
 			{virtual: true}
 		);
+		mockLibXpContext();
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
 		mockLibUtil();
-	});
+	}); // beforeAll
+
 	it('should return undefined when no image found', () => {
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
@@ -199,6 +205,24 @@ describe('getImageUrl', () => {
 					prefix: 'articleWithImages',
 					data: {
 						images: 'twoImageContentId'
+					}
+				}),
+				site: siteContent
+			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
+		}); // import
+	}); // it
+
+	it('should return an url when content has data.pathsImages[0].images', () => {
+		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+			expect(getImageUrl({
+				applicationConfig: {},
+				applicationKey: 'com.enonic.app.metafields',
+				content: mockContent({
+					prefix: 'articleWithImages',
+					data: {
+						pathsImages: [{
+							image: 'twoImageContentId'
+						}]
 					}
 				}),
 				site: siteContent

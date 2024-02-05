@@ -19,6 +19,7 @@ import { join } from 'node:path';
 import {mockContent} from '../../mocks/mockContent';
 import {mockLibThymeleaf} from '../../mocks/mockLibThymeleaf';
 import {mockLibUtil} from '../../mocks/mockLibUtil';
+import {mockLibXpContext} from '../../mocks/mockLibXpContext';
 import {mocklibXpPortal} from '../../mocks/mockLibXpPortal';
 import {mockSite} from '../../mocks/mockSite';
 
@@ -48,6 +49,7 @@ describe('getMetaData', () => {
 	beforeEach(() => {
 		jest.resetAllMocks(); // Resets the state of all mocks. Equivalent to calling .mockReset() on every mocked function.
 		jest.resetModules();
+		mockLibXpContext();
 		mockLibThymeleaf();
 		mockLibUtil();
 		jest.mock(
@@ -56,6 +58,12 @@ describe('getMetaData', () => {
 				get: jest.fn<typeof GetContentByKey<Content>>().mockImplementation(({key}) => {
 					// console.debug('GetContentByKey', key);
 					return null;
+				}),
+				getOutboundDependencies: jest.fn().mockReturnValue([]),
+				query: jest.fn().mockReturnValue({
+					count: 0,
+					hits: [],
+					total: 0,
 				})
 			}),
 			{virtual: true}
@@ -284,52 +292,6 @@ describe('getMetaData', () => {
 				twitterUserName: undefined,
 				twitterImageUrl: null,
 				url: 'oneContentPathabsolutePageUrl',
-			});
-		}); // import
-	}); // it
-
-	it('should handle isFrontpage && siteConfig.frontpageImage', () => {
-		const siteConfig: MetafieldsSiteConfig = {
-			...metaFieldsSiteConfig,
-			frontpageImage: 'frontpageImage',
-		};
-		mocklibXpPortal({
-			siteConfig
-		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
-			const contentWithImage = mockContent({
-				prefix: 'one',
-				data: {
-					image: 'oneImageContentId'
-				}
-			});
-			const site = mockSite({
-				description: 'Site description',
-				prefix: 'site',
-				siteConfig
-			});
-			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
-				content: site,
-				site,
-				siteConfig,
-			})).toEqual({
-				blockRobots: undefined,
-				canonical: undefined,
-				canonicalUrl: 'siteContentPathabsolutePageUrl',
-				description: 'Site description',
-				imageUrl: 'frontpageImageblock(1200,630)absoluteImageUrl', // frontpageImage set as fallbackImage
-				imageWidth: 1200,
-				imageHeight: 630,
-				locale: 'en_US',
-				siteName: 'siteContentDisplayName',
-				siteVerification: null,
-				title: 'siteContentDisplayName',
-				type: 'website',
-				twitterUserName: undefined,
-				twitterImageUrl: 'frontpageImageblock(1200,630)absoluteImageUrl',
-				url: 'siteContentPathabsolutePageUrl',
 			});
 		}); // import
 	}); // it
