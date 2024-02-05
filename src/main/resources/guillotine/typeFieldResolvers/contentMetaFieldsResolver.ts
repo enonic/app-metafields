@@ -99,19 +99,11 @@ export const contentMetaFieldsResolver: Resolver<
 				canonical
 			},
 			description,
-			// images: imageIds,
-			// images: [{
-			// 	_id: 'f0ada1c6-f80f-4872-87ff-f10313499081'
-			// },{
-			// 	_id: '358cd06c-d97b-4088-963c-e32170bd7866'
-			// }],
 			locale: getLang(content, site),
 			openGraph: {
-				// description, // NOTE: Also available on toplevel
-				// images: appOrSiteConfig.removeOpenGraphImage ? [] : images
-				// title, // NOTE: Also available on toplevel
+				hideImages: appOrSiteConfig.removeOpenGraphImage,
+				hideUrl: appOrSiteConfig.removeOpenGraphUrl,
 				type: isFrontpage ? 'website' : 'article', // TODO could be expanded to support more types, see https://ogp.me/
-				// url: appOrSiteConfig.removeOpenGraphUrl ? null : _path,
 			},
 			robots: {
 				follow: !blockRobots,
@@ -120,10 +112,8 @@ export const contentMetaFieldsResolver: Resolver<
 			siteName: site.displayName,
 			title,
 			twitter: {
-				// description, // NOTE: Also available on toplevel
-				// images: appOrSiteConfig.removeTwitterImage ? [] : images
-				// title, // NOTE: Also available on toplevel
-				creator: appOrSiteConfig.twitterUsername
+				creator: appOrSiteConfig.twitterUsername,
+				hideImages: appOrSiteConfig.removeTwitterImage,
 			},
 			verification: {
 				google: siteConfig.siteVerification || null

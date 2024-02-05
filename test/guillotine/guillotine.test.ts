@@ -4,10 +4,6 @@ import type {
 	Site
 } from '/lib/xp/content';
 import type {
-	get as getContext,
-	run
-} from '/lib/xp/context';
-import type {
 	getSiteConfig
 } from '/lib/xp/portal';
 import type {
@@ -163,6 +159,8 @@ const folderMetaFields: MetaFields = {
 	// images: [imageContent],
 	locale: 'en_US',
 	openGraph: {
+		hideImages: true,
+		hideUrl: true,
 		type: 'article'
 	},
 	robots: {
@@ -172,7 +170,8 @@ const folderMetaFields: MetaFields = {
 	siteName: 'siteContentDisplayName',
 	title: 'folderContentDisplayName - siteContentDisplayName',
 	twitter: {
-		creator: '@twitterUsername'
+		creator: '@twitterUsername',
+		hideImages: true,
 	},
 	verification: {
 		google: 'siteVerification'
@@ -222,8 +221,8 @@ describe('guillotine extensions', () => {
 			{virtual: true}
 		);
 	});
+
 	it("does it's thing", () => {
-		// expect(true).toBe(true);
 		import('/guillotine/guillotine').then(({extensions}) => {
 			const res = extensions(graphQL);
 			expect(JSON.parse(JSON.stringify(res))).toEqual({
