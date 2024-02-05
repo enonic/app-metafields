@@ -116,13 +116,9 @@ export function getMetaData({
 		twitterImageUrl,
 	};
 
-	if (returnType === 'json') {
-		return params;
-	}
-
 	if (returnType === 'html') {
 		return _resolveMetadata(params, selfClosingTags);
 	}
 
-	return undefined;
+	return params;
 }
