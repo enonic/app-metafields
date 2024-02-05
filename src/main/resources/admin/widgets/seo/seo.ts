@@ -100,7 +100,7 @@ export const get = (req) => {
 					 fallbackImage = siteConfig.frontpageImage;
 					 fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
 				}
-				const image = getImageUrl({
+				const imageUrl = getImageUrl({
 					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 					content,
@@ -114,7 +114,7 @@ export const get = (req) => {
 						title: pageTitle,
 						fullTitle: (pageTitle + titleAppendix),
 						description: description,
-						image: image,
+						image: imageUrl,
 						canonical: (siteConfig.canonical ? canonicalJustThePath : null),
 						blockRobots: (siteConfig.blockRobots || getBlockRobots(content))
 					},
@@ -126,7 +126,7 @@ export const get = (req) => {
 						url: justThePath,
 						locale: getLang(content,site),
 						image: {
-							src: image,
+							src: imageUrl,
 							width: 1200, // Twice of 600x315, for retina
 							height: 630
 						}
@@ -135,7 +135,7 @@ export const get = (req) => {
 						active: (siteConfig.twitterUsername ? true : false),
 						title: pageTitle,
 						description: description,
-						image: image,
+						image: imageUrl,
 						site: siteConfig.twitterUsername || null
 					}
 				};
