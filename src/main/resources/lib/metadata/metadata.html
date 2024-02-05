@@ -18,6 +18,11 @@
 <meta property="og:image:width" data-th-attr="content=${imageWidth}">
 <meta property="og:image:height" data-th-attr="content=${imageHeight}">
 </th:block>
+<th:block data-th-if="${openGraph.article}">
+<meta property="article:expiration_time" data-th-attr="content=${openGraph.article.expirationTime}" data-th-if="${openGraph.article.expirationTime}">
+<meta property="article:modified_time" data-th-attr="content=${openGraph.article.modifiedTime}" data-th-if="${openGraph.article.modifiedTime}">
+<meta property="article:published_time" data-th-attr="content=${openGraph.article.publishedTime}" data-th-if="${openGraph.article.publishedTime}">
+</th:block>
 <!--/* Twitter */-->
 <th:block data-th-if="${twitterUserName}">
 <meta name="twitter:card" content="summary_large_image">

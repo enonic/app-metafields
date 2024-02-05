@@ -1,7 +1,13 @@
 const OG_ATTRIBUTE = "og: http://ogp.me/ns#";
+const ARTICLE_NAMESPACE = "article: http://ogp.me/ns/article#";
 
-
-export function getFixedHtmlAttrsAsString(htmlTag) {
+export function getFixedHtmlAttrsAsString({
+	htmlTag,
+	isFrontpage,
+}: {
+	htmlTag: string
+	isFrontpage: boolean
+}) {
 	const htmlIndex = htmlTag.toLowerCase().indexOf("<html");
 	const endHtmlIndex = htmlTag.indexOf(">", htmlIndex);
 	const htmlTagContents = htmlTag.substr(htmlIndex + 5, endHtmlIndex - htmlIndex - 5).trim();
@@ -21,6 +27,7 @@ export function getFixedHtmlAttrsAsString(htmlTag) {
 					) +
 					" " +
 					OG_ATTRIBUTE +
+					`${isFrontpage ? '' : ` ${ARTICLE_NAMESPACE}`}` +
 					htmlTagAttributes[i + 1].substr(-1);
 				// log.info("After join - " + htmlTagAttributes[i+1]);
 			} else {
@@ -31,7 +38,9 @@ export function getFixedHtmlAttrsAsString(htmlTag) {
 	// Join the new html element string
 	let innerHtmlTagText = htmlTagAttributes.join("=");
 
-	if (!prefixFound) innerHtmlTagText += ' prefix="' + OG_ATTRIBUTE + '"';
+	if (!prefixFound) {
+		innerHtmlTagText += ' prefix="' + OG_ATTRIBUTE + `${isFrontpage ? '' : ` ${ARTICLE_NAMESPACE}`}` + '"';
+	}
 
 	return innerHtmlTagText;
 }
