@@ -10,7 +10,7 @@ import {render} from '/lib/thymeleaf';
 import {getAppendix} from '/lib/common/getAppendix';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
-import {getImage} from '/lib/common/getImage';
+import {getImageUrl} from '../../../lib/common/getImageUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getPageTitle} from '/lib/common/getPageTitle';
@@ -100,7 +100,7 @@ export const get = (req) => {
 					 fallbackImage = siteConfig.frontpageImage;
 					 fallbackImageIsPrescaled = siteConfig.frontpageImageIsPrescaled;
 				}
-				const image = getImage({
+				const image = getImageUrl({
 					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 					content,
