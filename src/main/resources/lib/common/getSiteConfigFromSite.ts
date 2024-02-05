@@ -18,7 +18,7 @@ export const getSiteConfigFromSite = ({
 	if (site) {
 		if (site.data) {
 			if (site.data.siteConfig) {
-				var siteConfigs = forceArray(site.data.siteConfig);
+				const siteConfigs = forceArray(site.data.siteConfig);
 				let siteConfig: Partial<typeof siteConfigs[0]> = {};
 				siteConfigs.forEach((cfg) => {
 					if (cfg.applicationKey == applicationKey) {

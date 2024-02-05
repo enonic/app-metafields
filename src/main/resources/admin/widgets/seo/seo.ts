@@ -36,7 +36,7 @@ export const get = (req) => {
          "meta-data"
 */
 
-	var contentId = req.params.contentId;
+	let contentId = req.params.contentId;
 
 	if (!contentId && getCurrentContent()) {
 		contentId = getCurrentContent()._id;
@@ -49,8 +49,8 @@ export const get = (req) => {
 		};
 	}
 
-	var params = {};
-	var content = getContentByKey({ key: contentId });
+	let params = {};
+	const content = getContentByKey({ key: contentId });
 
 	if (content) {
 		// The first part of the content '_path' is the site's URL, make sure to fetch current site!
