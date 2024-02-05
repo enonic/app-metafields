@@ -97,7 +97,8 @@ describe('getMetaData', () => {
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
-					prefix: 'one'
+					prefix: 'one',
+					type: 'base:folder',
 				}),
 				site: mockSite({
 					description: 'Site description',
@@ -169,8 +170,9 @@ describe('getMetaData', () => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
-					image: 'oneImageContentId'
-				}
+					image: 'oneImageContentId',
+				},
+				type: 'base:folder',
 			});
 			const siteConfig = metaFieldsSiteConfig;
 			const site = mockSite({
@@ -217,7 +219,8 @@ describe('getMetaData', () => {
 				prefix: 'one',
 				data: {
 					image: 'oneImageContentId'
-				}
+				},
+				type: 'base:folder',
 			});
 			const site = mockSite({
 				description: 'Site description',
@@ -263,7 +266,8 @@ describe('getMetaData', () => {
 				prefix: 'one',
 				data: {
 					image: 'oneImageContentId'
-				}
+				},
+				type: 'base:folder',
 			});
 			const site = mockSite({
 				description: 'Site description',
@@ -305,7 +309,8 @@ describe('getMetaData', () => {
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
-					prefix: 'one'
+					prefix: 'one',
+					type: 'base:folder',
 				}),
 				site: mockSite({
 					description: 'Site description',
@@ -361,7 +366,8 @@ describe('getMetaData', () => {
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
-					prefix: 'one'
+					prefix: 'one',
+					type: 'base:folder',
 				}),
 				site: mockSite({
 					description: 'Site description',

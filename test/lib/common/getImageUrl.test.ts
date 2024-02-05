@@ -141,7 +141,8 @@ describe('getImageUrl', () => {
 				applicationConfig: {},
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
-					prefix: 'articleWithoutImage'
+					prefix: 'articleWithoutImage',
+					type: 'base:folder',
 				}),
 				site: siteContent
 			})).toBeUndefined();
@@ -155,6 +156,7 @@ describe('getImageUrl', () => {
 				applicationKey: 'com.enonic.app.metafields',
 				content: mockContent({
 					prefix: 'articleWithoutImage',
+					type: 'base:folder',
 				}),
 				defaultImg: 'threeImageContentId',
 				defaultImgPrescaled: true,
@@ -172,7 +174,8 @@ describe('getImageUrl', () => {
 					prefix: 'articleWithImage',
 					data: {
 						image: 'fourImageContentId',
-					}
+					},
+					type: 'base:folder',
 				}),
 				site: siteContent
 			})).toBe('fourImageContentIdblock(1200,630)absoluteImageUrl');
@@ -189,7 +192,8 @@ describe('getImageUrl', () => {
 					data: {
 						image: 'oneImageContentId',
 						images: 'twoImageContentId'
-					}
+					},
+					type: 'base:folder',
 				}),
 				site: siteContent
 			})).toBe('oneImageContentIdjpg85block(1200,630)absoluteImageUrl');
@@ -205,7 +209,8 @@ describe('getImageUrl', () => {
 					prefix: 'articleWithImages',
 					data: {
 						images: 'twoImageContentId'
-					}
+					},
+					type: 'base:folder',
 				}),
 				site: siteContent
 			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
@@ -223,7 +228,8 @@ describe('getImageUrl', () => {
 						pathsImages: [{
 							image: 'twoImageContentId'
 						}]
-					}
+					},
+					type: 'base:folder',
 				}),
 				site: siteContent
 			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');

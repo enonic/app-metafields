@@ -9,10 +9,10 @@ export function brand<T extends Branded<Base, any>, Base = BrandBase<T>>(
 	function assertIsBrand(value: Base): asserts value is T {
 		const result = validate(value)
 		if (typeof result === 'string') {
-			throw new Error(result)
+			throw new TypeError(result)
 		}
 		if (result === false) {
-			throw new Error(`Invalid value ${value}`)
+			throw new TypeError(`Invalid value ${value}`)
 		}
 	}
 

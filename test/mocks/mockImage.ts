@@ -31,6 +31,7 @@ export function mockImage({
 				},
 			}
 		},
-		prefix: `${prefix}Image`
+		prefix: `${prefix}Image`,
+		type: 'media:image'
 	}) as MediaImage;
 }
