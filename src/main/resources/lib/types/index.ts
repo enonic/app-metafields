@@ -2,6 +2,7 @@
 // Type imports
 //──────────────────────────────────────────────────────────────────────────────
 import type {
+	CommaSeparatedString,
 	ImageId,
 } from '/lib/types/Content';
 import type {
@@ -32,6 +33,7 @@ import {brand} from '/lib/types/brand';
 //──────────────────────────────────────────────────────────────────────────────
 export type {
 	BaseFolder,
+	CommaSeparatedString,
 	ImageId,
 	MediaImage,
 } from '/lib/types/Content';
@@ -41,6 +43,7 @@ export type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 //──────────────────────────────────────────────────────────────────────────────
 // Exported values
 //──────────────────────────────────────────────────────────────────────────────
+export const CommaSeparatedStringBuilder = brand<CommaSeparatedString>();
 export const ImageIdBuilder = brand<ImageId>();
 
 export const GraphQLBooleanBuilder = brand<GraphQLBoolean>();

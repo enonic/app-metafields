@@ -1,13 +1,13 @@
 import type {Content} from '/lib/xp/content';
 import type {Site} from '/lib/xp/portal';
 import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
-// import type {Content} from '/guillotine/guillotine.d';
 
 
 import {commaStringToArray} from '/lib/common/commaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {getTheConfig} from '/lib/common/getTheConfig';
+import {CommaSeparatedStringBuilder} from '/lib/types';
 
 
 export const getMetaDescription = ({
@@ -27,7 +27,7 @@ export const getMetaDescription = ({
 		site
 	});
 
-	const userDefinedPaths = siteConfig.pathsDescriptions || '';
+	const userDefinedPaths = CommaSeparatedStringBuilder.from(siteConfig.pathsDescriptions || '');
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
 

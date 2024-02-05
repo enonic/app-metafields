@@ -1,5 +1,7 @@
 export declare type BaseFolder = Content<{}, 'base:folder'>;
 
+export declare type CommaSeparatedString = Branded<string, 'CommaSeparatedString'>;
+
 export declare type ImageId = Branded<string, 'ImageId'>;
 
 export declare type MediaImage = Content<{
