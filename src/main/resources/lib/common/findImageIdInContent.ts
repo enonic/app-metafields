@@ -11,7 +11,10 @@ import {commaStringToArray} from '/lib/common/commaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findValueInObject} from '/lib/common/findValueInObject';
 import {isString} from '/lib/common/isString';
-import {ImageIdBuilder} from '/lib/types';
+import {
+	CommaSeparatedStringBuilder,
+	ImageIdBuilder,
+} from '/lib/types';
 
 
 export function findImageIdInContent({
@@ -25,7 +28,7 @@ export function findImageIdInContent({
 		return ImageIdBuilder.from(content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as string);
 	}
 
-	const userDefinedPaths = siteConfig.pathsImages || '';
+	const userDefinedPaths = CommaSeparatedStringBuilder.from(siteConfig.pathsImages || '');
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
 

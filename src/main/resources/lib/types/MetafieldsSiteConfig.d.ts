@@ -1,5 +1,6 @@
 export type {
 	BaseFolder,
+	CommaSeparatedString,
 	ImageId,
 	MediaImage,
 } from '/lib/types/Content';
@@ -11,9 +12,9 @@ export interface MetafieldsSiteConfig {
 	disableAppConfig?: boolean
 	fullPath?: boolean
 	headless?: boolean
-	pathsDescriptions?: string // with comma
-	pathsImages?: string // with comma
-	pathsTitles?: string // with comma
+	pathsDescriptions?: CommaSeparatedString
+	pathsImages?: CommaSeparatedString
+	pathsTitles?: CommaSeparatedString
 	seoDescription?: string
 	seoImage?: ImageId
 	seoImageIsPrescaled?: boolean

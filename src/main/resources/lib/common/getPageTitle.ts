@@ -8,6 +8,7 @@ import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {getTheConfig} from '/lib/common/getTheConfig';
 import {stringOrNull} from '/lib/common/stringOrNull';
+import {CommaSeparatedStringBuilder} from '/lib/types';
 
 
 export const getPageTitle = ({
@@ -28,15 +29,15 @@ export const getPageTitle = ({
 	});
 	// log.info('siteConfig: %s', JSON.stringify(siteConfig, null, 4));
 
-	var userDefinedPaths = siteConfig.pathsTitles || '';
-	var userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
-	var userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
+	const userDefinedPaths = CommaSeparatedStringBuilder.from(siteConfig.pathsTitles || '');
+	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
+	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
 
-	var setWithMixin = content.x[APP_NAME_PATH]
+	const setWithMixin = content.x[APP_NAME_PATH]
 		&& content.x[APP_NAME_PATH][MIXIN_PATH]
 		&& content.x[APP_NAME_PATH][MIXIN_PATH].seoTitle;
 
-	var metaTitle = setWithMixin ? stringOrNull(content.x[APP_NAME_PATH][MIXIN_PATH].seoTitle) // Get from mixin
+	const metaTitle = setWithMixin ? stringOrNull(content.x[APP_NAME_PATH][MIXIN_PATH].seoTitle) // Get from mixin
 		: stringOrNull(userDefinedValue) // json property defined by user as important
 		|| stringOrNull(content.data.title) || stringOrNull(content.data.heading) || stringOrNull(content.data.header) // Use other typical content titles (overrides displayName)
 		|| stringOrNull(content.displayName) // Use content's display name
