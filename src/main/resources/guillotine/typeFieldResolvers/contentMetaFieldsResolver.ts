@@ -1,5 +1,5 @@
 import type {Content} from '/lib/xp/content';
-import type {Resolver} from '/guillotine/guillotine.d';
+import type {Resolver} from '../../lib/types/Guillotine';
 
 
 import {

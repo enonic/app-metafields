@@ -3,7 +3,7 @@ import type {
 	get as GetContentByKey,
 	// Site
 } from '/lib/xp/content';
-import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/types';
 
 
 import {

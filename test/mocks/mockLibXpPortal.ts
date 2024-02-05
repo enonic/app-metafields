@@ -4,7 +4,7 @@ import type {
 	imageUrl,
 	pageUrl,
 } from '/lib/xp/portal';
-import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/types';
 
 
 import {jest} from '@jest/globals';

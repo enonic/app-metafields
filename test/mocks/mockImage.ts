@@ -1,4 +1,4 @@
-import type {MediaImage} from '/guillotine/guillotine.d';
+import type {MediaImage} from '/lib/types';
 
 
 import {mockContent} from './mockContent';

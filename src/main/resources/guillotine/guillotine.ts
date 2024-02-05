@@ -1,10 +1,10 @@
 import type {
 	Extensions,
 	GraphQL,
-} from '/guillotine/guillotine.d';
+} from '../lib/types/Guillotine';
 
 
-import {GraphQLFieldName, GraphQLTypeName} from '/guillotine/guillotine.d';
+import {GraphQLFieldName, GraphQLTypeName} from '../lib/types/Guillotine';
 import {contentMetaFieldsResolver} from '/guillotine/typeFieldResolvers/contentMetaFieldsResolver';
 import {metaFieldsImagesResolver} from '/guillotine/typeFieldResolvers/metaFieldsImagesResolver';
 

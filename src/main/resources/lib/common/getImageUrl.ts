@@ -1,7 +1,7 @@
 import type {Content, Site} from '/lib/xp/content';
 import type {ImageUrlParams} from '/lib/xp/portal';
 // import type {MediaImage} from '/guillotine/guillotine.d';
-import type {MetafieldsSiteConfig} from '/lib/common/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
