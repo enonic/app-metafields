@@ -17,7 +17,8 @@ import {getFullTitle} from '/lib/common/getFullTitle';
 import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
 import {getTheConfig} from '/lib/common/getTheConfig';
 import {APP_CONFIG, APP_NAME, APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
-
+import {startsWith} from '@enonic/js-utils/string/startsWith';
+import {includes as arrayIncludes} from '@enonic/js-utils/array/includes';
 
 export const contentMetaFieldsResolver: Resolver<
 	{},
@@ -29,6 +30,18 @@ export const contentMetaFieldsResolver: Resolver<
 		localContext,
 		source: content
 	} = env;
+
+	if (
+		startsWith(content.type,'media:')
+		|| arrayIncludes([
+			'portal:fragment',
+			'portal:template',
+			'portal:template-folder'
+		],(content.type))
+	) {
+		return null;
+	}
+
 	const {
 		branch,
 		project,
