@@ -1,3 +1,5 @@
+import type {Content} from '@enonic-types/lib-content';
+
 export declare type BaseFolder = Content<{}, 'base:folder'>;
 
 export declare type CommaSeparatedString = Branded<string, 'CommaSeparatedString'>;

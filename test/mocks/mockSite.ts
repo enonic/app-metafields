@@ -22,4 +22,5 @@ export const mockSite = ({
 		}
 	},
 	prefix,
+	type: 'portal:site'
 }) as Site<MetafieldsSiteConfig>;

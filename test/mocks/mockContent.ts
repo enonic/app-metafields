@@ -8,10 +8,12 @@ export function mockContent({
 	attachments = {},
 	data = {},
 	prefix,
+	type
 }: {
 	attachments?: Record<string, Attachment>
 	data?: Record<string, unknown>
 	prefix: string
+	type: string
 }): Content {
 	return {
 		_id: `${prefix}ContentId`,
@@ -23,7 +25,7 @@ export function mockContent({
 		data,
 		displayName: `${prefix}ContentDisplayName`,
 		owner: 'user:system:owner',
-		type: 'portal:site',
+		type,
 		hasChildren: false,
 		valid: true,
 		x: {},
