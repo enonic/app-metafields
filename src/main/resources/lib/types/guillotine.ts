@@ -19,6 +19,8 @@ export interface MetaFields {
 	images?: MediaImage[]
 	locale?: string
 	openGraph?: {
+		hideImages?: boolean
+		hideUrl?: boolean
 		type?: 'website' | 'article'
 	} // string
 	robots?: {
@@ -29,6 +31,7 @@ export interface MetaFields {
 	title: string
 	twitter?: {
 		creator?: string
+		hideImages?: boolean
 	} // string
 	verification?: {
 		google?: string
