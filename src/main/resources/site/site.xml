@@ -8,19 +8,15 @@
 			<label>General settings</label>
 			<items>
 				<input name="headless" type="CheckBox">
-					<label>Headless mode</label>
-					<help-text>If enabled, page processor will do nothing.</help-text>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
-				<input name="canonical" type="CheckBox">
-					<label>Use Canonical meta?</label>
-					<help-text>Generates the canonical page URL meta data for all content. You can also overwrite canonical page from current content configuration.</help-text>
-					<!--<default>checked</default>-->
-					<occurrences minimum="0" maximum="1"/>
-				</input>
-				<input name="siteVerification" type="TextLine">
-					<label>Google Search Console (site verification code)</label>
-					<help-text>Do you want to use Google Search Console? Then you need to verify that you own the site. Add verification code in this field to generate the necessary meta field. We will not generate this tag if field is left empty (good if you've already added this field elsewhere).</help-text>
+					<label>API mode</label>
+					<help-text>
+					The MetaFields app:
+					1. Provides a page processor that "can" inject html meta tags into the head of your pages.
+					2. Extends the Guillotine Schema for Content with a metaFields query.
+
+					When API mode is enabled: The metaFields query will return an data, but the page processor will do nothing.
+					When API mode is disabled: The page processor will do it's thing, but the metaFields query will return null.
+					</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
 				<input name="blockRobots" type="CheckBox">
@@ -28,50 +24,6 @@
 					<help-text>Caution: Use this to ask search engines to ignore your entire site!</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
-				<input name="disableAppConfig" type="CheckBox">
-					<label>Don't overwrite values from app.config</label>
-					<help-text>It's possible to configure this app for all your site through a file on the server, here you can disable this behavior.</help-text>
-					<default>false</default>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
-			</items>
-		</field-set>
-		<!-- Option-set for Twitter yes/now - expands and shows input -->
-		<field-set>
-			<label>Twitter Cards</label>
-			<items>
-				<input name="twitterUsername" type="TextLine">
-					<label>Twitter username (must begin with @)</label>
-					<help-text>Using Twitter? Just add your Twitter username here (starting with the @ symbol) to generate Twitter Card metadata on all pages. It uses the same data used in Open Graph metadata, so no further settings needed.</help-text>
-					<config>
-						<regexp>^[@]+.*$</regexp>
-					</config>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
-				<input name="removeTwitterImage" type="checkbox">
-					<label>Remove the twitter image from the card?</label>
-					<help-text>Removes the twitter image tag if username is provided</help-text>
-				</input>
-			</items>
-		</field-set>
-		<!-- Field set for openGraph images (used by facebook) -->
-		<field-set>
-			<label>Open Graph</label>
-			<items>
-				<input name="removeOpenGraphUrl" type="CheckBox">
-					<label>Remove the openGraph Url tag?</label>
-					<help-text>Checking this will stop the app from generating the open graph url tag</help-text>
-				</input>
-				<input name="removeOpenGraphImage" type="CheckBox">
-					<label>Remove the openGraph image tag?</label>
-					<help-text>Checking this will stop the app from generating the open graph image tag</help-text>
-				</input>
-			</items>
-		</field-set>
-		<!-- Option set for at least "configure fallbacks" -->
-		<field-set>
-			<label>Fallback settings</label>
-			<items>
 				<input name="seoImage" type="ImageSelector">
 					<label>Content image fallback</label>
 					<help-text>If current content image is not found, use this as last resort. Tip: add company logo here!</help-text>
@@ -118,9 +70,68 @@
 				</input>
 			</items>
 		</field-set>
+		<field-set>
+			<label>Verification</label>
+			<items>
+				<input name="siteVerification" type="TextLine">
+					<label>Google Search Console (site verification code)</label>
+					<help-text>Do you want to use Google Search Console? Then you need to verify that you own the site. Add verification code in this field to generate the necessary meta field. We will not generate this tag if field is left empty (good if you've already added this field elsewhere).</help-text>
+					<occurrences minimum="0" maximum="1"/>
+				</input>
+			</items>
+		</field-set>
+		<!-- Option-set for Twitter yes/now - expands and shows input -->
+		<field-set>
+			<label>Twitter Cards</label>
+			<items>
+				<input name="twitterUsername" type="TextLine">
+					<label>Twitter username (must begin with @)</label>
+					<help-text>Using Twitter? Just add your Twitter username here (starting with the @ symbol) to generate Twitter Card metadata on all pages. It uses the same data used in Open Graph metadata, so no further settings needed.</help-text>
+					<config>
+						<regexp>^[@]+.*$</regexp>
+					</config>
+					<occurrences minimum="0" maximum="1"/>
+				</input>
+				<input name="removeTwitterImage" type="checkbox">
+					<label>Remove the twitter image from the card?</label>
+					<help-text>Removes the twitter image tag if username is provided</help-text>
+				</input>
+			</items>
+		</field-set>
+		<!-- Field set for openGraph images (used by facebook) -->
+		<field-set>
+			<label>Open Graph</label>
+			<items>
+				<input name="removeOpenGraphUrl" type="CheckBox">
+					<label>Remove the openGraph Url tag?</label>
+					<help-text>Checking this will stop the app from generating the open graph url tag</help-text>
+				</input>
+				<input name="removeOpenGraphImage" type="CheckBox">
+					<label>Remove the openGraph image tag?</label>
+					<help-text>Checking this will stop the app from generating the open graph image tag</help-text>
+				</input>
+			</items>
+		</field-set>
 		<!-- Option set for advanced configuration -->
 		<field-set>
-			<label>Advanced: prioritized JSON paths</label><!-- Customized paths yes/no --><!-- +Text about advanced/custom settings needed -->
+			<label>Advanced</label>
+			<items>
+				<input name="disableAppConfig" type="CheckBox">
+					<label>Don't overwrite values from app.config</label>
+					<help-text>It's possible to configure this app for all your site through a file on the server, here you can disable this behavior.</help-text>
+					<default>false</default>
+					<occurrences minimum="0" maximum="1"/>
+				</input>
+				<input name="canonical" type="CheckBox">
+					<label>Use Canonical meta?</label>
+					<help-text>Generates the canonical page URL meta data for all content. You can also overwrite canonical page from current content configuration.</help-text>
+					<!--<default>checked</default>-->
+					<occurrences minimum="0" maximum="1"/>
+				</input>
+			</items>
+		</field-set>
+		<field-set>
+			<label>JSON paths</label><!-- Customized paths yes/no --><!-- +Text about advanced/custom settings needed -->
 			<items>
 				<input name="fullPath" type="checkbox">
 					<label>Access the field by the full JSON path?</label>
