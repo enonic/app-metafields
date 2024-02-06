@@ -43,12 +43,13 @@ export const metaFieldsImagesResolver: Resolver<
 		_siteConfig
 	} = source;
 	const context = getContext();
+	// log.info('metaFieldsImagesResolver context: %s', JSON.stringify(context, null, 4));
 	const {
 		authInfo: {
-			user: {
-				login: userLogin,
-				idProvider: userIdProvider
-			},
+			// user: { // NOTE: Can be undefined when not logged in
+			// 	login: userLogin,
+			// 	idProvider: userIdProvider
+			// },
 			principals
 		}
 	} = context;
@@ -56,10 +57,10 @@ export const metaFieldsImagesResolver: Resolver<
 	return runInContext({
 		branch,
 		repository: `com.enonic.cms.${project}`,
-		user: {
-			idProvider: userIdProvider,
-			login: userLogin,
-		},
+		// user: {
+		// 	idProvider: userIdProvider,
+		// 	login: userLogin,
+		// },
 		principals
 	}, () => {
 
