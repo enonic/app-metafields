@@ -126,8 +126,8 @@ export const contentMetaFieldsResolver: Resolver<
 			siteName: site.displayName,
 			title,
 			twitter: {
-				creator: appOrSiteConfig.twitterUsername,
 				hideImages: appOrSiteConfig.removeTwitterImage,
+				site: appOrSiteConfig.twitterUsername,
 			},
 			verification: {
 				google: siteConfig.siteVerification || null

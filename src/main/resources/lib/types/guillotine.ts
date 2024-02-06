@@ -30,8 +30,8 @@ export interface MetaFields {
 	siteName: string
 	title: string
 	twitter?: {
-		creator?: string
 		hideImages?: boolean
+		site?: string
 	} // string
 	verification?: {
 		google?: string

@@ -144,7 +144,7 @@ mockLibUtil();
 // 	siteName: 'siteContentDisplayName',
 // 	title: 'string',
 // 	twitter: {
-// 		creator: 'string'
+// 		site: 'string'
 // 	},
 // 	verification: {
 // 		google: 'string'
@@ -170,8 +170,8 @@ const folderMetaFields: MetaFields = {
 	siteName: 'siteContentDisplayName',
 	title: 'folderContentDisplayName - siteContentDisplayName',
 	twitter: {
-		creator: '@twitterUsername',
 		hideImages: true,
+		site: '@twitterUsername',
 	},
 	verification: {
 		google: 'siteVerification'
