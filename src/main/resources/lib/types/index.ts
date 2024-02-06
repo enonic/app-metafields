@@ -40,6 +40,8 @@ export type {
 	MediaImage,
 } from '/lib/types/Content';
 export type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+export type {Request} from '/lib/types/Request';
+export type {Response} from '/lib/types/Response';
 
 
 //──────────────────────────────────────────────────────────────────────────────
@@ -133,7 +135,7 @@ const contentValidator = (value: unknown): value is Content => isObject(value)
 	// && value.hasOwnProperty('data')
 	// && value.hasOwnProperty('displayName')
 	// && value.hasOwnProperty('owner')
-	&& value.hasOwnProperty('type') && isString(value['type'])
+	&& value.hasOwnProperty('type') && isString((value as Content).type)
 	// && value.hasOwnProperty('hasChildren') && isBoolean(value['hasChildren'])
 	// && value.hasOwnProperty('valid') && isBoolean(value['valid'])
 	// && value.hasOwnProperty('x')
@@ -156,12 +158,12 @@ export const GraphQLMediaImageBuilder = brand<GraphQLMediaImage>({
 const metaFieldsValidator = (value: unknown)/*: value is GraphQLMetaFields*/ => isObject(value)
 	&& !value.hasOwnProperty('siteName')
 		? `expected object to have property 'siteName' object:${JSON.stringify(value, null, 4)}`
-		: !isString(value['siteName'])
-			? `expected object.siteName to be a string got ${value['siteName']} object:${JSON.stringify(value, null, 4)}`
+		: !isString((value as GraphQLMetaFields)['siteName'])
+			? `expected object.siteName to be a string got ${(value as GraphQLMetaFields)['siteName']} object:${JSON.stringify(value, null, 4)}`
 			: !value.hasOwnProperty('title')
 				? `expected object to have property 'title' object:${JSON.stringify(value, null, 4)}`
-				: !isString(value['siteName'])
-					? `expected object.siteName to be a string got ${value['siteName']} object:${JSON.stringify(value, null, 4)}`
+				: !isString((value as GraphQLMetaFields)['siteName'])
+					? `expected object.siteName to be a string got ${(value as GraphQLMetaFields)['siteName']} object:${JSON.stringify(value, null, 4)}`
 					: true
 
 

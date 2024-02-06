@@ -1,3 +1,6 @@
+import type {Request, Response} from '/lib/types';
+
+
 import {forceArray} from '@enonic/js-utils/array/forceArray';
 import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/metadata/getMetaData'
@@ -9,7 +12,7 @@ const HTML_MEDIA_TYPE = 'text/html';
 const XML_MEDIA_TYPES = ['application/xhtml+xml', 'application/xml', 'text/xml'];
 
 
-export const responseProcessor = (req, res) => {
+export const responseProcessor = (req: Request, res: Response) => {
 	const reusableData = getReusableData({
 		applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 	});
@@ -62,7 +65,7 @@ export const responseProcessor = (req, res) => {
 	// Push metadata if response content type is html or xml
 	if ( isResponseContentTypeHtml || isResponseContentTypeXml ) {
 		const selfClosingTags = isResponseContentTypeXml;
-		const metadata = getMetaData({
+		const metadata: string = getMetaData({
 			applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 			site,
@@ -70,7 +73,7 @@ export const responseProcessor = (req, res) => {
 			content,
 			returnType: 'html',
 			selfClosingTags
-		}) || "";
+		}) as string || "";
 		res.pageContributions.headEnd.push(metadata);
 	}
 
