@@ -22,11 +22,6 @@ export const responseProcessor = (req: Request, res: Response) => {
 	const content = reusableData.content;
 	const siteConfig = reusableData.siteConfig;
 
-	// Avoid page processor if the app is set to headless mode
-	if ( siteConfig.headless ) {
-		return res;
-	}
-
 	let titleAdded = false;
 	const isResponseContentTypeHtml = res.contentType.indexOf(HTML_MEDIA_TYPE) > -1;
 	const isResponseContentTypeXml = XML_MEDIA_TYPES.some(xmlMediaType => res.contentType.indexOf(xmlMediaType) > -1);

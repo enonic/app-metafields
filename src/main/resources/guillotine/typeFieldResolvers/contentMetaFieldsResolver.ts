@@ -81,9 +81,6 @@ export const contentMetaFieldsResolver: Resolver<
 			applicationKey: APP_NAME,
 			site
 		});
-		if (!appOrSiteConfig.headless) {
-			return null;
-		}
 
 		const title = getFullTitle({
 			applicationConfig: APP_CONFIG,

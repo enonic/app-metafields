@@ -11,7 +11,6 @@ export declare interface MetafieldsSiteConfig {
 	canonical?: boolean
 	disableAppConfig?: boolean
 	fullPath?: boolean
-	headless?: boolean
 	pathsDescriptions?: CommaSeparatedString
 	pathsImages?: CommaSeparatedString
 	pathsTitles?: CommaSeparatedString
