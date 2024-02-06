@@ -49,12 +49,13 @@ export const contentMetaFieldsResolver: Resolver<
 	} = localContext;
 	const {_path} = content;
 	const context = getContext();
+	// log.info('contentMetaFieldsResolver context:%s', JSON.stringify(context, null, 4));
 	const {
 		authInfo: {
-			user: {
-				login: userLogin,
-				idProvider: userIdProvider
-			},
+			// user: { // NOTE: Can be undefined when not logged in
+			// 	login: userLogin,
+			// 	idProvider: userIdProvider
+			// },
 			principals
 		}
 	} = context;
@@ -62,10 +63,10 @@ export const contentMetaFieldsResolver: Resolver<
 	return runInContext({
 		branch,
 		repository: `com.enonic.cms.${project}`,
-		user: {
-			idProvider: userIdProvider,
-			login: userLogin,
-		},
+		// user: {
+		// 	idProvider: userIdProvider,
+		// 	login: userLogin,
+		// },
 		principals
 	}, () => {
 		const site = libsContentGetSite({ key: _path });
