@@ -14,14 +14,18 @@ export function mockLibXpContext() {
 			get: jest.fn<typeof getContext>().mockReturnValue({
 				attributes: {},
 				authInfo: {
-					principals: [],
-					user: {
-						login: 'login',
-						idProvider: 'idProvider',
-						type: 'user',
-						key: 'user:idProvder:name',
-						displayName: 'userDisplayName',
-					},
+					principals: [
+						"user:system:anonymous",
+						"role:system.everyone"
+					],
+					// The site is public, so no user is logged in
+					// user: {
+					// 	login: 'login',
+					// 	idProvider: 'idProvider',
+					// 	type: 'user',
+					// 	key: 'user:idProvder:name',
+					// 	displayName: 'userDisplayName',
+					// },
 				},
 				branch: 'master',
 				repository: 'repository'
