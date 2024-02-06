@@ -16,7 +16,7 @@ export interface MetaFields {
 		canonical?: string
 	}, // string
 	description?: string
-	images?: MediaImage[]
+	image?: MediaImage|null
 	locale?: string
 	openGraph?: {
 		hideImages?: boolean
@@ -43,7 +43,7 @@ export type GraphQLMediaImage = Branded<MediaImage, 'media_Image'>
 export type GraphQLMetaFields = Branded<MetaFields, 'MetaFields'>
 
 export const enum GraphQLFieldName {
-	IMAGES = 'images',
+	IMAGE = 'image',
 	METAFIELDS = 'metaFields',
 }
 
