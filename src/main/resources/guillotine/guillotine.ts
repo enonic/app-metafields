@@ -24,8 +24,8 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 					locale: {
 						type: graphQL.GraphQLString,
 					},
-					images: {
-						type: graphQL.list(graphQL.reference(GraphQLTypeName.MEDIA_IMAGE)),
+					image: {
+						type: graphQL.reference(GraphQLTypeName.MEDIA_IMAGE),
 					},
 					openGraph: {
 						type: graphQL.Json,
@@ -62,7 +62,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 				[GraphQLFieldName.METAFIELDS]: contentMetaFieldsResolver,
 			},
 			[GraphQLTypeName.METAFIELDS]: {
-				[GraphQLFieldName.IMAGES]: metaFieldsImagesResolver
+				[GraphQLFieldName.IMAGE]: metaFieldsImagesResolver
 			}
 		},
 	}

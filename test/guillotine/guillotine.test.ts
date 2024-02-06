@@ -132,7 +132,7 @@ mockLibUtil();
 // 		canonical: 'canonical'
 // 	},
 // 	description: 'string',
-// 	images: [imageContent],
+// 	image: imageContent,
 // 	locale: 'en_US',
 // 	openGraph: {
 // 		type: 'website'
@@ -156,7 +156,7 @@ const folderMetaFields: MetaFields = {
 		canonical: null
 	},
 	description: 'seoDescription',
-	// images: [imageContent],
+	// image: imageContent,
 	locale: 'en_US',
 	openGraph: {
 		hideImages: true,
@@ -234,7 +234,7 @@ describe('guillotine extensions', () => {
 						// metaFields: contentMetaFieldsResolver
 					},
 					MetaFields: {
-						// images: metaFieldsImagesResolver
+						// image: metaFieldsImagesResolver
 					}
 				},
 				types: {
@@ -243,7 +243,7 @@ describe('guillotine extensions', () => {
 						fields: {
 							alternates: {type: '{"json": "value"}'},
 							description: {type: "string"},
-							images: {
+							image: {
 								type: imageContent
 							},
 							locale: {type: "string"},
@@ -266,7 +266,7 @@ describe('guillotine extensions', () => {
 						metaFields: contentMetaFieldsResolver
 					},
 					MetaFields: {
-						images: metaFieldsImagesResolver
+						image: metaFieldsImagesResolver
 					}
 				}
 			} = res;

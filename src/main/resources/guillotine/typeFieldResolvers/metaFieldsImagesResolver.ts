@@ -23,7 +23,6 @@ export const metaFieldsImagesResolver: Resolver<
 		_content: Content
 		_site: Site<MetafieldsSiteConfig>
 		_siteConfig: MetafieldsSiteConfig
-		// images: string[]
 	}
 > = (env) => {
 	// log.info(`resolvers content metafields ${JSON.stringify(env, null, 4)}`);
@@ -64,7 +63,6 @@ export const metaFieldsImagesResolver: Resolver<
 		principals
 	}, () => {
 
-		const images = [];
 		const imageId = getImageId({
 			content: _content,
 			site: _site,
@@ -73,12 +71,12 @@ export const metaFieldsImagesResolver: Resolver<
 		if (imageId) {
 			const imageContent = getContentByKey({ key: imageId });
 			if (imageContent) {
-				images.push(imageContent);
+				return imageContent;
 			} else {
 				log.error(`content with path:${_content._path} or site with path: ${_site._path} references a non-existing image with key:${imageId}`);
 			}
 		}
 
-		return images;
+		return null;
 	});
 }
