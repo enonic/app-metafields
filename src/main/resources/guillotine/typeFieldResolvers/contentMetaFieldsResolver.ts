@@ -76,15 +76,19 @@ export const contentMetaFieldsResolver: Resolver<
 			content,
 			site
 		});
+		const appOrSiteConfig = getTheConfig({
+			applicationConfig: APP_CONFIG,
+			applicationKey: APP_NAME,
+			site
+		});
+		if (!appOrSiteConfig.headless) {
+			return null;
+		}
+
 		const title = getFullTitle({
 			applicationConfig: APP_CONFIG,
 			applicationKey: APP_NAME,
 			content,
-			site
-		});
-		const appOrSiteConfig = getTheConfig({
-			applicationConfig: APP_CONFIG,
-			applicationKey: APP_NAME,
 			site
 		});
 		const isFrontpage = site._path === _path;
