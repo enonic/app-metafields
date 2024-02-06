@@ -1,3 +1,6 @@
+import type {Request} from '/lib/types';
+
+
 import {
 	get as getContentByKey,
 } from '/lib/xp/content';
@@ -28,7 +31,7 @@ TODO: Perhaps add (?) icons with info for each data.
 TODO: Possibility to click title, desc, image and see the water fall logic and where data is found?
 TODO: Grade each data based on amount of text etc. Red, yellow, green. And info about it (best-practise).
 */
-export const get = (req) => {
+export const get = (req: Request) => {
 /*
 	TODO: Display content settings? If any, then fallbacks.
 	x": {

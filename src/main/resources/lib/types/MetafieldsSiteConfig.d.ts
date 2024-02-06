@@ -6,7 +6,7 @@ export type {
 } from '/lib/types/Content';
 
 
-export interface MetafieldsSiteConfig {
+export declare interface MetafieldsSiteConfig {
 	blockRobots?: boolean
 	canonical?: boolean
 	disableAppConfig?: boolean

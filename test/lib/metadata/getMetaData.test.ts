@@ -107,7 +107,7 @@ describe('getMetaData', () => {
 				}),
 				siteConfig: metaFieldsSiteConfig,
 			})).toEqual({
-				blockRobots: undefined,
+				blockRobots: false,
 				canonical: undefined,
 				canonicalUrl: 'oneContentPathabsolutePageUrl',
 				description: 'Site description',
@@ -150,7 +150,7 @@ describe('getMetaData', () => {
 				site,
 				siteConfig: metaFieldsSiteConfig,
 			})).toEqual({
-				blockRobots: undefined,
+				blockRobots: false,
 				canonical: undefined,
 				canonicalUrl: 'siteContentPathabsolutePageUrl',
 				description: 'Site description',
@@ -197,7 +197,7 @@ describe('getMetaData', () => {
 				site,
 				siteConfig,
 			})).toEqual({
-				blockRobots: undefined,
+				blockRobots: false,
 				canonical: undefined,
 				canonicalUrl: 'oneContentPathabsolutePageUrl',
 				description: 'Site description',
@@ -251,7 +251,7 @@ describe('getMetaData', () => {
 				site,
 				siteConfig,
 			})).toEqual({
-				blockRobots: undefined,
+				blockRobots: false,
 				canonical: undefined,
 				canonicalUrl: 'oneContentPathabsolutePageUrl',
 				description: 'Site description',
@@ -305,7 +305,7 @@ describe('getMetaData', () => {
 				site,
 				siteConfig,
 			})).toEqual({
-				blockRobots: undefined,
+				blockRobots: false,
 				canonical: undefined,
 				canonicalUrl: 'oneContentPathabsolutePageUrl',
 				description: 'Site description',

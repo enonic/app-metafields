@@ -1,5 +1,5 @@
 import type {Site} from '/lib/xp/portal';
-import type { MetafieldsSiteConfig } from '../types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
 
 
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
@@ -30,7 +30,7 @@ export const getTheConfig = ({
 				if (value === 'true' || value === 'false') {
 					value = value === 'true';
 				}
-				config[prop] = value;
+				(config as Record<typeof prop, typeof value>)[prop] = value;
 			}
 		}
 	}

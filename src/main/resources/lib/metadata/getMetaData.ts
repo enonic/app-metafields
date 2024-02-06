@@ -15,7 +15,7 @@ import {getPageTitle} from '/lib/common/getPageTitle';
 import {getTheConfig} from '/lib/common/getTheConfig';
 
 
-function _resolveMetadata(params, selfClosingTags=false) {
+function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
 	return render(resolve(`metadata${
 		selfClosingTags ? '-self-closing' : ''
 	}.html`), params)
