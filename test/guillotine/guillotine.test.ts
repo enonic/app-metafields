@@ -54,7 +54,6 @@ const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	canonical: true,
 	disableAppConfig: true,
 	fullPath: true,
-	headless: true,
 	pathsDescriptions: 'pathsDescriptions', // with comma
 	pathsImages: 'pathsImages', // with comma
 	pathsTitles: 'pathsTitles', // with comma

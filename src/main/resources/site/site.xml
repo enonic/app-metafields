@@ -7,18 +7,6 @@
 		<field-set>
 			<label>General settings</label>
 			<items>
-				<input name="headless" type="CheckBox">
-					<label>API mode</label>
-					<help-text>
-					The MetaFields app:
-					1. Provides a page processor that "can" inject html meta tags into the head of your pages.
-					2. Extends the Guillotine Schema for Content with a metaFields query.
-
-					When API mode is enabled: The metaFields query will return an data, but the page processor will do nothing.
-					When API mode is disabled: The page processor will do it's thing, but the metaFields query will return null.
-					</help-text>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
 				<input name="blockRobots" type="CheckBox">
 					<label>Hide site from search engines?</label>
 					<help-text>Caution: Use this to ask search engines to ignore your entire site!</help-text>
