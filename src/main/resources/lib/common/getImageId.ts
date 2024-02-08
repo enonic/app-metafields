@@ -7,15 +7,18 @@ import {findImageIdInContent} from '/lib/common/findImageIdInContent';
 import {ImageIdBuilder} from '/lib/types';
 
 
+interface GetImageUrlParams {
+	content: Content
+	site: Site<MetafieldsSiteConfig>
+	siteConfig: MetafieldsSiteConfig
+}
+
+
 export function getImageId({
 	content,
 	site,
 	siteConfig
-} :{
-	content: Content
-	site: Site<MetafieldsSiteConfig>
-	siteConfig: MetafieldsSiteConfig
-}): ImageId|undefined {
+}: GetImageUrlParams): ImageId|undefined {
 	// 1. Try to find an image within the content isself
 	const imageId = findImageIdInContent({
 		content,

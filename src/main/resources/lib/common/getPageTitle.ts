@@ -11,17 +11,20 @@ import {stringOrNull} from '/lib/common/stringOrNull';
 import {CommaSeparatedStringBuilder} from '/lib/types';
 
 
+interface GetPageTitleParams {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	content: Content
+	site: Site<MetafieldsSiteConfig>
+}
+
+
 export const getPageTitle = ({
 	applicationConfig,
 	applicationKey,
 	content,
 	site
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
-	content: Content
-	site: Site<MetafieldsSiteConfig>
-}) => {
+}: GetPageTitleParams): string => {
 	const siteConfig = getTheConfig({
 		applicationConfig,
 		applicationKey,

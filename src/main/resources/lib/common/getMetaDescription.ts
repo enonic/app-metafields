@@ -10,17 +10,20 @@ import {getTheConfig} from '/lib/common/getTheConfig';
 import {CommaSeparatedStringBuilder} from '/lib/types';
 
 
+interface GetMetaDescriptionParams {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	content: Content
+	site: Site<MetafieldsSiteConfig>
+}
+
+
 export const getMetaDescription = ({
 	applicationConfig,
 	applicationKey,
 	content,
 	site,
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
-	content: Content
-	site: Site<MetafieldsSiteConfig>
-}) => {
+}: GetMetaDescriptionParams): string => {
 	const siteConfig = getTheConfig({
 		applicationConfig,
 		applicationKey,

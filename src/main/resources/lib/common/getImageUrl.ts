@@ -15,6 +15,16 @@ import {getTheConfig} from '/lib/common/getTheConfig';
 import {findImageIdInContent} from '/lib/common/findImageIdInContent';
 
 
+interface GetImageUrlParams {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	content: Content
+	defaultImg?: ImageId
+	defaultImgPrescaled?: boolean
+	site: Site<MetafieldsSiteConfig>
+}
+
+
 function _imageUrlFromId(imageId: ImageId): string|null {
 	// Set basic image options
 	const imageOpts: ImageUrlParams = {
@@ -57,14 +67,7 @@ export const getImageUrl = ({
 	defaultImg,
 	defaultImgPrescaled,
 	site,
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
-	content: Content
-	defaultImg?: ImageId
-	defaultImgPrescaled?: boolean
-	site: Site<MetafieldsSiteConfig>
-}): string|null|undefined => {
+}: GetImageUrlParams): string|null|undefined => {
 	const siteConfig = getTheConfig({
 		applicationConfig,
 		applicationKey,
