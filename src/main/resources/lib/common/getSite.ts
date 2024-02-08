@@ -1,5 +1,5 @@
 import type {Site} from '/lib/xp/portal';
-import type { MetafieldsSiteConfig } from '../types/MetafieldsSiteConfig';
+import type { MetafieldsSiteConfig } from '/lib/types/MetafieldsSiteConfig';
 
 
 import {query} from '/lib/xp/content';

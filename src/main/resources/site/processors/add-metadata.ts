@@ -5,7 +5,7 @@ import {forceArray} from '@enonic/js-utils/array/forceArray';
 import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/metadata/getMetaData'
 import {getReusableData} from '/lib/metadata/getReusableData';
-import {getTitleHtml} from '../../lib/metadata/getTitleHtml';
+import {getTitleHtml} from '/lib/metadata/getTitleHtml';
 
 
 const HTML_MEDIA_TYPE = 'text/html';

@@ -27,7 +27,7 @@ import type {
 // Value imports
 //──────────────────────────────────────────────────────────────────────────────
 import {brand} from '/lib/types/brand';
-import {isString} from '../common/isString';
+import {isString} from '/lib/common/isString';
 
 
 //──────────────────────────────────────────────────────────────────────────────
