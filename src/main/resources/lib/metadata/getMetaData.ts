@@ -1,6 +1,6 @@
 import type {Content} from '/lib/xp/content';
 import type {Site} from '/lib/xp/portal';
-import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
 import {pageUrl} from '/lib/xp/portal';
@@ -8,7 +8,7 @@ import {pageUrl} from '/lib/xp/portal';
 import {render} from '/lib/thymeleaf';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
-import {getImageUrl} from '../common/getImageUrl';
+import {getImageUrl} from '/lib/common/getImageUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getPageTitle} from '/lib/common/getPageTitle';

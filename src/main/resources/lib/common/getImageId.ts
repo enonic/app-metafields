@@ -1,6 +1,6 @@
 import type {Content, Site} from '/lib/xp/content';
 import type {ImageId} from '/lib/types';
-import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
 import {findImageIdInContent} from '/lib/common/findImageIdInContent';

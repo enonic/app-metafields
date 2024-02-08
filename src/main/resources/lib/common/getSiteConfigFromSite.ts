@@ -1,5 +1,5 @@
 import type {Site} from '/lib/xp/portal';
-import type {MetafieldsSiteConfig} from '../types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
