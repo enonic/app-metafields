@@ -6,16 +6,19 @@ import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
 import {getSiteConfigFromSite} from './getSiteConfigFromSite';
 
 
+interface GetTheConfigParams {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	site: Site<MetafieldsSiteConfig>
+}
+
+
 // The configuration needs to be fetched first from site config (using current content if site context is not available - like for widgets), and lastly we'll check for any config files and use these to overwrite.
 export const getTheConfig = ({
 	applicationConfig,
 	applicationKey,
 	site,
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
-	site: Site<MetafieldsSiteConfig>
-}) => {
+}: GetTheConfigParams): MetafieldsSiteConfig => {
 	let config = libPortalGetSiteConfig<MetafieldsSiteConfig>();
 	if (!config) {
 		config = getSiteConfigFromSite({
