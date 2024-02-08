@@ -5,8 +5,6 @@ import type {MediaImage} from '/lib/types/Content';
 
 export const enum GraphQLTypeName {
 	CONTENT = 'Content',
-	// IMAGE = 'Image',
-	// IMAGE_STYLE = 'ImageStyle',
 	MEDIA_IMAGE = 'media_Image',
 	METAFIELDS = 'MetaFields',
 }
@@ -14,7 +12,7 @@ export const enum GraphQLTypeName {
 export interface MetaFields {
 	alternates?: {
 		canonical?: string
-	}, // string
+	},
 	description?: string
 	image?: MediaImage|null
 	locale?: string
@@ -22,20 +20,20 @@ export interface MetaFields {
 		hideImages?: boolean
 		hideUrl?: boolean
 		type?: 'website' | 'article'
-	} // string
+	}
 	robots?: {
 		follow?: boolean
 		index?: boolean
-	} // string
+	}
 	siteName: string
 	title: string
 	twitter?: {
 		hideImages?: boolean
 		site?: string
-	} // string
+	}
 	verification?: {
 		google?: string
-	} // string
+	}
 }
 
 export type GraphQLContent = Branded<Content, 'Content'>
@@ -129,21 +127,6 @@ interface XpXDataMetaData {
 	seoImage?: string
 	seoTitle?: string
 }
-
-// type Content = Omit<ImportedContent,'x'> & {
-// 	x: Record<string, {
-// 		'meta-data': XpXDataMetaData
-// 	}>
-// }
-
-// interface Content extends ImportedContent {
-// 	// _id: string
-// 	// _path: string
-// 	data?: Record<string, any>
-// 	x: Record<string, {
-// 		'meta-data': XpXDataMetaData
-// 	}>
-// }
 
 interface Env <
 	ARGS extends Record<string, any> = Record<string, any>,
