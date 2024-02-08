@@ -15,12 +15,6 @@ import {getPageTitle} from '/lib/common/getPageTitle';
 import {getTheConfig} from '/lib/common/getTheConfig';
 
 
-function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
-	return render(resolve(`metadata${
-		selfClosingTags ? '-self-closing' : ''
-	}.html`), params)
-}
-
 interface MetaDataModel {
 	blockRobots: boolean
 	canonical: boolean
@@ -46,6 +40,24 @@ interface MetaDataModel {
 	url: string
 }
 
+interface GetMetaDataParams {
+	applicationConfig: Record<string, string|boolean>
+	applicationKey: string
+	site: Site<MetafieldsSiteConfig>
+	siteConfig: MetafieldsSiteConfig
+	content?: Content
+	returnType?: 'json'|'html'
+	selfClosingTags?: boolean
+}
+
+
+function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
+	return render(resolve(`metadata${
+		selfClosingTags ? '-self-closing' : ''
+	}.html`), params)
+}
+
+
 export function getMetaData({
 	applicationConfig,
 	applicationKey,
@@ -54,15 +66,7 @@ export function getMetaData({
 	content=undefined,
 	returnType="json",
 	selfClosingTags=false
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
-	site: Site<MetafieldsSiteConfig>
-	siteConfig: MetafieldsSiteConfig
-	content?: Content
-	returnType?: 'json'|'html'
-	selfClosingTags?: boolean
-}): MetaDataModel|string|undefined {
+}: GetMetaDataParams): MetaDataModel|string|undefined {
 	if (!content) {
 		return undefined;
 	}
