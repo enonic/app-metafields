@@ -126,30 +126,6 @@ jest.mock(
 
 mockLibUtil();
 
-// const siteMetaFields: MetaFields = {
-// 	alternates: {
-// 		canonical: 'canonical'
-// 	},
-// 	description: 'string',
-// 	image: imageContent,
-// 	locale: 'en_US',
-// 	openGraph: {
-// 		type: 'website'
-// 	},
-// 	robots: {
-// 		follow: true,
-// 		index: true
-// 	},
-// 	siteName: 'siteContentDisplayName',
-// 	title: 'string',
-// 	twitter: {
-// 		site: 'string'
-// 	},
-// 	verification: {
-// 		google: 'string'
-// 	},
-// };
-
 const folderMetaFields: MetaFields = {
 	alternates: {
 		canonical: null
