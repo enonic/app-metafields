@@ -3,7 +3,7 @@ import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
-import {getSiteConfigFromSite} from './getSiteConfigFromSite';
+import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
 
 
 interface GetTheConfigParams {
