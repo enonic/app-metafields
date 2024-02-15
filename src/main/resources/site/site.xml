@@ -2,7 +2,7 @@
 <site xmlns="urn:enonic:xp:model:1.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="urn:enonic:xp:model:1.0 https://raw.githubusercontent.com/enonic/xp/master/modules/core/core-api/src/main/resources/META-INF/xsd/model.xsd">
-	<x-data name="meta-data" allowContentTypes="^(?!media:.*|portal:fragment|portal:template|portal:template-folder$).*"/>
+	<x-data name="meta-data" allowContentTypes="^(?!media:.*|portal:fragment|portal:template|portal:template-folder$).*" optional="true"/>
 	<form>
 		<field-set>
 			<label>General settings</label>
@@ -105,18 +105,6 @@
 				<input name="removeOpenGraphImage" type="CheckBox">
 					<label>Remove the openGraph image tag?</label>
 					<help-text>Checking this will stop the app from generating the open graph image tag</help-text>
-				</input>
-			</items>
-		</field-set>
-		<!-- Option set for advanced configuration -->
-		<field-set>
-			<label>Advanced</label>
-			<items>
-				<input name="disableAppConfig" type="CheckBox">
-					<label>Don't overwrite values from app.config</label>
-					<help-text>It's possible to configure this app for all your site through a file on the server, here you can disable this behavior.</help-text>
-					<default>false</default>
-					<occurrences minimum="0" maximum="1"/>
 				</input>
 			</items>
 		</field-set>
