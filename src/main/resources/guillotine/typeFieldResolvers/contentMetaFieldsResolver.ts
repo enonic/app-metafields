@@ -15,6 +15,7 @@ import {
 
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
+import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getFullTitle} from '/lib/common/getFullTitle';
@@ -100,37 +101,21 @@ export const contentMetaFieldsResolver: Resolver<
 		const blockRobots = siteConfig.blockRobots || getBlockRobots(content)
 
 		let canonical: string|null = null;
-		if (appOrSiteConfig.canonical) {
-			let contentForCanonicalUrl: Content|null = null;
-
-			if (content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoContentForCanonicalUrl) {
-				const aContent = getContentByKey({
-					key: content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl as string
+		const contentForCanonicalUrl = getContentForCanonicalUrl(content);
+		if (contentForCanonicalUrl) {
+			if (appOrSiteConfig.baseUrl) {
+				canonical = prependBaseUrl({
+					baseUrl: siteConfig.baseUrl,
+					contentPath: contentForCanonicalUrl._path,
+					sitePath: site._path
 				});
-				if (aContent) {
-					contentForCanonicalUrl = aContent;
-				} else {
-					log.error(`content.x.${APP_NAME_PATH}.${MIXIN_PATH}.seoContentForCanonicalUrl for content with _path:${_path} references a non-existing content with key:${content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl}`);
-				}
 			} else {
-				contentForCanonicalUrl = content;
+				canonical = siteRelativePath({
+					contentPath: contentForCanonicalUrl._path,
+					sitePath: site._path
+				});
 			}
-
-			if (contentForCanonicalUrl) {
-				if (appOrSiteConfig.baseUrl) {
-					canonical = prependBaseUrl({
-						baseUrl: siteConfig.baseUrl,
-						contentPath: contentForCanonicalUrl._path,
-						sitePath: site._path
-					});
-				} else {
-					canonical = siteRelativePath({
-						contentPath: contentForCanonicalUrl._path,
-						sitePath: site._path
-					});
-				}
-			}
-		} // if appOrSiteConfig.canonical
+		} // if contentForCanonicalUrl
 
 		const url: string = appOrSiteConfig.baseUrl
 			? prependBaseUrl({
@@ -148,9 +133,7 @@ export const contentMetaFieldsResolver: Resolver<
 			_content: content,
 			_site: site,
 			_siteConfig: siteConfig,
-			alternates: {
-				canonical
-			},
+			canonical,
 			description,
 			locale: getLang(content, site),
 			openGraph: {

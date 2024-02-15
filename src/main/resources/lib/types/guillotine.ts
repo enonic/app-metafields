@@ -12,9 +12,7 @@ export const enum GraphQLTypeName {
 
 // In fields names first letter should be lowercase
 export interface MetaFields {
-	alternates?: {
-		canonical?: string
-	},
+	canonical?: string
 	description?: string
 	image?: MediaImage|null
 	locale?: string

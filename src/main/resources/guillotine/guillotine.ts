@@ -15,8 +15,8 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 			[GraphQLTypeName.METAFIELDS]: {
 				description: 'Meta fields for a content',
 				fields: {
-					alternates: {
-						type: graphQL.Json,
+					canonical: {
+						type: graphQL.GraphQLString,
 					},
 					description: {
 						type: graphQL.GraphQLString,

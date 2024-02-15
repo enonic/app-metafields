@@ -123,12 +123,6 @@
 					<default>false</default>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
-				<input name="canonical" type="CheckBox">
-					<label>Use Canonical meta?</label>
-					<help-text>Generates the canonical page URL meta data for all content. You can also overwrite canonical page from current content configuration.</help-text>
-					<!--<default>checked</default>-->
-					<occurrences minimum="0" maximum="1"/>
-				</input>
 			</items>
 		</field-set>
 		<field-set>

@@ -41,7 +41,7 @@
                 <dd>
                     <p th:if="${summary.canonical}" th:text="${summary.canonical}"></p>
                     <p data-th-unless="${summary.canonical}" class="message-empty">
-                        Canonical not activated!
+                        This page doesn't have a canonical URL.
                     </p>
                 </dd>
             </dl>

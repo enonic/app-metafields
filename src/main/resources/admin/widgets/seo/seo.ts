@@ -108,8 +108,8 @@ export const get = (req: Request) => {
 				}
 
 				let canonical = null;
-				if (siteConfig.canonical) {
-					const contentForCanonicalUrl = getContentForCanonicalUrl(content);
+				const contentForCanonicalUrl = getContentForCanonicalUrl(content);
+				if (contentForCanonicalUrl) {
 					if (siteConfig.baseUrl) {
 						canonical = prependBaseUrl({
 							baseUrl: siteConfig.baseUrl,
