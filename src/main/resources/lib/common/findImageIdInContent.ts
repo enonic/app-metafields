@@ -33,11 +33,7 @@ export function findImageIdInContent({
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
 
-	const firstItem = forceArray(
-		userDefinedValue
-		|| content.data.image
-		|| content.data.images
-	)[0];
+	const firstItem = forceArray(userDefinedValue)[0];
 
 	const hopefullyString = firstItem?.image || firstItem;
 

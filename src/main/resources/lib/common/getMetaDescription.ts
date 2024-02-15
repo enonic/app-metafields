@@ -41,7 +41,6 @@ export const getMetaDescription = ({
 	let metaDescription = (
 		setWithMixin ? content.x[APP_NAME_PATH][MIXIN_PATH].seoDescription // Get from mixin
 			: userDefinedValue
-			|| content.data.preface || content.data.description || content.data.summary // Use typical content summary names
 			|| siteConfig.seoDescription // Use default for site
 			|| site.data.description // Use bottom default
 			|| '' // Don't crash plugin on clean installs
