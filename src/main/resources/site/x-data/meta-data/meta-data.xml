@@ -21,8 +21,8 @@
 			<occurrences minimum="0" maximum="1"/>
 		</input>
 		<input name="seoContentForCanonicalUrl" type="ContentSelector">
-			<label>Override Canonical URL</label>
-			<help-text>Select a customized source content for canonical URL.</help-text>
+			<label>Canonical</label>
+			<help-text>Select the canonical content you want search engines to index, instead of this.</help-text>
 			<occurrences minimum="0" maximum="1"/>
 			<config>
 				<relationshipType>system:reference</relationshipType>

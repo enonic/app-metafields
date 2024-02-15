@@ -19,7 +19,6 @@ import {getTheConfig} from '/lib/common/getTheConfig';
 
 interface MetaDataModel {
 	blockRobots: boolean
-	canonical: boolean
 	canonicalUrl: string
 	description: string
 	imageHeight: number
@@ -105,7 +104,7 @@ export function getMetaData({
 				sitePath: site._path
 			})
 			: pageUrl({ path: canonicalContent._path, type: "absolute" })
-		: absoluteUrl;
+		: null;
 
 	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
 		? getImageUrl({
@@ -130,7 +129,6 @@ export function getMetaData({
 
 	const params: MetaDataModel = {
 		blockRobots: siteConfig.blockRobots || getBlockRobots(content),
-		canonical: siteConfig.canonical,
 		canonicalUrl,
 		description: getMetaDescription({
 			applicationConfig,
