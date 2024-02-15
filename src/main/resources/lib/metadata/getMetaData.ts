@@ -6,6 +6,8 @@ import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 import {pageUrl} from '/lib/xp/portal';
 // @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
+
+import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
 import {getImageUrl} from '/lib/common/getImageUrl';
@@ -86,13 +88,24 @@ export function getMetaData({
 	});
 	const siteVerification = siteConfig.siteVerification || null;
 
-	let url = !appOrSiteConfig.removeOpenGraphUrl
-		? pageUrl({ path: content._path, type: "absolute" })
-		: null;
+	const absoluteUrl = siteConfig.baseUrl
+	? prependBaseUrl({
+		baseUrl: siteConfig.baseUrl,
+		contentPath: content._path,
+		sitePath: site._path
+	})
+	: pageUrl({ path: content._path, type: "absolute" });
+
 	const canonicalContent = getContentForCanonicalUrl(content);
 	const canonicalUrl = canonicalContent
-		? pageUrl({ path: canonicalContent._path, type: "absolute"})
-		: url;
+		? siteConfig.baseUrl
+			? prependBaseUrl({
+				baseUrl: siteConfig.baseUrl,
+				contentPath: canonicalContent._path,
+				sitePath: site._path
+			})
+			: pageUrl({ path: canonicalContent._path, type: "absolute" })
+		: absoluteUrl;
 
 	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
 		? getImageUrl({
@@ -142,7 +155,7 @@ export function getMetaData({
 		twitterUserName: appOrSiteConfig.twitterUsername,
 		twitterImageUrl,
 		type: isFrontpage ? "website" : "article",
-		url,
+		url: appOrSiteConfig.removeOpenGraphUrl ? null : absoluteUrl,
 	};
 
 	if (returnType === 'html') {

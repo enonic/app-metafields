@@ -2,6 +2,8 @@ import type {Content} from '/lib/xp/content';
 import type {Resolver} from '/lib/types/guillotine';
 
 
+import {startsWith} from '@enonic/js-utils/string/startsWith';
+import {includes as arrayIncludes} from '@enonic/js-utils/array/includes';
 import {
 	get as getContentByKey,
 	getSite as libsContentGetSite,
@@ -10,6 +12,8 @@ import {
 	get as getContext,
 	run as runInContext
 } from '/lib/xp/context';
+
+import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
@@ -17,8 +21,8 @@ import {getFullTitle} from '/lib/common/getFullTitle';
 import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
 import {getTheConfig} from '/lib/common/getTheConfig';
 import {APP_CONFIG, APP_NAME, APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
-import {startsWith} from '@enonic/js-utils/string/startsWith';
-import {includes as arrayIncludes} from '@enonic/js-utils/array/includes';
+import { siteRelativePath } from '/lib/app-metafields/path/siteRelativePath';
+
 
 export const contentMetaFieldsResolver: Resolver<
 	{},
@@ -95,17 +99,51 @@ export const contentMetaFieldsResolver: Resolver<
 		});
 		const blockRobots = siteConfig.blockRobots || getBlockRobots(content)
 
-		let canonical = null;
-		if (content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoContentForCanonicalUrl) {
-			const canonicalContent = getContentByKey({
-				key: content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl as string
-			});
-			if (canonicalContent) {
-				canonical = canonicalContent._path;
+		let canonical: string|null = null;
+		if (appOrSiteConfig.canonical) {
+			let contentForCanonicalUrl: Content|null = null;
+
+			if (content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoContentForCanonicalUrl) {
+				const aContent = getContentByKey({
+					key: content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl as string
+				});
+				if (aContent) {
+					contentForCanonicalUrl = aContent;
+				} else {
+					log.error(`content.x.${APP_NAME_PATH}.${MIXIN_PATH}.seoContentForCanonicalUrl for content with _path:${_path} references a non-existing content with key:${content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl}`);
+				}
 			} else {
-				log.error(`content.x.${APP_NAME_PATH}.${MIXIN_PATH}.seoContentForCanonicalUrl for content with _path:${_path} references a non-existing content with key:${content.x[APP_NAME_PATH][MIXIN_PATH].seoContentForCanonicalUrl}`);
+				contentForCanonicalUrl = content;
 			}
-		}
+
+			if (contentForCanonicalUrl) {
+				if (appOrSiteConfig.baseUrl) {
+					canonical = prependBaseUrl({
+						baseUrl: siteConfig.baseUrl,
+						contentPath: contentForCanonicalUrl._path,
+						sitePath: site._path
+					});
+				} else {
+					canonical = siteRelativePath({
+						contentPath: contentForCanonicalUrl._path,
+						sitePath: site._path
+					});
+				}
+			}
+		} // if appOrSiteConfig.canonical
+
+		const url: string = appOrSiteConfig.baseUrl
+			? prependBaseUrl({
+				baseUrl: siteConfig.baseUrl,
+				contentPath: content._path,
+				sitePath: site._path
+			})
+			: siteRelativePath({
+				contentPath: content._path,
+				sitePath: site._path
+			});
+
+		// return <Partial<GraphQLTypeToResolverResult<GraphQLMetafields>>>{
 		return {
 			_content: content,
 			_site: site,
@@ -132,7 +170,8 @@ export const contentMetaFieldsResolver: Resolver<
 			},
 			verification: {
 				google: siteConfig.siteVerification || null
-			}
+			},
+			url,
 		};
 	});
 };

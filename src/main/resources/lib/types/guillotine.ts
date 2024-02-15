@@ -3,12 +3,14 @@ import type {Branded} from '/lib/types/Branded';
 import type {MediaImage} from '/lib/types/Content';
 
 
+// In type names first letter should be uppercase
 export const enum GraphQLTypeName {
 	CONTENT = 'Content',
 	MEDIA_IMAGE = 'media_Image',
 	METAFIELDS = 'MetaFields',
 }
 
+// In fields names first letter should be lowercase
 export interface MetaFields {
 	alternates?: {
 		canonical?: string
@@ -34,12 +36,14 @@ export interface MetaFields {
 	verification?: {
 		google?: string
 	}
+	url: string
 }
 
 export type GraphQLContent = Branded<Content, 'Content'>
 export type GraphQLMediaImage = Branded<MediaImage, 'media_Image'>
 export type GraphQLMetaFields = Branded<MetaFields, 'MetaFields'>
 
+// In fields names first letter should be lowercase
 export const enum GraphQLFieldName {
 	IMAGE = 'image',
 	METAFIELDS = 'metaFields',
@@ -90,7 +94,7 @@ type GraphQLTypes =
 
 export type GraphQL = Record<GraphQLTypes, GraphQLType> & {
 	nonNull: (type: GraphQLType) => GraphQLType
-	list: (type: GraphQLType) => GraphQLType
+	list: (type: GraphQLType) => GraphQLType[]
 	reference: (type: GraphQLTypeName) => GraphQLType
 }
 
@@ -104,21 +108,23 @@ interface CreationCallback {
 
 interface ExtensionEnum {
 	description: string
-	values: Record<string, string>
+	values: Record<string, string> // /^_A-Za-z(_A-Za-z0-9)*/
 }
 
 interface ExtensionType {
 	description: string
 	fields: Record<string, {
-		type: GraphQLType
+		type: GraphQLType | GraphQLType[]
 	}>
 }
 
-interface LocalContext {
+type LocalContext<
+	T extends Record<string,string|number|boolean|null> = Record<string,string|number|boolean|null>
+> = {
 	branch: string
 	project: string
 	siteKey?: string
-}
+} & T
 
 interface XpXDataMetaData {
 	blockRobots?: boolean
@@ -128,9 +134,9 @@ interface XpXDataMetaData {
 	seoTitle?: string
 }
 
-interface Env <
+interface DataFetchingEnvironment<
 	ARGS extends Record<string, any> = Record<string, any>,
-	SOURCE extends Record<string, any> = Record<string, any> // Content
+	SOURCE extends Record<string, any> = Record<string, any>,
 > {
 	args: ARGS
 	localContext: LocalContext
@@ -148,10 +154,10 @@ interface MetafieldsResolverReturnType {
 
 export interface Resolver<
 	ARGS extends Record<string, any> = Record<string, any>,
-	SOURCE extends Record<string, any> = Record<string, any>, // Content,
+	SOURCE extends Record<string, any> = Record<string, any>,
 	RETURN = any
 > {
-	(env: Env<ARGS,SOURCE>): RETURN
+	(env: DataFetchingEnvironment<ARGS,SOURCE>): RETURN
 }
 
 export interface Extensions {
