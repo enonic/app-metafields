@@ -4,25 +4,22 @@ import type {Resolver} from '/lib/types/guillotine';
 
 import {startsWith} from '@enonic/js-utils/string/startsWith';
 import {includes as arrayIncludes} from '@enonic/js-utils/array/includes';
-import {
-	get as getContentByKey,
-	getSite as libsContentGetSite,
-} from '/lib/xp/content';
+import {getSite as libsContentGetSite} from '/lib/xp/content';
 import {
 	get as getContext,
 	run as runInContext
 } from '/lib/xp/context';
 
+import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
+
+import {getAppOrSiteConfig} from '/lib/common/getAppOrSiteConfig';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getFullTitle} from '/lib/common/getFullTitle';
-import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
-import {getTheConfig} from '/lib/common/getTheConfig';
-import {APP_CONFIG, APP_NAME, APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
-import { siteRelativePath } from '/lib/app-metafields/path/siteRelativePath';
+import {APP_CONFIG, APP_NAME} from '/lib/common/constants';
 
 
 export const contentMetaFieldsResolver: Resolver<
@@ -75,37 +72,31 @@ export const contentMetaFieldsResolver: Resolver<
 		principals
 	}, () => {
 		const site = libsContentGetSite({ key: _path });
-		const description = getMetaDescription({
+		const appOrSiteConfig = getAppOrSiteConfig({
 			applicationConfig: APP_CONFIG,
 			applicationKey: APP_NAME,
-			content,
 			site
 		});
-		const appOrSiteConfig = getTheConfig({
-			applicationConfig: APP_CONFIG,
-			applicationKey: APP_NAME,
+		const description = getMetaDescription({
+			appOrSiteConfig,
+			content,
 			site
 		});
 
 		const title = getFullTitle({
-			applicationConfig: APP_CONFIG,
-			applicationKey: APP_NAME,
+			appOrSiteConfig,
 			content,
 			site
 		});
 		const isFrontpage = site._path === _path;
-		const siteConfig = getSiteConfigFromSite({
-			applicationKey: APP_NAME,
-			site
-		});
-		const blockRobots = siteConfig.blockRobots || getBlockRobots(content)
+		const blockRobots = appOrSiteConfig.blockRobots || getBlockRobots(content)
 
 		let canonical: string|null = null;
 		const contentForCanonicalUrl = getContentForCanonicalUrl(content);
 		if (contentForCanonicalUrl) {
 			if (appOrSiteConfig.baseUrl) {
 				canonical = prependBaseUrl({
-					baseUrl: siteConfig.baseUrl,
+					baseUrl: appOrSiteConfig.baseUrl,
 					contentPath: contentForCanonicalUrl._path,
 					sitePath: site._path
 				});
@@ -119,7 +110,7 @@ export const contentMetaFieldsResolver: Resolver<
 
 		const url: string = appOrSiteConfig.baseUrl
 			? prependBaseUrl({
-				baseUrl: siteConfig.baseUrl,
+				baseUrl: appOrSiteConfig.baseUrl,
 				contentPath: content._path,
 				sitePath: site._path
 			})
@@ -130,9 +121,9 @@ export const contentMetaFieldsResolver: Resolver<
 
 		// return <Partial<GraphQLTypeToResolverResult<GraphQLMetafields>>>{
 		return {
+			_appOrSiteConfig: appOrSiteConfig,
 			_content: content,
 			_site: site,
-			_siteConfig: siteConfig,
 			canonical,
 			description,
 			locale: getLang(content, site),
@@ -152,7 +143,7 @@ export const contentMetaFieldsResolver: Resolver<
 				site: appOrSiteConfig.twitterUsername,
 			},
 			verification: {
-				google: siteConfig.siteVerification || null
+				google: appOrSiteConfig.siteVerification || null
 			},
 			url,
 		};

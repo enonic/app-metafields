@@ -11,6 +11,8 @@ import {
 // @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
 
+import {queryForFirstSiteWithAppAndUrl} from '/admin/widgets/seo/queryForFirstSiteWithAppAndUrl';
+
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 import {getAppendix} from '/lib/common/getAppendix';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
@@ -19,8 +21,7 @@ import {getImageUrl} from '/lib/common/getImageUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getPageTitle} from '/lib/common/getPageTitle';
-import {getSite} from '/lib/common/getSite';
-import {getTheConfig} from '/lib/common/getTheConfig';
+import {getAppOrSiteConfig} from '/lib/common/getAppOrSiteConfig';
 
 
 /*
@@ -60,33 +61,29 @@ export const get = (req: Request) => {
 	if (content) {
 		// The first part of the content '_path' is the site's URL, make sure to fetch current site!
 		const parts = content._path.split('/');
-		const site = getSite({
+		const site = queryForFirstSiteWithAppAndUrl({
 			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 			siteUrl: parts[1]
 		}); // Send the first /x/-part of the content's path.
 		if (site) {
-			const siteConfig = getTheConfig({
+			const appOrSiteConfig = getAppOrSiteConfig({
 				applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 				applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 				site
 			});
-			if (siteConfig) {
+			if (appOrSiteConfig) {
 				const isFrontpage = site._path === content._path;
 				const pageTitle = getPageTitle({
-					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					appOrSiteConfig,
 					content,
-					site
 				});
 				const titleAppendix = getAppendix({
-					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					appOrSiteConfig,
 					isFrontpage,
 					site,
 				});
 				let description = getMetaDescription({
-					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					appOrSiteConfig,
 					content,
 					site
 				});
@@ -96,9 +93,9 @@ export const get = (req: Request) => {
 				const absoluteUrl = pageUrl({ path: content._path, type: "absolute" });
 
 				let ogUrl: string;
-				if (siteConfig.baseUrl) {
+				if (appOrSiteConfig.baseUrl) {
 					ogUrl = prependBaseUrl({
-						baseUrl: siteConfig.baseUrl,
+						baseUrl: appOrSiteConfig.baseUrl,
 						contentPath: content._path,
 						sitePath: site._path
 					});
@@ -110,9 +107,9 @@ export const get = (req: Request) => {
 				let canonical = null;
 				const contentForCanonicalUrl = getContentForCanonicalUrl(content);
 				if (contentForCanonicalUrl) {
-					if (siteConfig.baseUrl) {
+					if (appOrSiteConfig.baseUrl) {
 						canonical = prependBaseUrl({
-							baseUrl: siteConfig.baseUrl,
+							baseUrl: appOrSiteConfig.baseUrl,
 							contentPath: contentForCanonicalUrl
 								? contentForCanonicalUrl._path
 								: content._path,
@@ -128,12 +125,11 @@ export const get = (req: Request) => {
 				}
 
 				const imageUrl = getImageUrl({
-					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-					applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+					appOrSiteConfig,
 					content,
 					site,
-					defaultImg: siteConfig.seoImage,
-					defaultImgPrescaled: siteConfig.seoImageIsPrescaled
+					defaultImg: appOrSiteConfig.seoImage,
+					defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled
 				});
 
 				params = {
@@ -143,7 +139,7 @@ export const get = (req: Request) => {
 						description: description,
 						image: imageUrl,
 						canonical,
-						blockRobots: (siteConfig.blockRobots || getBlockRobots(content))
+						blockRobots: (appOrSiteConfig.blockRobots || getBlockRobots(content))
 					},
 					og: {
 						type: (isFrontpage ? 'website' : 'article'),
@@ -159,11 +155,11 @@ export const get = (req: Request) => {
 						}
 					},
 					twitter: {
-						active: (siteConfig.twitterUsername ? true : false),
+						active: (appOrSiteConfig.twitterUsername ? true : false),
 						title: pageTitle,
 						description: description,
 						image: imageUrl,
-						site: siteConfig.twitterUsername || null
+						site: appOrSiteConfig.twitterUsername || null
 					}
 				};
 			}

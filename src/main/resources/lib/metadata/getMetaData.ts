@@ -14,7 +14,6 @@ import {getImageUrl} from '/lib/common/getImageUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getPageTitle} from '/lib/common/getPageTitle';
-import {getTheConfig} from '/lib/common/getTheConfig';
 
 
 interface MetaDataModel {
@@ -42,10 +41,8 @@ interface MetaDataModel {
 }
 
 interface GetMetaDataParams {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
+	appOrSiteConfig: MetafieldsSiteConfig
 	site: Site<MetafieldsSiteConfig>
-	siteConfig: MetafieldsSiteConfig
 	content?: Content
 	returnType?: 'json'|'html'
 	selfClosingTags?: boolean
@@ -60,10 +57,8 @@ function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
 
 
 export function getMetaData({
-	applicationConfig,
-	applicationKey,
+	appOrSiteConfig,
 	site,
-	siteConfig,
 	content=undefined,
 	returnType="json",
 	selfClosingTags=false
@@ -72,24 +67,16 @@ export function getMetaData({
 		return undefined;
 	}
 
-	const appOrSiteConfig = getTheConfig({
-		applicationConfig,
-		applicationKey,
-		site
-	});
-
 	const isFrontpage = site._path === content._path;
 	const pageTitle = getPageTitle({
-		applicationConfig,
-		applicationKey,
+		appOrSiteConfig,
 		content,
-		site
 	});
-	const siteVerification = siteConfig.siteVerification || null;
+	const siteVerification = appOrSiteConfig.siteVerification || null;
 
-	const absoluteUrl = siteConfig.baseUrl
+	const absoluteUrl = appOrSiteConfig.baseUrl
 	? prependBaseUrl({
-		baseUrl: siteConfig.baseUrl,
+		baseUrl: appOrSiteConfig.baseUrl,
 		contentPath: content._path,
 		sitePath: site._path
 	})
@@ -97,9 +84,9 @@ export function getMetaData({
 
 	const canonicalContent = getContentForCanonicalUrl(content);
 	const canonicalUrl = canonicalContent
-		? siteConfig.baseUrl
+		? appOrSiteConfig.baseUrl
 			? prependBaseUrl({
-				baseUrl: siteConfig.baseUrl,
+				baseUrl: appOrSiteConfig.baseUrl,
 				contentPath: canonicalContent._path,
 				sitePath: site._path
 			})
@@ -108,31 +95,28 @@ export function getMetaData({
 
 	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
 		? getImageUrl({
-			applicationConfig,
-			applicationKey,
+			appOrSiteConfig,
 			content,
 			site,
-			defaultImg: siteConfig.seoImage,
-			defaultImgPrescaled: siteConfig.seoImageIsPrescaled
+			defaultImg: appOrSiteConfig.seoImage,
+			defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled
 		})
 		: null;
 
 	const twitterImageUrl = !appOrSiteConfig.removeTwitterImage
 		? getImageUrl({
-			applicationConfig,
-			applicationKey,
+			appOrSiteConfig,
 			content,
 			site,
-			defaultImg: siteConfig.seoImage
+			defaultImg: appOrSiteConfig.seoImage
 		})
 		: null;
 
 	const params: MetaDataModel = {
-		blockRobots: siteConfig.blockRobots || getBlockRobots(content),
+		blockRobots: appOrSiteConfig.blockRobots || getBlockRobots(content),
 		canonicalUrl,
 		description: getMetaDescription({
-			applicationConfig,
-			applicationKey,
+			appOrSiteConfig,
 			content,
 			site
 		}),

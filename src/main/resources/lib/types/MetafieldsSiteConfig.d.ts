@@ -10,7 +10,6 @@ export declare interface MetafieldsSiteConfig {
 	baseUrl?: string
 	blockRobots?: boolean
 	canonical?: boolean
-	disableAppConfig?: boolean
 	fullPath?: boolean
 	pathsDescriptions?: CommaSeparatedString
 	pathsImages?: CommaSeparatedString

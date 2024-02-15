@@ -33,15 +33,13 @@ globalThis.log = {
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	blockRobots: true,
 	canonical: true,
-	disableAppConfig: true,
 	// fullPath: true,
-	pathsDescriptions: 'pathsDescriptions', // with comma
-	pathsImages: 'pathsImages', // with comma
-	pathsTitles: 'pathsTitles', // with comma
+	pathsDescriptions: 'pathsDescriptions0,pathsDescriptions1', // with comma
+	pathsImages: 'pathsImages0,pathsImages1', // with comma
+	pathsTitles: 'pathsTitles0,pathsTitles1', // with comma
 	seoDescription: 'seoDescription',
 	seoImage: 'seoImage',
 	seoImageIsPrescaled: true,
-	seoTitle: 'seoTitle',
 	siteVerification: 'siteVerification',
 	removeOpenGraphImage: true,
 	removeOpenGraphUrl: true,
@@ -137,8 +135,7 @@ describe('getImageUrl', () => {
 	it('should return undefined when no image found', () => {
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
@@ -151,8 +148,7 @@ describe('getImageUrl', () => {
 	it('should return attachmentUrl when defaultImg and defaultImgPrescaled provided', () => {
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
@@ -165,32 +161,33 @@ describe('getImageUrl', () => {
 	}); // it
 
 	it('should handle svgs', () => {
+		const content = mockContent({
+			prefix: 'articleWithImage',
+			data: {
+				pathsImages1: 'fourImageContentId',
+			},
+			type: 'base:folder',
+		});
+		// console.info('content', content);
+		const getImageUrlParams = {
+			appOrSiteConfig: metaFieldsSiteConfig,
+			content,
+			site: siteContent
+		};
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
-			expect(getImageUrl({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
-				content: mockContent({
-					prefix: 'articleWithImage',
-					data: {
-						image: 'fourImageContentId',
-					},
-					type: 'base:folder',
-				}),
-				site: siteContent
-			})).toBe('fourImageContentIdblock(1200,630)absoluteImageUrl');
+			expect(getImageUrl(getImageUrlParams)).toBe('fourImageContentIdblock(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
 
-	it('should return an url when content has data.image', () => {
+	it('should return an url when content has data.pathsImages0', () => {
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImage',
 					data: {
-						image: 'oneImageContentId',
-						images: 'twoImageContentId'
+						pathsImages0: 'oneImageContentId',
+						pathsImages1: 'twoImageContentId'
 					},
 					type: 'base:folder',
 				}),
@@ -199,15 +196,14 @@ describe('getImageUrl', () => {
 		}); // import
 	}); // it
 
-	it('should return an url when content has data.images', () => {
+	it('should return an url when content has data.pathsImages1', () => {
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImages',
 					data: {
-						images: 'twoImageContentId'
+						pathsImages1: 'twoImageContentId'
 					},
 					type: 'base:folder',
 				}),
@@ -216,17 +212,14 @@ describe('getImageUrl', () => {
 		}); // import
 	}); // it
 
-	it('should return an url when content has data.pathsImages[0].images', () => {
+	it('should return an url when content has data.pathsImages0[0]', () => {
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImages',
 					data: {
-						pathsImages: [{
-							image: 'twoImageContentId'
-						}]
+						pathsImages0: ['twoImageContentId']
 					},
 					type: 'base:folder',
 				}),

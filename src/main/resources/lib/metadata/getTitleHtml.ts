@@ -6,24 +6,23 @@ import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 import {getFullTitle} from '/lib/common/getFullTitle';
 
 
-export function getTitleHtml({
-	applicationConfig, // Avoid app.config so it can be used in Guillotine Extension Context
-	applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context,
-	content=undefined,
-	site,
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
+interface GetTitleHtmlParams {
+	appOrSiteConfig: MetafieldsSiteConfig
 	content?: Content
 	site: Site<MetafieldsSiteConfig>
-}) {
+}
+
+export function getTitleHtml({
+	appOrSiteConfig,
+	content=undefined,
+	site,
+}: GetTitleHtmlParams) {
 	if (!content) {
 		return undefined;
 	}
 
 	return `<title>${getFullTitle({
-		applicationConfig,
-		applicationKey,
+		appOrSiteConfig,
 		content,
 		site
 	})}</title>`;
