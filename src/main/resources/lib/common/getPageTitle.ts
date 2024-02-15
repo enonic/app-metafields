@@ -36,17 +36,10 @@ export const getPageTitle = ({
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
 
-	const setWithMixin = content.x[APP_NAME_PATH]
-		&& content.x[APP_NAME_PATH][MIXIN_PATH]
-		&& content.x[APP_NAME_PATH][MIXIN_PATH].seoTitle;
-
-	const metaTitle = setWithMixin ? stringOrNull(content.x[APP_NAME_PATH][MIXIN_PATH].seoTitle) // Get from mixin
-		: stringOrNull(userDefinedValue) // json property defined by user as important
-		|| stringOrNull(content.data.title) || stringOrNull(content.data.heading) || stringOrNull(content.data.header) // Use other typical content titles (overrides displayName)
+	return content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoTitle as string
+		|| stringOrNull(userDefinedValue) // json property defined by user as important
+		|| stringOrNull(content.data.title)
+		|| stringOrNull(content.data.heading)
+		|| stringOrNull(content.data.header) // Use other typical content titles (overrides displayName)
 		|| stringOrNull(content.displayName) // Use content's display name
-		|| stringOrNull(siteConfig.seoTitle) // Use default og-title for site
-		|| stringOrNull(site.displayName) // Use site default
-		|| ''
-
-	return metaTitle;
 };
