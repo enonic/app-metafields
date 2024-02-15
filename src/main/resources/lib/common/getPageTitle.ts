@@ -38,8 +38,5 @@ export const getPageTitle = ({
 
 	return content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoTitle as string
 		|| stringOrNull(userDefinedValue) // json property defined by user as important
-		|| stringOrNull(content.data.title)
-		|| stringOrNull(content.data.heading)
-		|| stringOrNull(content.data.header) // Use other typical content titles (overrides displayName)
 		|| stringOrNull(content.displayName) // Use content's display name
 };
