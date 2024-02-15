@@ -42,6 +42,9 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 					twitter: {
 						type: graphQL.Json,
 					},
+					url: {
+						type: graphQL.nonNull(graphQL.GraphQLString),
+					},
 					verification: {
 						type: graphQL.Json,
 					},
@@ -49,7 +52,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 			}
 		},
 		creationCallbacks: {
-			[GraphQLTypeName.CONTENT]: function (params) {
+			[GraphQLTypeName.CONTENT]: (params) => {
 				params.addFields({
 					[GraphQLFieldName.METAFIELDS]: {
 						type: graphQL.reference(GraphQLTypeName.METAFIELDS)

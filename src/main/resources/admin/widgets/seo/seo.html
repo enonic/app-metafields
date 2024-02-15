@@ -39,7 +39,7 @@
                 </dd>
                 <dt>Canonical URL</dt>
                 <dd>
-                    <p data-th-if="${summary.canonical}" data-th-text="${'[SITE_URL]' + summary.canonical}"></p>
+                    <p th:if="${summary.canonical}" th:text="${summary.canonical}"></p>
                     <p data-th-unless="${summary.canonical}" class="message-empty">
                         Canonical not activated!
                     </p>
@@ -69,7 +69,7 @@
                     <dd data-th-text="${og.description}">x</dd>
                 </div>
                 <dt title="&lt;og:url&gt;">Url</dt>
-                <dd data-th-text="${'[SITE_URL]' + og.url}">x</dd>
+                <dd th:text="${og.url}">x</dd>
                 <div data-th-remove="tag" data-th-if="${og.image.src}">
                     <dt title="&lt;og:image&gt;">Image</dt>
                     <dd>

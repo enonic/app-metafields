@@ -105,6 +105,7 @@ export default function buildServerConfig(): Options {
 		external: [
 			/^\/lib\/common/,
 			/^\/lib\/metadata/,
+			/^\/lib\/app-metafields/,
 
 			'/lib/cache',
 			'/lib/enonic/static',

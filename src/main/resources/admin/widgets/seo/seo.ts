@@ -10,6 +10,8 @@ import {
 } from '/lib/xp/portal';
 // @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
+
+import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 import {getAppendix} from '/lib/common/getAppendix';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
@@ -91,11 +93,39 @@ export const get = (req: Request) => {
 				if (description === '') description = null;
 
 				const frontpageUrl = pageUrl({ path: site._path, type: "absolute" });
-				const url = pageUrl({ path: content._path, type: "absolute" });
-				const contentForCanonicalUrl = getContentForCanonicalUrl(content);
-				const canonicalUrl = contentForCanonicalUrl ? pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" }) : url;
-				const justThePath = url.replace(frontpageUrl,'');
-				const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
+				const absoluteUrl = pageUrl({ path: content._path, type: "absolute" });
+
+				let ogUrl: string;
+				if (siteConfig.baseUrl) {
+					ogUrl = prependBaseUrl({
+						baseUrl: siteConfig.baseUrl,
+						contentPath: content._path,
+						sitePath: site._path
+					});
+				} else {
+					const justThePath = absoluteUrl.replace(frontpageUrl,'');
+					ogUrl = `[SITE_URL]${justThePath}`;
+				}
+
+				let canonical = null;
+				if (siteConfig.canonical) {
+					const contentForCanonicalUrl = getContentForCanonicalUrl(content);
+					if (siteConfig.baseUrl) {
+						canonical = prependBaseUrl({
+							baseUrl: siteConfig.baseUrl,
+							contentPath: contentForCanonicalUrl
+								? contentForCanonicalUrl._path
+								: content._path,
+							sitePath: site._path
+						});
+					} else {
+						const canonicalUrl = contentForCanonicalUrl
+							? pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" })
+							: absoluteUrl;
+						const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
+						canonical = `[SITE_URL]${canonicalJustThePath}`;
+					}
+				}
 
 				const imageUrl = getImageUrl({
 					applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
@@ -112,7 +142,7 @@ export const get = (req: Request) => {
 						fullTitle: (pageTitle + titleAppendix),
 						description: description,
 						image: imageUrl,
-						canonical: (siteConfig.canonical ? canonicalJustThePath : null),
+						canonical,
 						blockRobots: (siteConfig.blockRobots || getBlockRobots(content))
 					},
 					og: {
@@ -120,7 +150,7 @@ export const get = (req: Request) => {
 						title: pageTitle,
 						description: description,
 						siteName: site.displayName,
-						url: justThePath,
+						url: ogUrl,
 						locale: getLang(content,site),
 						image: {
 							src: imageUrl,
