@@ -19,19 +19,19 @@ import {
 
 
 export function findImageIdInContent({
+	appOrSiteConfig,
 	content,
-	siteConfig
 }: {
+	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
-	siteConfig: MetafieldsSiteConfig
 }): ImageId|undefined {
 	if(content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoImage) {
 		return ImageIdBuilder.from(content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as string);
 	}
 
-	const userDefinedPaths = CommaSeparatedStringBuilder.from(siteConfig.pathsImages || '');
+	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsImages || '');
 	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
-	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, siteConfig.fullPath) : null;
+	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
 
 	const firstItem = forceArray(userDefinedValue)[0];
 

@@ -12,17 +12,15 @@ import {
 	get as getContext,
 	run as runInContext
 } from '/lib/xp/context';
-import {commaStringToArray} from '/lib/common/commaStringToArray';
-import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {getImageId} from '/lib/common/getImageId';
 
 
 export const metaFieldsImagesResolver: Resolver<
 	{}, // args
 	{ // source
+		_appOrSiteConfig: MetafieldsSiteConfig
 		_content: Content
 		_site: Site<MetafieldsSiteConfig>
-		_siteConfig: MetafieldsSiteConfig
 	}
 > = (env) => {
 	// log.info(`resolvers content metafields ${JSON.stringify(env, null, 4)}`);
@@ -37,9 +35,9 @@ export const metaFieldsImagesResolver: Resolver<
 		// siteKey // NOTE: Can be undefined when x-guillotine-sitekey is missing
 	} = localContext;
 	const {
+		_appOrSiteConfig,
 		_content,
 		_site,
-		_siteConfig
 	} = source;
 	const context = getContext();
 	// log.info('metaFieldsImagesResolver context: %s', JSON.stringify(context, null, 4));
@@ -64,9 +62,9 @@ export const metaFieldsImagesResolver: Resolver<
 	}, () => {
 
 		const imageId = getImageId({
+			appOrSiteConfig: _appOrSiteConfig,
 			content: _content,
 			site: _site,
-			siteConfig: _siteConfig
 		});
 		if (imageId) {
 			const imageContent = getContentByKey({ key: imageId });

@@ -40,6 +40,7 @@ import {
 import {mockImage} from '../mocks/mockImage';
 import {mockLibUtil} from '../mocks/mockLibUtil';
 import {mockLibXpContext} from '../mocks/mockLibXpContext';
+import {mockLibXpNode} from '../mocks/mockLibXpNode';
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
 globalThis.log = {
@@ -52,7 +53,6 @@ globalThis.log = {
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	blockRobots: true,
 	canonical: true,
-	disableAppConfig: true,
 	fullPath: true,
 	pathsDescriptions: 'pathsDescriptions', // with comma
 	pathsImages: 'pathsImages', // with comma
@@ -60,7 +60,6 @@ const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	seoDescription: 'seoDescription',
 	seoImage: 'seoImage',
 	seoImageIsPrescaled: true,
-	seoTitle: 'seoTitle',
 	siteVerification: 'siteVerification',
 	removeOpenGraphImage: true,
 	removeOpenGraphUrl: true,
@@ -74,7 +73,7 @@ const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 const siteContent: Site<MetafieldsSiteConfig> = {
 	_id: 'siteContentId',
 	_name: 'siteContentName',
-	_path: 'siteContentPath',
+	_path: '/siteContentPath',
 	attachments: {},
 	creator: 'user:system:creator',
 	createdTime: '2021-01-01T00:00:00Z',
@@ -96,7 +95,7 @@ const siteContent: Site<MetafieldsSiteConfig> = {
 const folderContent: BaseFolder = {
 	_id: 'folderContentId',
 	_name: 'folderContentName',
-	_path: 'folderContentPath',
+	_path: '/folderContentPath',
 	attachments: {},
 	creator: 'user:system:creator',
 	createdTime: '2021-01-01T00:00:00Z',
@@ -115,6 +114,11 @@ const imageContent = mockImage({
 });
 
 mockLibXpContext();
+mockLibXpNode({
+	nodes: {
+		folderContentId: {}
+	}
+});
 
 jest.mock(
 	'/lib/xp/portal',
@@ -127,9 +131,7 @@ jest.mock(
 mockLibUtil();
 
 const folderMetaFields: MetaFields = {
-	alternates: {
-		canonical: null
-	},
+	canonical: null,
 	description: 'seoDescription',
 	// image: imageContent,
 	locale: 'en_US',
@@ -151,6 +153,7 @@ const folderMetaFields: MetaFields = {
 	verification: {
 		google: 'siteVerification'
 	},
+	url: '/folderContentPath'
 };
 
 const graphQLContent = GraphQLContentBuilder.from(siteContent);
@@ -167,7 +170,7 @@ const graphQL: GraphQL = {
 	LocalTime: GraphQLLocalTimeBuilder.from('00:00:00'),
 	LocalDateTime: GraphQLLocalDateTimeBuilder.from('2021-01-01T00:00:00'),
 	nonNull: (type) => type,
-	list: (type) => type,
+	list: (type) => [type],
 	reference: (typeName) => {
 		// console.debug('reference typeName', typeName);
 		if (typeName === 'media_Image') {
@@ -216,7 +219,7 @@ describe('guillotine extensions', () => {
 					MetaFields: {
 						description: "Meta fields for a content",
 						fields: {
-							alternates: {type: '{"json": "value"}'},
+							canonical: {type: 'string'},
 							description: {type: "string"},
 							image: {
 								type: imageContent
@@ -228,6 +231,7 @@ describe('guillotine extensions', () => {
 							title: {type: "string"},
 							twitter: {type: '{"json": "value"}'},
 							verification: {type: '{"json": "value"}'},
+							url: {type: 'string'},
 						}
 					} // MetaFields
 				} // types
@@ -257,9 +261,9 @@ describe('guillotine extensions', () => {
 				},
 				source: folderContent
 			})).toEqual({
+				_appOrSiteConfig: metaFieldsSiteConfig,
 				_content: folderContent,
 				_site: siteContent,
-				_siteConfig: metaFieldsSiteConfig,
 				...folderMetaFields
 			});
 			// expect(metaFieldsImagesResolver({}));

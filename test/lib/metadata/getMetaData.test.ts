@@ -20,6 +20,7 @@ import {mockContent} from '../../mocks/mockContent';
 import {mockLibThymeleaf} from '../../mocks/mockLibThymeleaf';
 import {mockLibUtil} from '../../mocks/mockLibUtil';
 import {mockLibXpContext} from '../../mocks/mockLibXpContext';
+import {mockLibXpNode} from '../../mocks/mockLibXpNode';
 import {mocklibXpPortal} from '../../mocks/mockLibXpPortal';
 import {mockSite} from '../../mocks/mockSite';
 
@@ -42,7 +43,9 @@ globalThis.resolve = (path: string) => {
 	return data;
 }
 
-const metaFieldsSiteConfig: MetafieldsSiteConfig = {};
+const metaFieldsSiteConfig: MetafieldsSiteConfig = {
+	pathsImages: 'pathsImages0,pathsImages1'
+};
 
 
 describe('getMetaData', () => {
@@ -71,31 +74,35 @@ describe('getMetaData', () => {
 	});
 
 	it('should return undefined when content is undefined', () => {
+		mockLibXpNode();
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				site: mockSite({
 					description: 'Site description',
 					prefix: 'site',
 					siteConfig: metaFieldsSiteConfig
 				}),
-				siteConfig: metaFieldsSiteConfig,
 			})).toBeUndefined();
 		}); // import
 	}); // it
 
 	it('should return an object when content is defined', () => {
+		mockLibXpNode({
+			nodes: {
+				oneContentId: {},
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
@@ -105,11 +112,9 @@ describe('getMetaData', () => {
 					prefix: 'site',
 					siteConfig: metaFieldsSiteConfig
 				}),
-				siteConfig: metaFieldsSiteConfig,
 			})).toEqual({
 				blockRobots: false,
-				canonical: undefined,
-				canonicalUrl: 'oneContentPathabsolutePageUrl',
+				canonicalUrl: null,
 				description: 'Site description',
 				imageUrl: undefined,
 				imageWidth: 1200,
@@ -134,6 +139,11 @@ describe('getMetaData', () => {
 	}); // it
 
 	it('should handle frontpage', () => {
+		mockLibXpNode({
+			nodes: {
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
@@ -144,15 +154,12 @@ describe('getMetaData', () => {
 				siteConfig: metaFieldsSiteConfig
 			});
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: site,
 				site,
-				siteConfig: metaFieldsSiteConfig,
 			})).toEqual({
 				blockRobots: false,
-				canonical: undefined,
-				canonicalUrl: 'siteContentPathabsolutePageUrl',
+				canonicalUrl: null,
 				description: 'Site description',
 				imageUrl: undefined,
 				imageWidth: 1200,
@@ -173,6 +180,12 @@ describe('getMetaData', () => {
 	}); // it
 
 	it('should make imageUrl', () => {
+		mockLibXpNode({
+			nodes: {
+				oneContentId: {},
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
@@ -180,7 +193,7 @@ describe('getMetaData', () => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
-					image: 'oneImageContentId',
+					pathsImages0: 'oneImageContentId',
 				},
 				type: 'base:folder',
 			});
@@ -191,15 +204,12 @@ describe('getMetaData', () => {
 				siteConfig
 			});
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: siteConfig,
 				content: contentWithImage,
 				site,
-				siteConfig,
 			})).toEqual({
 				blockRobots: false,
-				canonical: undefined,
-				canonicalUrl: 'oneContentPathabsolutePageUrl',
+				canonicalUrl: null,
 				description: 'Site description',
 				imageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
 				imageWidth: 1200,
@@ -228,6 +238,12 @@ describe('getMetaData', () => {
 			...metaFieldsSiteConfig,
 			removeOpenGraphImage: true,
 		};
+		mockLibXpNode({
+			nodes: {
+				oneContentId: {},
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig
 		});
@@ -235,7 +251,7 @@ describe('getMetaData', () => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
-					image: 'oneImageContentId'
+					pathsImages0: 'oneImageContentId'
 				},
 				type: 'base:folder',
 			});
@@ -245,17 +261,14 @@ describe('getMetaData', () => {
 				siteConfig
 			});
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: siteConfig,
 				content: contentWithImage,
 				site,
-				siteConfig,
 			})).toEqual({
 				blockRobots: false,
-				canonical: undefined,
-				canonicalUrl: 'oneContentPathabsolutePageUrl',
+				canonicalUrl: null,
 				description: 'Site description',
-				imageUrl: null,
+				imageUrl: null, // The test is that this is null
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
@@ -282,6 +295,12 @@ describe('getMetaData', () => {
 			...metaFieldsSiteConfig,
 			removeTwitterImage: true,
 		};
+		mockLibXpNode({
+			nodes: {
+				oneContentId: {},
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig
 		});
@@ -289,7 +308,7 @@ describe('getMetaData', () => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
-					image: 'oneImageContentId'
+					pathsImages0: 'oneImageContentId'
 				},
 				type: 'base:folder',
 			});
@@ -299,15 +318,12 @@ describe('getMetaData', () => {
 				siteConfig
 			});
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: siteConfig,
 				content: contentWithImage,
 				site,
-				siteConfig,
 			})).toEqual({
 				blockRobots: false,
-				canonical: undefined,
-				canonicalUrl: 'oneContentPathabsolutePageUrl',
+				canonicalUrl: null,
 				description: 'Site description',
 				imageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
 				imageWidth: 1200,
@@ -332,13 +348,18 @@ describe('getMetaData', () => {
 	}); // it
 
 	it('should html when returnType is html', () => {
+		mockLibXpNode({
+			nodes: {
+				oneContentId: {},
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
@@ -348,13 +369,12 @@ describe('getMetaData', () => {
 					prefix: 'site',
 					siteConfig: metaFieldsSiteConfig
 				}),
-				siteConfig: metaFieldsSiteConfig,
 				returnType: 'html',
 				// selfClosingTags: true // Doesn't affect the output in this test
 			})).resolves.toEqual(
 				'<html><head></head><body><div data-th-remove="tag">\n' +
 				'<meta data-th-if="${blockRobots}" name="robots" content="noindex,nofollow">\n' +
-				'<link data-th-if="${canonical}" data-th-attr="rel=canonical" data-th-href="${canonicalUrl}">\n' +
+				'<link th:if="${canonicalUrl}" th:attr="rel=canonical" th:href="${canonicalUrl}">\n' +
 				'<meta data-th-if="${siteVerification}" name="google-site-verification" content="" data-th-attr="content=${siteVerification}">\n' +
 				'<meta name="description" data-th-attr="content=${description}">\n' +
 				'<!--/* Open graph */-->\n' +
@@ -394,13 +414,18 @@ describe('getMetaData', () => {
 	}); // it
 
 	it('should handle selfClosingTags', () => {
+		mockLibXpNode({
+			nodes: {
+				oneContentId: {},
+				siteContentId: {}
+			}
+		});
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				applicationConfig: {},
-				applicationKey: 'com.enonic.app.metafields',
+				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
@@ -410,13 +435,12 @@ describe('getMetaData', () => {
 					prefix: 'site',
 					siteConfig: metaFieldsSiteConfig
 				}),
-				siteConfig: metaFieldsSiteConfig,
 				returnType: 'html',
 				selfClosingTags: true // Doesn't affect the output in this test
 			})).resolves.toEqual(
 				'<html><head></head><body><div data-th-remove="tag">\n' +
 				'<meta data-th-if="${blockRobots}" name="robots" content="noindex,nofollow">\n' +
-				'<link data-th-if="${canonical}" data-th-attr="rel=canonical" data-th-href="${canonicalUrl}">\n' +
+				'<link th:if="${canonicalUrl}" th:attr="rel=canonical" th:href="${canonicalUrl}">\n' +
 				'<meta data-th-if="${siteVerification}" name="google-site-verification" content="" data-th-attr="content=${siteVerification}">\n' +
 				'<meta name="description" data-th-attr="content=${description}">\n' +
 				'<!--/* Open graph */-->\n' +

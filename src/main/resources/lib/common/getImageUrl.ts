@@ -11,13 +11,11 @@ import {
 	attachmentUrl,
 	imageUrl
 } from '/lib/xp/portal';
-import {getTheConfig} from '/lib/common/getTheConfig';
 import {findImageIdInContent} from '/lib/common/findImageIdInContent';
 
 
 interface GetImageUrlParams {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
+	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
 	defaultImg?: ImageId
 	defaultImgPrescaled?: boolean
@@ -61,23 +59,16 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 
 
 export const getImageUrl = ({
-	applicationConfig,
-	applicationKey,
+	appOrSiteConfig,
 	content,
 	defaultImg,
 	defaultImgPrescaled,
 	site,
 }: GetImageUrlParams): string|null|undefined => {
-	const siteConfig = getTheConfig({
-		applicationConfig,
-		applicationKey,
-		site
-	});
-
 	// Try to find an image in the content's image or images properties
 	const imageId = findImageIdInContent({
+		appOrSiteConfig,
 		content,
-		siteConfig
 	});
 
 	if (imageId || (defaultImg && !defaultImgPrescaled)) {
@@ -93,8 +84,8 @@ export const getImageUrl = ({
 	}
 
 	const siteImageId = findImageIdInContent({
+		appOrSiteConfig,
 		content: site,
-		siteConfig
 	});
 	if (siteImageId) {
 		return _imageUrlFromId(siteImageId);

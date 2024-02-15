@@ -2,9 +2,13 @@ import type {Request, Response} from '/lib/types';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
+import {
+	getContent as getCurrentContent,
+	getSite as libPortalGetSite,
+} from '/lib/xp/portal';
+import {getAppOrSiteConfig} from '/lib/common/getAppOrSiteConfig';
 import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/metadata/getMetaData'
-import {getReusableData} from '/lib/metadata/getReusableData';
 import {getTitleHtml} from '/lib/metadata/getTitleHtml';
 
 
@@ -13,14 +17,13 @@ const XML_MEDIA_TYPES = ['application/xhtml+xml', 'application/xml', 'text/xml']
 
 
 export const responseProcessor = (req: Request, res: Response) => {
-	const reusableData = getReusableData({
+	const site = libPortalGetSite();
+	const content = getCurrentContent();
+	const appOrSiteConfig = getAppOrSiteConfig({
+		applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 		applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+		site
 	});
-	// log.info(`Reusable data: ${JSON.stringify(reusableData, null, 4)}`);
-
-	const site = reusableData.site;
-	const content = reusableData.content;
-	const siteConfig = reusableData.siteConfig;
 
 	let titleAdded = false;
 	const isResponseContentTypeHtml = res.contentType.indexOf(HTML_MEDIA_TYPE) > -1;
@@ -35,8 +38,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 		// Svg are text/html can have a <title>
 		if (titleHasIndex && htmlIndex > -1) {
 			const titleHtml = getTitleHtml({
-				applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-				applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+				appOrSiteConfig,
 				content,
 				site,
 			}) || "";
@@ -61,10 +63,8 @@ export const responseProcessor = (req: Request, res: Response) => {
 	if ( isResponseContentTypeHtml || isResponseContentTypeXml ) {
 		const selfClosingTags = isResponseContentTypeXml;
 		const metadata: string = getMetaData({
-			applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+			appOrSiteConfig,
 			site,
-			siteConfig,
 			content,
 			returnType: 'html',
 			selfClosingTags
@@ -74,8 +74,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 
 	if ( !titleAdded ) {
 		const titleHtml = getTitleHtml({
-			applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+			appOrSiteConfig,
 			content,
 			site,
 		}) || "";

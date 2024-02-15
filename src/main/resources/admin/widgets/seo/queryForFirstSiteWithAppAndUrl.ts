@@ -5,7 +5,7 @@ import type { MetafieldsSiteConfig } from '/lib/types/MetafieldsSiteConfig';
 import {query} from '/lib/xp/content';
 
 
-export const getSite = ({
+export const queryForFirstSiteWithAppAndUrl = ({
 	applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context
 	siteUrl
 } : {

@@ -2,12 +2,8 @@ import type {Site} from '@enonic-types/lib-portal';
 import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
-import {getTheConfig} from '/lib/common/getTheConfig';
-
-
 interface GetAppendixParams {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
+	appOrSiteConfig: MetafieldsSiteConfig
 	isFrontpage?: boolean
 	site: Site<MetafieldsSiteConfig>
 }
@@ -15,20 +11,16 @@ interface GetAppendixParams {
 
 // Concat site title? Trigger if set to true in settings, or if not set at all (default = true)
 export const getAppendix = ({
-	applicationConfig, // Avoid app.config so it can be used in Guillotine Extension Context
-	applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context
+	appOrSiteConfig,
 	isFrontpage,
 	site,
 }: GetAppendixParams): string => {
-	const siteConfig = getTheConfig({
-		applicationConfig,
-		applicationKey,
-		site
-	});
 	let titleAppendix = '';
-	if (siteConfig.titleBehaviour || !siteConfig.hasOwnProperty("titleBehaviour")) {
-		const separator = siteConfig.titleSeparator || '-';
-		const titleRemoveOnFrontpage = siteConfig.hasOwnProperty("titleFrontpageBehaviour") ? siteConfig.titleFrontpageBehaviour : true; // Default true needs to be respected
+	if (appOrSiteConfig.titleBehaviour || !appOrSiteConfig.hasOwnProperty("titleBehaviour")) {
+		const separator = appOrSiteConfig.titleSeparator || '-';
+		const titleRemoveOnFrontpage = appOrSiteConfig.hasOwnProperty("titleFrontpageBehaviour")
+			? appOrSiteConfig.titleFrontpageBehaviour
+			: true; // Default true needs to be respected
 		if (!isFrontpage || !titleRemoveOnFrontpage) {
 			titleAppendix = ' ' + separator + ' ' + site.displayName;
 		}

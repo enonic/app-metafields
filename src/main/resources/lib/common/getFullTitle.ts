@@ -7,29 +7,26 @@ import {getAppendix} from '/lib/common/getAppendix';
 import {getPageTitle} from '/lib/common/getPageTitle';
 
 
-export function getFullTitle({
-	applicationConfig, // Avoid app.config so it can be used in Guillotine Extension Context
-	applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context,
-	content,
-	site,
-}: {
-	applicationConfig: Record<string, string|boolean>
-	applicationKey: string
+interface GetFullTitleParams {
+	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
 	site: Site<MetafieldsSiteConfig>
-}) {
+}
+
+export function getFullTitle({
+	appOrSiteConfig,
+	content,
+	site,
+}: GetFullTitleParams) {
 	const isFrontpage = site._path === content._path;
 	const titleAppendix = getAppendix({
-		applicationConfig,
-		applicationKey,
+		appOrSiteConfig,
 		isFrontpage,
 		site,
 	});
 	const pageTitle = getPageTitle({
-		applicationConfig,
-		applicationKey,
-		content,
-		site
+		appOrSiteConfig,
+		content
 	});
 	return `${pageTitle}${titleAppendix}`;
 }
