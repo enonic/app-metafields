@@ -35,11 +35,6 @@
 					<help-text>Image will otherwise be scaled to 1200x630px and set to jpg with quality 85</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
-				<input name="seoTitle" type="TextLine">
-					<label>Title fallback</label>
-					<help-text>If current content title is not found this title will be used as a fallback. If not used, the site content's displayName will be used instead.</help-text>
-					<occurrences minimum="0" maximum="1"/>
-				</input>
 				<input name="seoDescription" type="TextArea">
 					<label>Description fallback</label>
 					<help-text>A default fallback description to use if current content does not have one. If not used, the site content's description field will be used instead. However, if that also is empty, we'll skip generating this meta field.</help-text>

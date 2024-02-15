@@ -18,7 +18,6 @@ export declare interface MetafieldsSiteConfig {
 	seoDescription?: string
 	seoImage?: ImageId
 	seoImageIsPrescaled?: boolean
-	seoTitle?: string
 	siteVerification?: string
 	removeOpenGraphImage?: boolean
 	removeOpenGraphUrl?: boolean
