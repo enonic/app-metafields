@@ -13,9 +13,6 @@ export default {
 	moduleNameMapper: {
 		'/guillotine/(.*)': '<rootDir>/src/main/resources/guillotine/$1',
 		'/lib/app-metafields/(.*)': '<rootDir>/src/main/resources/lib/app-metafields/$1',
-		'/lib/common/(.*)': '<rootDir>/src/main/resources/lib/common/$1',
-		'/lib/metadata/(.*)': '<rootDir>/src/main/resources/lib/metadata/$1',
-		'/lib/types(.*)': '<rootDir>/src/main/resources/lib/types$1',
 	},
 	preset: 'ts-jest/presets/js-with-babel-legacy',
 	testEnvironment: 'node',

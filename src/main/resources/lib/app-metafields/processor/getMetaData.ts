@@ -1,6 +1,6 @@
 import type {Content} from '/lib/xp/content';
 import type {Site} from '/lib/xp/portal';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
 import {pageUrl} from '/lib/xp/portal';
@@ -8,12 +8,12 @@ import {pageUrl} from '/lib/xp/portal';
 import {render} from '/lib/thymeleaf';
 
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
-import {getBlockRobots} from '/lib/common/getBlockRobots';
-import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
-import {getImageUrl} from '/lib/common/getImageUrl';
-import {getLang} from '/lib/common/getLang';
-import {getMetaDescription} from '/lib/common/getMetaDescription';
-import {getPageTitle} from '/lib/common/getPageTitle';
+import {getBlockRobots} from '/lib/app-metafields/getBlockRobots';
+import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanonicalUrl';
+import {getImageUrl} from '/lib/app-metafields/image/getImageUrl';
+import {getLang} from '/lib/app-metafields/getLang';
+import {getMetaDescription} from '/lib/app-metafields/getMetaDescription';
+import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
 
 
 interface MetaDataModel {

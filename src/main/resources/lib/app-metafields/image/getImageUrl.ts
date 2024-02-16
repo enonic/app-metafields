@@ -3,7 +3,7 @@ import type {ImageUrlParams} from '/lib/xp/portal';
 import type {
 	ImageId,
 	MetafieldsSiteConfig
-} from '/lib/types';
+} from '/lib/app-metafields/types';
 
 
 import {get as getContentByKey} from '/lib/xp/content';
@@ -11,7 +11,7 @@ import {
 	attachmentUrl,
 	imageUrl
 } from '/lib/xp/portal';
-import {findImageIdInContent} from '/lib/common/findImageIdInContent';
+import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInContent';
 
 
 interface GetImageUrlParams {

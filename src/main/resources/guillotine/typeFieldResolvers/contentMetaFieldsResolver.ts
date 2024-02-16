@@ -1,5 +1,10 @@
+// import type {
+// 	// GraphQLTypeToResolverResult,
+// 	Resolver,
+// } from '@enonic-types/guillotine';
 import type {Content} from '/lib/xp/content';
-import type {Resolver} from '/lib/types/guillotine';
+import type {Resolver} from '/lib/app-metafields/types/guillotine';
+// import type {GraphQLMetafields} from '/guillotine/guillotine.d';
 
 
 import {toStr} from '@enonic/js-utils/value/toStr';
@@ -11,17 +16,16 @@ import {
 	run as runInContext
 } from '/lib/xp/context';
 
-import {DEBUG} from '/lib/app-metafields/constants';
+import {APP_CONFIG, APP_NAME, DEBUG} from '/lib/app-metafields/constants';
 import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 
-import {getAppOrSiteConfig} from '../../lib/app-metafields/xp/getAppOrSiteConfig';
-import {getBlockRobots} from '/lib/common/getBlockRobots';
-import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
-import {getLang} from '/lib/common/getLang';
-import {getMetaDescription} from '/lib/common/getMetaDescription';
-import {getFullTitle} from '/lib/common/getFullTitle';
-import {APP_CONFIG, APP_NAME} from '/lib/common/constants';
+import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
+import {getBlockRobots} from '/lib/app-metafields/getBlockRobots';
+import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanonicalUrl';
+import {getLang} from '/lib/app-metafields/getLang';
+import {getMetaDescription} from '/lib/app-metafields/getMetaDescription';
+import {getFullTitle} from '/lib/app-metafields/title/getFullTitle';
 
 
 export const contentMetaFieldsResolver: Resolver<

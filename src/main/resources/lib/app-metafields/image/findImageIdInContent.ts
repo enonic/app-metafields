@@ -1,6 +1,6 @@
 import type {Content} from '/lib/xp/content';
-import type {ImageId} from '/lib/types';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {ImageId} from '/lib/app-metafields/types';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
@@ -9,13 +9,13 @@ import {
 	query as queryContent
 } from '/lib/xp/content';
 import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
-import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
-import {findValueInObject} from '/lib/common/findValueInObject';
-import {isString} from '/lib/common/isString';
+import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
+import {findValueInObject} from '/lib/app-metafields/object/findValueInObject';
+import {isString} from '/lib/app-metafields/string/isString';
 import {
 	CommaSeparatedStringBuilder,
 	ImageIdBuilder,
-} from '/lib/types';
+} from '/lib/app-metafields/types';
 
 
 export function findImageIdInContent({

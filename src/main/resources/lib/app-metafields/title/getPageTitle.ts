@@ -1,12 +1,12 @@
 import type {Content} from '/lib/xp/content';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
 import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
-import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
-import {findStringValueInObject} from '/lib/common/findStringValueInObject';
-import {stringOrNull} from '/lib/common/stringOrNull';
-import {CommaSeparatedStringBuilder} from '/lib/types';
+import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
+import {findStringValueInObject} from '/lib/app-metafields/object/findStringValueInObject';
+import {stringOrNull} from '/lib/app-metafields/string/stringOrNull';
+import {CommaSeparatedStringBuilder} from '/lib/app-metafields/types';
 
 
 interface GetPageTitleParams {

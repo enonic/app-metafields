@@ -5,7 +5,7 @@ import type {
 import type {
 	MetafieldsSiteConfig,
 	MediaImage
-} from '/lib/types';
+} from '/lib/app-metafields/types';
 
 
 import {
@@ -15,11 +15,10 @@ import {
 	jest,
 	test as it,
 } from '@jest/globals';
-import {mockLibXpContext} from '../../mocks/mockLibXpContext';
-import {mocklibXpPortal} from '../../mocks/mockLibXpPortal';
-import {mockLibUtil} from '../../mocks/mockLibUtil';
-import {mockContent} from '../../mocks/mockContent';
-import {mockImage} from '../../mocks/mockImage';
+import {mockLibXpContext} from '../../../mocks/mockLibXpContext';
+import {mocklibXpPortal} from '../../../mocks/mockLibXpPortal';
+import {mockContent} from '../../../mocks/mockContent';
+import {mockImage} from '../../../mocks/mockImage';
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
 globalThis.log = {
@@ -129,11 +128,10 @@ describe('getImageUrl', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		mockLibUtil();
 	}); // beforeAll
 
 	it('should return undefined when no image found', () => {
-		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
@@ -146,7 +144,7 @@ describe('getImageUrl', () => {
 	}); // it
 
 	it('should return attachmentUrl when defaultImg and defaultImgPrescaled provided', () => {
-		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
@@ -174,13 +172,13 @@ describe('getImageUrl', () => {
 			content,
 			siteOrNull: siteContent
 		};
-		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl(getImageUrlParams)).toBe('fourImageContentIdblock(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
 
 	it('should return an url when content has data.pathsImages0', () => {
-		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
@@ -197,7 +195,7 @@ describe('getImageUrl', () => {
 	}); // it
 
 	it('should return an url when content has data.pathsImages1', () => {
-		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
@@ -213,7 +211,7 @@ describe('getImageUrl', () => {
 	}); // it
 
 	it('should return an url when content has data.pathsImages0[0]', () => {
-		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
+		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({

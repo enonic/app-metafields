@@ -3,7 +3,7 @@ import type {
 	get as GetContentByKey,
 	// Site
 } from '/lib/xp/content';
-import type {MetafieldsSiteConfig} from '/lib/types';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 
 import {
@@ -16,13 +16,12 @@ import {
 } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import {mockContent} from '../../mocks/mockContent';
-import {mockLibThymeleaf} from '../../mocks/mockLibThymeleaf';
-import {mockLibUtil} from '../../mocks/mockLibUtil';
-import {mockLibXpContext} from '../../mocks/mockLibXpContext';
-import {mockLibXpNode} from '../../mocks/mockLibXpNode';
-import {mocklibXpPortal} from '../../mocks/mockLibXpPortal';
-import {mockSite} from '../../mocks/mockSite';
+import {mockContent} from '../../../mocks/mockContent';
+import {mockLibThymeleaf} from '../../../mocks/mockLibThymeleaf';
+import {mockLibXpContext} from '../../../mocks/mockLibXpContext';
+import {mockLibXpNode} from '../../../mocks/mockLibXpNode';
+import {mocklibXpPortal} from '../../../mocks/mockLibXpPortal';
+import {mockSite} from '../../../mocks/mockSite';
 
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
@@ -36,7 +35,7 @@ globalThis.log = {
 // @ts-ignore TS2339: Property 'resolve' does not exist on type 'typeof globalThis'.
 globalThis.resolve = (path: string) => {
 	// console.debug('resolve path', path);
-	const fullPath = join(__dirname, '../../../src/main/resources/lib/metadata', path);
+	const fullPath = join(__dirname, '../../../../src/main/resources/lib/app-metafields/processor', path);
 	// console.debug('resolve fullPath', fullPath);
 	const data = readFileSync(fullPath, { encoding: 'utf8', flag: 'r' });
 	// console.debug('resolve data', data);
@@ -54,7 +53,6 @@ describe('getMetaData', () => {
 		jest.resetModules();
 		mockLibXpContext();
 		mockLibThymeleaf();
-		mockLibUtil();
 		jest.mock(
 			'/lib/xp/content',
 			() => ({
@@ -83,7 +81,7 @@ describe('getMetaData', () => {
 			prefix: 'site',
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				siteOrNull: site,
@@ -106,7 +104,7 @@ describe('getMetaData', () => {
 			prefix: 'site',
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
@@ -149,7 +147,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const site = mockSite({
 				description: 'Site description',
 				prefix: 'site',
@@ -191,7 +189,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
@@ -249,7 +247,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
@@ -306,7 +304,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
@@ -359,7 +357,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const site = mockSite({
 				description: 'Site description',
 				prefix: 'site',
@@ -426,7 +424,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const site = mockSite({
 				description: 'Site description',
 				prefix: 'site',

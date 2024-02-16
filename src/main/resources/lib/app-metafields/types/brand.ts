@@ -1,4 +1,4 @@
-import type {BrandBase, BrandBuilder, BrandBuilderOptions, Branded} from '/lib/types/Branded';
+import type {BrandBase, BrandBuilder, BrandBuilderOptions, Branded} from '/lib/app-metafields/types/Branded';
 
 
 export function brand<T extends Branded<Base, any>, Base = BrandBase<T>>(

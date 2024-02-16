@@ -3,7 +3,7 @@ import {
 	expect,
 	test as it,
 } from '@jest/globals';
-import {findStringValueInObject} from '/lib/common/findStringValueInObject';
+import {findStringValueInObject} from '/lib/app-metafields/object/findStringValueInObject';
 
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.

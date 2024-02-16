@@ -1,4 +1,4 @@
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 import type {
 	getSite as ContentGetSite,
 	Site
@@ -9,10 +9,10 @@ import type {
 import type {
 	GraphQL,
 	MetaFields,
-} from '/lib/types/guillotine';
+} from '/lib/app-metafields/types/guillotine';
 import type {
 	BaseFolder,
-} from '/lib/types'
+} from '/lib/app-metafields/types'
 
 
 import {
@@ -36,9 +36,8 @@ import {
 	GraphQLMediaImageBuilder,
 	GraphQLMetaFieldsBuilder,
 	GraphQLStringBuilder,
-} from '/lib/types';
+} from '/lib/app-metafields/types';
 import {mockImage} from '../mocks/mockImage';
-import {mockLibUtil} from '../mocks/mockLibUtil';
 import {mockLibXpContext} from '../mocks/mockLibXpContext';
 import {mockLibXpNode} from '../mocks/mockLibXpNode';
 
@@ -127,8 +126,6 @@ jest.mock(
 	}),
 	{virtual: true}
 );
-
-mockLibUtil();
 
 const folderMetaFields: MetaFields = {
 	canonical: null,

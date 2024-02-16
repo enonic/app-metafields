@@ -1,4 +1,4 @@
-import type {CommaSeparatedString} from '/lib/types';
+import type {CommaSeparatedString} from '/lib/app-metafields/types';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';

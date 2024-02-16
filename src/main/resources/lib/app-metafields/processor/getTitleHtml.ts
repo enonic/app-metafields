@@ -1,9 +1,9 @@
 import type {Content} from '/lib/xp/content';
 import type {Site} from '/lib/xp/portal';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
-import {getFullTitle} from '/lib/common/getFullTitle';
+import {getFullTitle} from '/lib/app-metafields/title/getFullTitle';
 
 
 interface GetTitleHtmlParams {

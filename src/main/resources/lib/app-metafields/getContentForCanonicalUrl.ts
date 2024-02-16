@@ -4,7 +4,7 @@ import type {Content} from '@enonic-types/lib-content';
 import {get as getContentByKey} from '/lib/xp/content';
 import {get as getContext} from '/lib/xp/context';
 import {connect} from '/lib/xp/node';
-import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
+import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
 
 
 export const getContentForCanonicalUrl = (content: Content): Content|null => {

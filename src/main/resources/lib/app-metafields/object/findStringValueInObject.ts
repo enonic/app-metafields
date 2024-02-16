@@ -1,4 +1,4 @@
-import {isString} from '/lib/common/isString';
+import {isString} from '/lib/app-metafields/string/isString';
 
 
 export function findStringValueInObject(

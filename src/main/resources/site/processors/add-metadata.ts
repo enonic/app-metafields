@@ -1,4 +1,4 @@
-import type {Request, Response} from '/lib/types';
+import type {Request, Response} from '/lib/app-metafields/types';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
@@ -7,9 +7,9 @@ import {
 	getSite as libPortalGetSite,
 } from '/lib/xp/portal';
 import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
-import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
-import {getMetaData} from '/lib/metadata/getMetaData'
-import {getTitleHtml} from '/lib/metadata/getTitleHtml';
+import {getFixedHtmlAttrsAsString} from '/lib/app-metafields/processor/getFixedHtmlAttrsAsString';
+import {getMetaData} from '/lib/app-metafields/processor/getMetaData'
+import {getTitleHtml} from '/lib/app-metafields/processor/getTitleHtml';
 
 
 const HTML_MEDIA_TYPE = 'text/html';

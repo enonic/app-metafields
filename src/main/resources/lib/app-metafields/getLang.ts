@@ -1,5 +1,5 @@
 import type {Content, Site} from '@enonic-types/lib-content';
-import type {MetafieldsSiteConfig} from '/lib/types';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 
 export const getLang = ({
