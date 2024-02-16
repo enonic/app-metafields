@@ -3,7 +3,7 @@ import type {Site} from '/lib/xp/portal';
 import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
-import {commaStringToArray} from '/lib/common/commaStringToArray';
+import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {CommaSeparatedStringBuilder} from '/lib/types';
@@ -22,7 +22,7 @@ export const getMetaDescription = ({
 	site,
 }: GetMetaDescriptionParams): string => {
 	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsDescriptions || '');
-	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
+	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
 
 	const setWithMixin = content.x[APP_NAME_PATH]

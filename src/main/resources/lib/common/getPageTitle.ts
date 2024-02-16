@@ -2,7 +2,7 @@ import type {Content} from '/lib/xp/content';
 import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
-import {commaStringToArray} from '/lib/common/commaStringToArray';
+import {oneOrMoreCommaStringToArray} from '../app-metafields/string/oneOrMoreCommaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {stringOrNull} from '/lib/common/stringOrNull';
@@ -22,7 +22,7 @@ export const getPageTitle = ({
 	// log.info('appOrSiteConfig: %s', JSON.stringify(appOrSiteConfig, null, 4));
 
 	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsTitles || '');
-	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
+	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
 
 	return content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoTitle as string

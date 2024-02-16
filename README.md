@@ -66,7 +66,7 @@ Note: Meta fields for Open Graph and Twitter Cards does not use these settings, 
 
 When figuring out what data to put in your meta fields, this app analyzes the current content you're viewing. It will fetch a pre-defined set of fields in a pre-defined order (more on that later in the "Waterfall logic" section). You might however have fields with different names, or want to add more fields, or control in which order the data is evaluated. Then these settings are for you.
 
-Add field names as comma separated strings, like `field1, field2, long-fieldname3`. It will remove spaces and it will handle dashes and other special characters in your field names. These custom fields will be checked before any other fields. If you add more than one field here, we'll let the first one overwrite any other fields on its right hand side. So if we find data in `field2` we won't look in `long-fieldname3`. This gives you powerful control over your SEO!
+Add field names, like `field1`, `field2`, `long-fieldname3`. It will handle dashes and other special characters in your field names. These custom fields will be checked before any other fields. If you add more than one field here, we'll let the first match win. So if we find data in `field2` we won't look in `long-fieldname3`. This gives you powerful control over your SEO!
 
 We only evaluate for matches in the JSON `data`-node for each content. So if you fill in `myField`, we'll look for `data.myField` in the content JSON (refer to Enonic XP's documentation on `getContent()` function).
 
@@ -112,19 +112,17 @@ It's important to understand the waterfall logic we use when evaluating which da
 ### For titles
 
 1. Current content's `SEO` mixin's `title` field.
-2. The app config's custom JSON paths, if any (in the order defined).
-3. Check in some commonly used fields: `title`, `header`, `heading`.
+2. The site config's custom JSON paths, if any (in the order defined).
+3. The app config's custom JSON paths, if any (in the order defined).
 4. The content's `displayName` field (all content has this field).
-5. See if the site itself has the `SEO` field `title` filled out.
-6. As a last resort, we default to the site's `displayName` field.
 
 For titles there is no way it can be empty, at least the last fallback will always trigger.
 
 ### For descriptions
 
 1. Current content's `SEO` mixin's `description` field.
-2. The app config's custom JSON paths, if any (in the order defined).
-3. Check in some commonly used fields: `preface`, `description`, `summary`.
+2. The site config's custom JSON paths, if any (in the order defined).
+3. The app config's custom JSON paths, if any (in the order defined).
 4. See if the site itself has the `SEO` field `description` filled out.
 5. As a last resort, we default to the site's `description` field (default Enonic XP data).
 6. An empty description is created.
@@ -132,10 +130,12 @@ For titles there is no way it can be empty, at least the last fallback will alwa
 ### For images
 
 1. Current content's `SEO` mixin's `image` field.
-2. The app config's custom JSON paths, if any (in the order defined).
-3. Check in some commonly used fields: `image`, `images`.
-4. Resort to the fallback image set on the app itself.
-5. If nothing is found the meta fields for the image are not created.
+2. First outboundDependency of type media:image on the content.
+3. The site config's custom JSON paths, if any (in the order defined).
+4. The app config's custom JSON paths, if any (in the order defined).
+5. Site content's `SEO` mixin's `image` field.
+6. First outboundDependency of type media:image on the site.
+7. If nothing is found the meta fields for the image are not created.
 
 ## Releases and Compatibility
 

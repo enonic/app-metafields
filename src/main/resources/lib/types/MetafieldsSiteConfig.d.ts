@@ -11,9 +11,9 @@ export declare interface MetafieldsSiteConfig {
 	blockRobots?: boolean
 	canonical?: boolean
 	fullPath?: boolean
-	pathsDescriptions?: CommaSeparatedString
-	pathsImages?: CommaSeparatedString
-	pathsTitles?: CommaSeparatedString
+	pathsDescriptions?: CommaSeparatedString|CommaSeparatedString[]
+	pathsImages?: CommaSeparatedString|CommaSeparatedString[]
+	pathsTitles?: CommaSeparatedString|CommaSeparatedString[]
 	seoDescription?: string
 	seoImage?: ImageId
 	seoImageIsPrescaled?: boolean
