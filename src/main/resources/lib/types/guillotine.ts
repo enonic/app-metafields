@@ -25,7 +25,7 @@ export interface MetaFields {
 		follow?: boolean
 		index?: boolean
 	}
-	siteName: string
+	siteName?: string|null // Can be null
 	title: string
 	twitter?: {
 		hideImages?: boolean

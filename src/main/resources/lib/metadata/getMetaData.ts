@@ -42,10 +42,10 @@ interface MetaDataModel {
 
 interface GetMetaDataParams {
 	appOrSiteConfig: MetafieldsSiteConfig
-	site: Site<MetafieldsSiteConfig>
 	content?: Content
 	returnType?: 'json'|'html'
 	selfClosingTags?: boolean
+	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 
@@ -58,16 +58,16 @@ function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
 
 export function getMetaData({
 	appOrSiteConfig,
-	site,
 	content=undefined,
 	returnType="json",
-	selfClosingTags=false
+	selfClosingTags=false,
+	siteOrNull,
 }: GetMetaDataParams): MetaDataModel|string|undefined {
 	if (!content) {
 		return undefined;
 	}
 
-	const isFrontpage = site._path === content._path;
+	const isFrontpage = siteOrNull?._path === content._path;
 	const pageTitle = getPageTitle({
 		appOrSiteConfig,
 		content,
@@ -78,7 +78,7 @@ export function getMetaData({
 	? prependBaseUrl({
 		baseUrl: appOrSiteConfig.baseUrl,
 		contentPath: content._path,
-		sitePath: site._path
+		sitePath: siteOrNull?._path || ''
 	})
 	: pageUrl({ path: content._path, type: "absolute" });
 
@@ -88,7 +88,7 @@ export function getMetaData({
 			? prependBaseUrl({
 				baseUrl: appOrSiteConfig.baseUrl,
 				contentPath: canonicalContent._path,
-				sitePath: site._path
+				sitePath: siteOrNull?._path || ''
 			})
 			: pageUrl({ path: canonicalContent._path, type: "absolute" })
 		: null;
@@ -97,9 +97,9 @@ export function getMetaData({
 		? getImageUrl({
 			appOrSiteConfig,
 			content,
-			site,
 			defaultImg: appOrSiteConfig.seoImage,
-			defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled
+			defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled,
+			siteOrNull,
 		})
 		: null;
 
@@ -107,8 +107,8 @@ export function getMetaData({
 		? getImageUrl({
 			appOrSiteConfig,
 			content,
-			site,
-			defaultImg: appOrSiteConfig.seoImage
+			defaultImg: appOrSiteConfig.seoImage,
+			siteOrNull,
 		})
 		: null;
 
@@ -118,12 +118,15 @@ export function getMetaData({
 		description: getMetaDescription({
 			appOrSiteConfig,
 			content,
-			site
+			siteOrNull
 		}),
 		imageHeight: 630,
 		imageUrl,
 		imageWidth: 1200, // Twice of 600x315, for retina
-		locale: getLang(content, site),
+		locale: getLang({
+			content,
+			siteOrNull
+		}),
 		openGraph: {
 			article: isFrontpage ? null : {
 				expirationTime: content.publish?.to,
@@ -131,7 +134,7 @@ export function getMetaData({
 				publishedTime: content.publish?.first,
 			}
 		},
-		siteName: site.displayName,
+		siteName: siteOrNull?.displayName,
 		siteVerification,
 		title: pageTitle,
 		twitterUserName: appOrSiteConfig.twitterUsername,

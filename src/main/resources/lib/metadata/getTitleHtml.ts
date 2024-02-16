@@ -9,13 +9,13 @@ import {getFullTitle} from '/lib/common/getFullTitle';
 interface GetTitleHtmlParams {
 	appOrSiteConfig: MetafieldsSiteConfig
 	content?: Content
-	site: Site<MetafieldsSiteConfig>
+	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 export function getTitleHtml({
 	appOrSiteConfig,
 	content=undefined,
-	site,
+	siteOrNull,
 }: GetTitleHtmlParams) {
 	if (!content) {
 		return undefined;
@@ -24,6 +24,6 @@ export function getTitleHtml({
 	return `<title>${getFullTitle({
 		appOrSiteConfig,
 		content,
-		site
+		siteOrNull
 	})}</title>`;
 }

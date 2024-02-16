@@ -263,7 +263,7 @@ describe('guillotine extensions', () => {
 			})).toEqual({
 				_appOrSiteConfig: metaFieldsSiteConfig,
 				_content: folderContent,
-				_site: siteContent,
+				_siteOrNull: siteContent,
 				...folderMetaFields
 			});
 			// expect(metaFieldsImagesResolver({}));

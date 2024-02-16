@@ -140,7 +140,7 @@ describe('getImageUrl', () => {
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
 				}),
-				site: siteContent
+				siteOrNull: siteContent
 			})).toBeUndefined();
 		}); // import
 	}); // it
@@ -155,7 +155,7 @@ describe('getImageUrl', () => {
 				}),
 				defaultImg: 'threeImageContentId',
 				defaultImgPrescaled: true,
-				site: siteContent
+				siteOrNull: siteContent
 			})).toBe('threeImageContentIdabsoluteAttachmentUrl');
 		}); // import
 	}); // it
@@ -172,7 +172,7 @@ describe('getImageUrl', () => {
 		const getImageUrlParams = {
 			appOrSiteConfig: metaFieldsSiteConfig,
 			content,
-			site: siteContent
+			siteOrNull: siteContent
 		};
 		import('/lib/common/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl(getImageUrlParams)).toBe('fourImageContentIdblock(1200,630)absoluteImageUrl');
@@ -191,7 +191,7 @@ describe('getImageUrl', () => {
 					},
 					type: 'base:folder',
 				}),
-				site: siteContent
+				siteOrNull: siteContent
 			})).toBe('oneImageContentIdjpg85block(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
@@ -207,7 +207,7 @@ describe('getImageUrl', () => {
 					},
 					type: 'base:folder',
 				}),
-				site: siteContent
+				siteOrNull: siteContent
 			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
@@ -223,7 +223,7 @@ describe('getImageUrl', () => {
 					},
 					type: 'base:folder',
 				}),
-				site: siteContent
+				siteOrNull: siteContent
 			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it

@@ -6,7 +6,7 @@ import {
 	getContent as getCurrentContent,
 	getSite as libPortalGetSite,
 } from '/lib/xp/portal';
-import {getAppOrSiteConfig} from '/lib/common/getAppOrSiteConfig';
+import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
 import {getFixedHtmlAttrsAsString} from '/lib/metadata/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/metadata/getMetaData'
 import {getTitleHtml} from '/lib/metadata/getTitleHtml';
@@ -22,7 +22,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 	const appOrSiteConfig = getAppOrSiteConfig({
 		applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 		applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
-		site
+		siteOrNull: site
 	});
 
 	let titleAdded = false;
@@ -40,7 +40,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 			const titleHtml = getTitleHtml({
 				appOrSiteConfig,
 				content,
-				site,
+				siteOrNull: site,
 			}) || "";
 			res.body = res.body.replace(/(<title>)(.*?)(<\/title>)/i, titleHtml);
 			titleAdded = true;
@@ -64,10 +64,10 @@ export const responseProcessor = (req: Request, res: Response) => {
 		const selfClosingTags = isResponseContentTypeXml;
 		const metadata: string = getMetaData({
 			appOrSiteConfig,
-			site,
 			content,
 			returnType: 'html',
-			selfClosingTags
+			selfClosingTags,
+			siteOrNull: site,
 		}) as string || "";
 		res.pageContributions.headEnd.push(metadata);
 	}
@@ -76,7 +76,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 		const titleHtml = getTitleHtml({
 			appOrSiteConfig,
 			content,
-			site,
+			siteOrNull: site,
 		}) || "";
 		res.pageContributions.headEnd.push(titleHtml);
 	}

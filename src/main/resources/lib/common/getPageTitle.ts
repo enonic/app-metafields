@@ -2,7 +2,7 @@ import type {Content} from '/lib/xp/content';
 import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
-import {oneOrMoreCommaStringToArray} from '../app-metafields/string/oneOrMoreCommaStringToArray';
+import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findStringValueInObject} from '/lib/common/findStringValueInObject';
 import {stringOrNull} from '/lib/common/stringOrNull';

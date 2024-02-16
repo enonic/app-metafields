@@ -12,14 +12,14 @@ import {CommaSeparatedStringBuilder} from '/lib/types';
 interface GetMetaDescriptionParams {
 	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
-	site: Site<MetafieldsSiteConfig>
+	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 
 export const getMetaDescription = ({
 	appOrSiteConfig,
 	content,
-	site,
+	siteOrNull,
 }: GetMetaDescriptionParams): string => {
 	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsDescriptions || '');
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
@@ -33,7 +33,7 @@ export const getMetaDescription = ({
 		setWithMixin ? content.x[APP_NAME_PATH][MIXIN_PATH].seoDescription // Get from mixin
 			: userDefinedValue
 			|| appOrSiteConfig.seoDescription // Use default for site
-			|| site.data.description // Use bottom default
+			|| siteOrNull?.data.description // Use site description
 			|| '' // Don't crash plugin on clean installs
 	) as string;
 
