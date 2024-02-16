@@ -1,4 +1,4 @@
-import type {Request} from '/lib/types';
+import type {Request} from '/lib/app-metafields/types';
 
 
 import {
@@ -15,13 +15,13 @@ import {queryForFirstSiteWithAppAndUrl} from '/admin/widgets/seo/queryForFirstSi
 
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
-import {getAppendix} from '/lib/common/getAppendix';
-import {getBlockRobots} from '/lib/common/getBlockRobots';
-import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
-import {getImageUrl} from '/lib/common/getImageUrl';
-import {getLang} from '/lib/common/getLang';
-import {getMetaDescription} from '/lib/common/getMetaDescription';
-import {getPageTitle} from '/lib/common/getPageTitle';
+import {getAppendix} from '/lib/app-metafields/title/getAppendix';
+import {getBlockRobots} from '/lib/app-metafields/getBlockRobots';
+import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanonicalUrl';
+import {getImageUrl} from '/lib/app-metafields/image/getImageUrl';
+import {getLang} from '/lib/app-metafields/getLang';
+import {getMetaDescription} from '/lib/app-metafields/getMetaDescription';
+import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
 
 
 /*

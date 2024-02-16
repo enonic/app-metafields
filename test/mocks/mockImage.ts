@@ -1,4 +1,4 @@
-import type {MediaImage} from '/lib/types';
+import type {MediaImage} from '/lib/app-metafields/types';
 
 
 import {mockContent} from './mockContent';

@@ -1,13 +1,13 @@
 import type {Site} from '/lib/xp/portal';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
 import {isSet} from '@enonic/js-utils/value/isSet';
 import {isString} from '@enonic/js-utils/value/isString';
 // import {toStr} from '@enonic/js-utils/value/toStr';
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
-import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
 import {trimQuotes} from '/lib/app-metafields/string/trimQuotes';
+import {getSiteConfigFromSite} from '/lib/app-metafields/xp/getSiteConfigFromSite';
 
 
 interface GetTheConfigParams {

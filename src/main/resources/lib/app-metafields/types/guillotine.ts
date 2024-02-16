@@ -1,6 +1,6 @@
 import type {Content} from '@enonic-types/lib-content';
-import type {Branded} from '/lib/types/Branded';
-import type {MediaImage} from '/lib/types/Content';
+import type {Branded} from '/lib/app-metafields/types/Branded';
+import type {MediaImage} from '/lib/app-metafields/types/Content';
 
 
 // In type names first letter should be uppercase

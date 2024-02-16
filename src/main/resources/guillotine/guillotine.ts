@@ -1,10 +1,13 @@
+// import type {Guillotine} from '@enonic-types/guillotine';
+// import type {MetaFieldFields} from '/guillotine/guillotine.d';
+
 import type {
 	Extensions,
 	GraphQL,
-} from '/lib/types/guillotine';
+} from '/lib/app-metafields/types/guillotine';
 
 
-import {GraphQLFieldName, GraphQLTypeName} from '/lib/types/guillotine';
+import {GraphQLFieldName, GraphQLTypeName} from '/lib/app-metafields/types/guillotine';
 import {contentMetaFieldsResolver} from '/guillotine/typeFieldResolvers/contentMetaFieldsResolver';
 import {metaFieldsImagesResolver} from '/guillotine/typeFieldResolvers/metaFieldsImagesResolver';
 
@@ -14,7 +17,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 		types: {
 			[GraphQLTypeName.METAFIELDS]: {
 				description: 'Meta fields for a content',
-				fields: {
+				fields: /*<MetaFieldFields>*/{
 					canonical: {
 						type: graphQL.GraphQLString,
 					},

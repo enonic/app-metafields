@@ -1,10 +1,10 @@
 import type {Content, Site} from '/lib/xp/content';
-import type {ImageId} from '/lib/types';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {ImageId} from '/lib/app-metafields/types';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
-import {findImageIdInContent} from '/lib/common/findImageIdInContent';
-import {ImageIdBuilder} from '/lib/types';
+import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInContent';
+import {ImageIdBuilder} from '/lib/app-metafields/types';
 
 
 interface GetImageUrlParams {

@@ -1,5 +1,5 @@
 import type {Site} from '@enonic-types/lib-portal';
-import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
 interface GetAppendixParams {

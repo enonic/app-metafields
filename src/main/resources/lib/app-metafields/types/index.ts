@@ -5,7 +5,7 @@ import type {Content} from '@enonic-types/lib-content';
 import type {
 	CommaSeparatedString,
 	ImageId,
-} from '/lib/types/Content';
+} from '/lib/app-metafields/types/Content';
 import type {
 	GraphQLBoolean,
 	GraphQLContent,
@@ -20,14 +20,14 @@ import type {
 	GraphQLMediaImage,
 	GraphQLMetaFields,
 	GraphQLString,
-} from '/lib/types/guillotine';
+} from '/lib/app-metafields/types/guillotine';
 
 
 //──────────────────────────────────────────────────────────────────────────────
 // Value imports
 //──────────────────────────────────────────────────────────────────────────────
-import {brand} from '/lib/types/brand';
-import {isString} from '/lib/common/isString';
+import {brand} from '/lib/app-metafields/types/brand';
+import {isString} from '/lib/app-metafields/string/isString';
 
 
 //──────────────────────────────────────────────────────────────────────────────
@@ -38,10 +38,10 @@ export type {
 	CommaSeparatedString,
 	ImageId,
 	MediaImage,
-} from '/lib/types/Content';
-export type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
-export type {Request} from '/lib/types/Request';
-export type {Response} from '/lib/types/Response';
+} from '/lib/app-metafields/types/Content';
+export type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
+export type {Request} from '/lib/app-metafields/types/Request';
+export type {Response} from '/lib/app-metafields/types/Response';
 
 
 //──────────────────────────────────────────────────────────────────────────────

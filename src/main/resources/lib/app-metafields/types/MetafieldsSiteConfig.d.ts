@@ -3,7 +3,7 @@ export type {
 	CommaSeparatedString,
 	ImageId,
 	MediaImage,
-} from '/lib/types/Content';
+} from '/lib/app-metafields/types/Content';
 
 
 export declare interface MetafieldsSiteConfig {

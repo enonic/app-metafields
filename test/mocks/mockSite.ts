@@ -1,5 +1,5 @@
 import type {Site} from '/lib/xp/content';
-import type {MetafieldsSiteConfig} from '/lib/types';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 
 import {mockContent} from './mockContent';

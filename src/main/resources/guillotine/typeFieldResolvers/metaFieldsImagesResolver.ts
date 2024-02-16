@@ -3,8 +3,8 @@ import type {Content, Site} from '/lib/xp/content';
 import type {
 	// Content,
 	Resolver
-} from '/lib/types/guillotine';
-import type {MetafieldsSiteConfig} from '/lib/types';
+} from '/lib/app-metafields/types/guillotine';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 
 import {toStr} from '@enonic/js-utils/value/toStr';
@@ -13,10 +13,11 @@ import {
 	get as getContext,
 	run as runInContext
 } from '/lib/xp/context';
-import {getImageId} from '/lib/common/getImageId';
-
 
 import {DEBUG} from '/lib/app-metafields/constants';
+import {getImageId} from '/lib/app-metafields/image/getImageId';
+
+
 export const metaFieldsImagesResolver: Resolver<
 	{}, // args
 	{ // source
