@@ -2,13 +2,16 @@ import type {Content, Site} from '@enonic-types/lib-content';
 import type {MetafieldsSiteConfig} from '/lib/types';
 
 
-export const getLang = (
+export const getLang = ({
+	content,
+	siteOrNull,
+}: {
 	content: Content,
-	site: Site<MetafieldsSiteConfig>
-): string => {
-	if (content.language || site.language) {
+	siteOrNull: Site<MetafieldsSiteConfig>|null
+}): string => {
+	if (content.language || siteOrNull?.language) {
 		// Format locale into the ISO format that Open Graph wants.
-		return (content.language || site.language).replace('-', '_');
+		return (content.language || siteOrNull?.language).replace('-', '_');
 	}
 	return 'en_US';
 }

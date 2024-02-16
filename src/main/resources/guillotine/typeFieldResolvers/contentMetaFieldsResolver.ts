@@ -2,6 +2,7 @@ import type {Content} from '/lib/xp/content';
 import type {Resolver} from '/lib/types/guillotine';
 
 
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {startsWith} from '@enonic/js-utils/string/startsWith';
 import {includes as arrayIncludes} from '@enonic/js-utils/array/includes';
 import {getSite as libsContentGetSite} from '/lib/xp/content';
@@ -10,10 +11,11 @@ import {
 	run as runInContext
 } from '/lib/xp/context';
 
+import {DEBUG} from '/lib/app-metafields/constants';
 import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 
-import {getAppOrSiteConfig} from '/lib/common/getAppOrSiteConfig';
+import {getAppOrSiteConfig} from '../../lib/app-metafields/xp/getAppOrSiteConfig';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
 import {getLang} from '/lib/common/getLang';
@@ -26,12 +28,14 @@ export const contentMetaFieldsResolver: Resolver<
 	{},
 	Content
 > = (env) => {
-	// log.info(`resolvers content metafields ${JSON.stringify(env, null, 4)}`);
+	DEBUG && log.debug('contentMetaFieldsResolver env:%s', toStr(env));
+
 	const {
 		// args,
 		localContext,
 		source: content
 	} = env;
+	DEBUG && log.debug('contentMetaFieldsResolver content:%s', toStr(env));
 
 	if (
 		startsWith(content.type,'media:')
@@ -50,8 +54,10 @@ export const contentMetaFieldsResolver: Resolver<
 		// siteKey // NOTE: Can be undefined when x-guillotine-sitekey is missing
 	} = localContext;
 	const {_path} = content;
+
 	const context = getContext();
-	// log.info('contentMetaFieldsResolver context:%s', JSON.stringify(context, null, 4));
+	DEBUG && log.debug('contentMetaFieldsResolver context:%s', toStr(context));
+
 	const {
 		authInfo: {
 			// user: { // NOTE: Can be undefined when not logged in
@@ -61,7 +67,8 @@ export const contentMetaFieldsResolver: Resolver<
 			principals
 		}
 	} = context;
-	// log.info(`resolvers content metafields context ${JSON.stringify(context, null, 4)}`);
+	DEBUG && log.debug('contentMetaFieldsResolver principals:%s', toStr(principals));
+
 	return runInContext({
 		branch,
 		repository: `com.enonic.cms.${project}`,
@@ -71,25 +78,35 @@ export const contentMetaFieldsResolver: Resolver<
 		// },
 		principals
 	}, () => {
-		const site = libsContentGetSite({ key: _path });
+		// NOTE: app-metafields can be added directly to a project, outside of a site
+		const siteOrNull = libsContentGetSite({ key: _path });
+		DEBUG && log.debug('contentMetaFieldsResolver siteOrNull:%s', toStr(siteOrNull));
+
 		const appOrSiteConfig = getAppOrSiteConfig({
 			applicationConfig: APP_CONFIG,
 			applicationKey: APP_NAME,
-			site
+			siteOrNull
 		});
+		DEBUG && log.debug('contentMetaFieldsResolver appOrSiteConfig:%s', toStr(appOrSiteConfig));
+
 		const description = getMetaDescription({
 			appOrSiteConfig,
 			content,
-			site
+			siteOrNull
 		});
+		DEBUG && log.debug('contentMetaFieldsResolver description:%s', description);
 
 		const title = getFullTitle({
 			appOrSiteConfig,
 			content,
-			site
+			siteOrNull
 		});
-		const isFrontpage = site._path === _path;
+		DEBUG && log.debug('contentMetaFieldsResolver title:%s', title);
+
+		const isFrontpage = siteOrNull?._path === _path;
+
 		const blockRobots = appOrSiteConfig.blockRobots || getBlockRobots(content)
+		DEBUG && log.debug('contentMetaFieldsResolver blockRobots:%s', blockRobots);
 
 		let canonical: string|null = null;
 		const contentForCanonicalUrl = getContentForCanonicalUrl(content);
@@ -98,12 +115,12 @@ export const contentMetaFieldsResolver: Resolver<
 				canonical = prependBaseUrl({
 					baseUrl: appOrSiteConfig.baseUrl,
 					contentPath: contentForCanonicalUrl._path,
-					sitePath: site._path
+					sitePath: siteOrNull?._path || ''
 				});
 			} else {
 				canonical = siteRelativePath({
 					contentPath: contentForCanonicalUrl._path,
-					sitePath: site._path
+					sitePath: siteOrNull?._path || ''
 				});
 			}
 		} // if contentForCanonicalUrl
@@ -112,21 +129,25 @@ export const contentMetaFieldsResolver: Resolver<
 			? prependBaseUrl({
 				baseUrl: appOrSiteConfig.baseUrl,
 				contentPath: content._path,
-				sitePath: site._path
+				sitePath: siteOrNull?._path || ''
 			})
 			: siteRelativePath({
 				contentPath: content._path,
-				sitePath: site._path
+				sitePath: siteOrNull?._path || ''
 			});
+		DEBUG && log.debug('contentMetaFieldsResolver url:%s', url);
 
 		// return <Partial<GraphQLTypeToResolverResult<GraphQLMetafields>>>{
 		return {
 			_appOrSiteConfig: appOrSiteConfig,
 			_content: content,
-			_site: site,
+			_siteOrNull: siteOrNull,
 			canonical,
 			description,
-			locale: getLang(content, site),
+			locale: getLang({
+				content,
+				siteOrNull
+			}),
 			openGraph: {
 				hideImages: appOrSiteConfig.removeOpenGraphImage,
 				hideUrl: appOrSiteConfig.removeOpenGraphUrl,
@@ -136,7 +157,7 @@ export const contentMetaFieldsResolver: Resolver<
 				follow: !blockRobots,
 				index: !blockRobots,
 			},
-			siteName: site.displayName,
+			siteName: siteOrNull?.displayName,
 			title,
 			twitter: {
 				hideImages: appOrSiteConfig.removeTwitterImage,

@@ -3,15 +3,17 @@ import type {MetafieldsSiteConfig} from '/lib/types/MetafieldsSiteConfig';
 
 
 import {isSet} from '@enonic/js-utils/value/isSet';
+import {isString} from '@enonic/js-utils/value/isString';
 // import {toStr} from '@enonic/js-utils/value/toStr';
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
 import {getSiteConfigFromSite} from '/lib/common/getSiteConfigFromSite';
+import {trimQuotes} from '/lib/app-metafields/string/trimQuotes';
 
 
 interface GetTheConfigParams {
 	applicationConfig: Record<string, string|boolean>
 	applicationKey: string
-	site: Site<MetafieldsSiteConfig>
+	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 
@@ -19,7 +21,7 @@ interface GetTheConfigParams {
 export const getAppOrSiteConfig = ({
 	applicationConfig,
 	applicationKey,
-	site,
+	siteOrNull,
 }: GetTheConfigParams): MetafieldsSiteConfig => {
 	let appOrSiteConfig: MetafieldsSiteConfig = {}
 
@@ -31,20 +33,28 @@ export const getAppOrSiteConfig = ({
 				if (value === 'true' || value === 'false') {
 					value = value === 'true';
 				}
+				if (isString(value)) {
+					value = trimQuotes(value);
+				}
 				(appOrSiteConfig as Record<typeof prop, typeof value>)[prop] = value;
 			}
 		}
 	}
 
 	let siteConfig = libPortalGetSiteConfig<MetafieldsSiteConfig>();
-	if (!siteConfig) {
+	if (!siteConfig && siteOrNull) {
 		siteConfig = getSiteConfigFromSite({
 			applicationKey,
-			site,
+			site: siteOrNull,
 		});
 	}
-
 	// log.info('siteConfig:%s', toStr(siteConfig));
+
+	// NOTE: app-metafields can be added directly to a project, outside of a site
+	if (!siteConfig) {
+		return appOrSiteConfig;
+	}
+
 	for (let key in siteConfig) {
 		const value = siteConfig[key as keyof typeof siteConfig];
 		if (isSet(value)) {

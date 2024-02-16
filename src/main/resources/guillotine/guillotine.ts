@@ -34,7 +34,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 						type: graphQL.Json,
 					},
 					siteName: {
-						type: graphQL.nonNull(graphQL.GraphQLString),
+						type: graphQL.GraphQLString, // can be null
 					},
 					title: {
 						type: graphQL.nonNull(graphQL.GraphQLString),

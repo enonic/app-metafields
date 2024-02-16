@@ -8,7 +8,7 @@ import {
 	getOutboundDependencies,
 	query as queryContent
 } from '/lib/xp/content';
-import {oneOrMoreCommaStringToArray} from '../app-metafields/string/oneOrMoreCommaStringToArray';
+import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findValueInObject} from '/lib/common/findValueInObject';
 import {isString} from '/lib/common/isString';

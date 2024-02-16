@@ -10,19 +10,19 @@ import {getPageTitle} from '/lib/common/getPageTitle';
 interface GetFullTitleParams {
 	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
-	site: Site<MetafieldsSiteConfig>
+	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 export function getFullTitle({
 	appOrSiteConfig,
 	content,
-	site,
+	siteOrNull,
 }: GetFullTitleParams) {
-	const isFrontpage = site._path === content._path;
+	const isFrontpage = siteOrNull?._path === content._path;
 	const titleAppendix = getAppendix({
 		appOrSiteConfig,
 		isFrontpage,
-		site,
+		siteOrNull,
 	});
 	const pageTitle = getPageTitle({
 		appOrSiteConfig,

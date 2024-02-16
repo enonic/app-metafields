@@ -19,7 +19,7 @@ interface GetImageUrlParams {
 	content: Content
 	defaultImg?: ImageId
 	defaultImgPrescaled?: boolean
-	site: Site<MetafieldsSiteConfig>
+	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 
@@ -63,7 +63,7 @@ export const getImageUrl = ({
 	content,
 	defaultImg,
 	defaultImgPrescaled,
-	site,
+	siteOrNull,
 }: GetImageUrlParams): string|null|undefined => {
 	// Try to find an image in the content's image or images properties
 	const imageId = findImageIdInContent({
@@ -83,9 +83,13 @@ export const getImageUrl = ({
 		});
 	}
 
+	if (!siteOrNull) {
+		return undefined
+	}
+
 	const siteImageId = findImageIdInContent({
 		appOrSiteConfig,
-		content: site,
+		content: siteOrNull,
 	});
 	if (siteImageId) {
 		return _imageUrlFromId(siteImageId);

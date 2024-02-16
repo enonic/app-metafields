@@ -78,14 +78,15 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
+		const site = mockSite({
+			description: 'Site description',
+			prefix: 'site',
+			siteConfig: metaFieldsSiteConfig
+		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
-				site: mockSite({
-					description: 'Site description',
-					prefix: 'site',
-					siteConfig: metaFieldsSiteConfig
-				}),
+				siteOrNull: site,
 			})).toBeUndefined();
 		}); // import
 	}); // it
@@ -100,6 +101,11 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
+		const site = mockSite({
+			description: 'Site description',
+			prefix: 'site',
+			siteConfig: metaFieldsSiteConfig
+		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
@@ -107,11 +113,7 @@ describe('getMetaData', () => {
 					prefix: 'one',
 					type: 'base:folder',
 				}),
-				site: mockSite({
-					description: 'Site description',
-					prefix: 'site',
-					siteConfig: metaFieldsSiteConfig
-				}),
+				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -156,7 +158,7 @@ describe('getMetaData', () => {
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: site,
-				site,
+				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -206,7 +208,7 @@ describe('getMetaData', () => {
 			expect(getMetaData({
 				appOrSiteConfig: siteConfig,
 				content: contentWithImage,
-				site,
+				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -263,7 +265,7 @@ describe('getMetaData', () => {
 			expect(getMetaData({
 				appOrSiteConfig: siteConfig,
 				content: contentWithImage,
-				site,
+				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -320,7 +322,7 @@ describe('getMetaData', () => {
 			expect(getMetaData({
 				appOrSiteConfig: siteConfig,
 				content: contentWithImage,
-				site,
+				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -358,17 +360,18 @@ describe('getMetaData', () => {
 			siteConfig: metaFieldsSiteConfig
 		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+			const site = mockSite({
+				description: 'Site description',
+				prefix: 'site',
+				siteConfig: metaFieldsSiteConfig
+			});
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
 				}),
-				site: mockSite({
-					description: 'Site description',
-					prefix: 'site',
-					siteConfig: metaFieldsSiteConfig
-				}),
+				siteOrNull: site,
 				returnType: 'html',
 				// selfClosingTags: true // Doesn't affect the output in this test
 			})).resolves.toEqual(
@@ -424,17 +427,18 @@ describe('getMetaData', () => {
 			siteConfig: metaFieldsSiteConfig
 		});
 		import('/lib/metadata/getMetaData').then(({getMetaData}) => {
+			const site = mockSite({
+				description: 'Site description',
+				prefix: 'site',
+				siteConfig: metaFieldsSiteConfig
+			});
 			expect(getMetaData({
 				appOrSiteConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
 				}),
-				site: mockSite({
-					description: 'Site description',
-					prefix: 'site',
-					siteConfig: metaFieldsSiteConfig
-				}),
+				siteOrNull: site,
 				returnType: 'html',
 				selfClosingTags: true // Doesn't affect the output in this test
 			})).resolves.toEqual(

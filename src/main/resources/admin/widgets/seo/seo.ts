@@ -14,6 +14,7 @@ import {render} from '/lib/thymeleaf';
 import {queryForFirstSiteWithAppAndUrl} from '/admin/widgets/seo/queryForFirstSiteWithAppAndUrl';
 
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
+import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
 import {getAppendix} from '/lib/common/getAppendix';
 import {getBlockRobots} from '/lib/common/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/common/getContentForCanonicalUrl';
@@ -21,7 +22,6 @@ import {getImageUrl} from '/lib/common/getImageUrl';
 import {getLang} from '/lib/common/getLang';
 import {getMetaDescription} from '/lib/common/getMetaDescription';
 import {getPageTitle} from '/lib/common/getPageTitle';
-import {getAppOrSiteConfig} from '/lib/common/getAppOrSiteConfig';
 
 
 /*
@@ -61,110 +61,114 @@ export const get = (req: Request) => {
 	if (content) {
 		// The first part of the content '_path' is the site's URL, make sure to fetch current site!
 		const parts = content._path.split('/');
-		const site = queryForFirstSiteWithAppAndUrl({
+		const siteOrNull = queryForFirstSiteWithAppAndUrl({
 			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 			siteUrl: parts[1]
 		}); // Send the first /x/-part of the content's path.
-		if (site) {
-			const appOrSiteConfig = getAppOrSiteConfig({
-				applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-				applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
-				site
+
+		const appOrSiteConfig = getAppOrSiteConfig({
+			applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
+			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
+			siteOrNull
+		});
+
+		if (appOrSiteConfig) {
+			const isFrontpage = siteOrNull?._path === content._path;
+			const pageTitle = getPageTitle({
+				appOrSiteConfig,
+				content,
 			});
-			if (appOrSiteConfig) {
-				const isFrontpage = site._path === content._path;
-				const pageTitle = getPageTitle({
-					appOrSiteConfig,
-					content,
-				});
-				const titleAppendix = getAppendix({
-					appOrSiteConfig,
-					isFrontpage,
-					site,
-				});
-				let description = getMetaDescription({
-					appOrSiteConfig,
-					content,
-					site
-				});
-				if (description === '') description = null;
+			const titleAppendix = getAppendix({
+				appOrSiteConfig,
+				isFrontpage,
+				siteOrNull,
+			});
+			let description = getMetaDescription({
+				appOrSiteConfig,
+				content,
+				siteOrNull
+			});
+			if (description === '') description = null;
 
-				const frontpageUrl = pageUrl({ path: site._path, type: "absolute" });
-				const absoluteUrl = pageUrl({ path: content._path, type: "absolute" });
+			const frontpageUrl = pageUrl({ path: siteOrNull?._path, type: "absolute" });
+			const absoluteUrl = pageUrl({ path: content._path, type: "absolute" });
 
-				let ogUrl: string;
+			let ogUrl: string;
+			if (appOrSiteConfig.baseUrl) {
+				ogUrl = prependBaseUrl({
+					baseUrl: appOrSiteConfig.baseUrl,
+					contentPath: content._path,
+					sitePath: siteOrNull?._path || ''
+				});
+			} else {
+				const justThePath = absoluteUrl.replace(frontpageUrl,'');
+				ogUrl = `[SITE_URL]${justThePath}`;
+			}
+
+			let canonical = null;
+			const contentForCanonicalUrl = getContentForCanonicalUrl(content);
+			if (contentForCanonicalUrl) {
 				if (appOrSiteConfig.baseUrl) {
-					ogUrl = prependBaseUrl({
+					canonical = prependBaseUrl({
 						baseUrl: appOrSiteConfig.baseUrl,
-						contentPath: content._path,
-						sitePath: site._path
+						contentPath: contentForCanonicalUrl
+							? contentForCanonicalUrl._path
+							: content._path,
+						sitePath: siteOrNull?._path || ''
 					});
 				} else {
-					const justThePath = absoluteUrl.replace(frontpageUrl,'');
-					ogUrl = `[SITE_URL]${justThePath}`;
+					const canonicalUrl = contentForCanonicalUrl
+						? pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" })
+						: absoluteUrl;
+					const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
+					canonical = `[SITE_URL]${canonicalJustThePath}`;
 				}
-
-				let canonical = null;
-				const contentForCanonicalUrl = getContentForCanonicalUrl(content);
-				if (contentForCanonicalUrl) {
-					if (appOrSiteConfig.baseUrl) {
-						canonical = prependBaseUrl({
-							baseUrl: appOrSiteConfig.baseUrl,
-							contentPath: contentForCanonicalUrl
-								? contentForCanonicalUrl._path
-								: content._path,
-							sitePath: site._path
-						});
-					} else {
-						const canonicalUrl = contentForCanonicalUrl
-							? pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" })
-							: absoluteUrl;
-						const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
-						canonical = `[SITE_URL]${canonicalJustThePath}`;
-					}
-				}
-
-				const imageUrl = getImageUrl({
-					appOrSiteConfig,
-					content,
-					site,
-					defaultImg: appOrSiteConfig.seoImage,
-					defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled
-				});
-
-				params = {
-					summary: {
-						title: pageTitle,
-						fullTitle: (pageTitle + titleAppendix),
-						description: description,
-						image: imageUrl,
-						canonical,
-						blockRobots: (appOrSiteConfig.blockRobots || getBlockRobots(content))
-					},
-					og: {
-						type: (isFrontpage ? 'website' : 'article'),
-						title: pageTitle,
-						description: description,
-						siteName: site.displayName,
-						url: ogUrl,
-						locale: getLang(content,site),
-						image: {
-							src: imageUrl,
-							width: 1200, // Twice of 600x315, for retina
-							height: 630
-						}
-					},
-					twitter: {
-						active: (appOrSiteConfig.twitterUsername ? true : false),
-						title: pageTitle,
-						description: description,
-						image: imageUrl,
-						site: appOrSiteConfig.twitterUsername || null
-					}
-				};
 			}
-		}
-	}
+
+			const imageUrl = getImageUrl({
+				appOrSiteConfig,
+				defaultImg: appOrSiteConfig.seoImage,
+				defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled,
+				content,
+				siteOrNull,
+			});
+
+			params = {
+				summary: {
+					title: pageTitle,
+					fullTitle: (pageTitle + titleAppendix),
+					description: description,
+					image: imageUrl,
+					canonical,
+					blockRobots: (appOrSiteConfig.blockRobots || getBlockRobots(content))
+				},
+				og: {
+					type: (isFrontpage ? 'website' : 'article'),
+					title: pageTitle,
+					description: description,
+					siteName: siteOrNull?.displayName,
+					url: ogUrl,
+					locale: getLang({
+						content,
+						siteOrNull
+					}),
+					image: {
+						src: imageUrl,
+						width: 1200, // Twice of 600x315, for retina
+						height: 630
+					}
+				},
+				twitter: {
+					active: (appOrSiteConfig.twitterUsername ? true : false),
+					title: pageTitle,
+					description: description,
+					image: imageUrl,
+					site: appOrSiteConfig.twitterUsername || null
+				}
+			};
+
+		} // if appOrSiteConfig
+	} // if content
 
 	return {
 		body: render( resolve('seo.html'), params),

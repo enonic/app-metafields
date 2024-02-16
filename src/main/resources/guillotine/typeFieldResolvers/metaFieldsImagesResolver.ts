@@ -7,6 +7,7 @@ import type {
 import type {MetafieldsSiteConfig} from '/lib/types';
 
 
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {get as getContentByKey} from '/lib/xp/content';
 import {
 	get as getContext,
@@ -15,32 +16,38 @@ import {
 import {getImageId} from '/lib/common/getImageId';
 
 
+import {DEBUG} from '/lib/app-metafields/constants';
 export const metaFieldsImagesResolver: Resolver<
 	{}, // args
 	{ // source
 		_appOrSiteConfig: MetafieldsSiteConfig
 		_content: Content
-		_site: Site<MetafieldsSiteConfig>
+		_siteOrNull: Site<MetafieldsSiteConfig>|null
 	}
 > = (env) => {
-	// log.info(`resolvers content metafields ${JSON.stringify(env, null, 4)}`);
+	DEBUG && log.debug('metaFieldsImagesResolver env:%s', toStr(env));
+
 	const {
 		// args,
 		localContext,
 		source
 	} = env;
+
 	const {
 		branch,
 		project,
 		// siteKey // NOTE: Can be undefined when x-guillotine-sitekey is missing
 	} = localContext;
+
 	const {
 		_appOrSiteConfig,
 		_content,
-		_site,
+		_siteOrNull,
 	} = source;
+
 	const context = getContext();
-	// log.info('metaFieldsImagesResolver context: %s', JSON.stringify(context, null, 4));
+	DEBUG && log.debug('metaFieldsImagesResolver context: %s', toStr(context));
+
 	const {
 		authInfo: {
 			// user: { // NOTE: Can be undefined when not logged in
@@ -50,7 +57,8 @@ export const metaFieldsImagesResolver: Resolver<
 			principals
 		}
 	} = context;
-	// log.info(`resolvers content metafields context ${JSON.stringify(context, null, 4)}`);
+	DEBUG && log.debug('metaFieldsImagesResolver principals:%s', toStr(principals));
+
 	return runInContext({
 		branch,
 		repository: `com.enonic.cms.${project}`,
@@ -64,14 +72,18 @@ export const metaFieldsImagesResolver: Resolver<
 		const imageId = getImageId({
 			appOrSiteConfig: _appOrSiteConfig,
 			content: _content,
-			site: _site,
+			siteOrNull: _siteOrNull,
 		});
 		if (imageId) {
 			const imageContent = getContentByKey({ key: imageId });
 			if (imageContent) {
 				return imageContent;
 			} else {
-				log.error(`content with path:${_content._path} or site with path: ${_site._path} references a non-existing image with key:${imageId}`);
+				if (_siteOrNull) {
+					log.error(`content with path:${_content._path} or site with path: ${_siteOrNull?._path} references a non-existing image with key:${imageId}`);
+				} else {
+					log.error(`content with path:${_content._path} references a non-existing image with key:${imageId}`);
+				}
 			}
 		}
 
