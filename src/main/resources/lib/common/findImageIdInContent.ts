@@ -8,7 +8,7 @@ import {
 	getOutboundDependencies,
 	query as queryContent
 } from '/lib/xp/content';
-import {commaStringToArray} from '/lib/common/commaStringToArray';
+import {oneOrMoreCommaStringToArray} from '../app-metafields/string/oneOrMoreCommaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/common/constants';
 import {findValueInObject} from '/lib/common/findValueInObject';
 import {isString} from '/lib/common/isString';
@@ -30,7 +30,7 @@ export function findImageIdInContent({
 	}
 
 	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsImages || '');
-	const userDefinedArray = userDefinedPaths ? commaStringToArray(userDefinedPaths) : [];
+	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
 
 	const firstItem = forceArray(userDefinedValue)[0];
