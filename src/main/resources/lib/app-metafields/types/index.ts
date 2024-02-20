@@ -76,10 +76,6 @@ const intValidator = (value: unknown): value is number => isNumber(value)
 		? Number.isInteger(value)
 		: isInt(value);
 
-export const CommaSeparatedStringBuilder = brand<CommaSeparatedString>({
-	validate: isString
-});
-
 export const ImageIdBuilder = brand<ImageId>({
 	validate: isString
 });

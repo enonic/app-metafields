@@ -6,7 +6,6 @@ import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreC
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
 import {findStringValueInObject} from '/lib/app-metafields/object/findStringValueInObject';
 import {stringOrNull} from '/lib/app-metafields/string/stringOrNull';
-import {CommaSeparatedStringBuilder} from '/lib/app-metafields/types';
 
 
 interface GetPageTitleParams {
@@ -21,7 +20,7 @@ export const getPageTitle = ({
 }: GetPageTitleParams): string => {
 	// log.info('appOrSiteConfig: %s', JSON.stringify(appOrSiteConfig, null, 4));
 
-	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsTitles || '');
+	const userDefinedPaths = appOrSiteConfig.pathsTitles || '';
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
 
