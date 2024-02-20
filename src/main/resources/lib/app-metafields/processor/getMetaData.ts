@@ -41,7 +41,7 @@ interface MetaDataModel {
 }
 
 interface GetMetaDataParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	siteOrProjectOrAppConfig: MetafieldsSiteConfig
 	content?: Content
 	returnType?: 'json'|'html'
 	selfClosingTags?: boolean
@@ -57,7 +57,7 @@ function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
 
 
 export function getMetaData({
-	appOrSiteConfig,
+	siteOrProjectOrAppConfig,
 	content=undefined,
 	returnType="json",
 	selfClosingTags=false,
@@ -69,14 +69,14 @@ export function getMetaData({
 
 	const isFrontpage = siteOrNull?._path === content._path;
 	const pageTitle = getPageTitle({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		content,
 	});
-	const siteVerification = appOrSiteConfig.siteVerification || null;
+	const siteVerification = siteOrProjectOrAppConfig.siteVerification || null;
 
-	const absoluteUrl = appOrSiteConfig.baseUrl
+	const absoluteUrl = siteOrProjectOrAppConfig.baseUrl
 	? prependBaseUrl({
-		baseUrl: appOrSiteConfig.baseUrl,
+		baseUrl: siteOrProjectOrAppConfig.baseUrl,
 		contentPath: content._path,
 		sitePath: siteOrNull?._path || ''
 	})
@@ -84,39 +84,39 @@ export function getMetaData({
 
 	const canonicalContent = getContentForCanonicalUrl(content);
 	const canonicalUrl = canonicalContent
-		? appOrSiteConfig.baseUrl
+		? siteOrProjectOrAppConfig.baseUrl
 			? prependBaseUrl({
-				baseUrl: appOrSiteConfig.baseUrl,
+				baseUrl: siteOrProjectOrAppConfig.baseUrl,
 				contentPath: canonicalContent._path,
 				sitePath: siteOrNull?._path || ''
 			})
 			: pageUrl({ path: canonicalContent._path, type: "absolute" })
 		: null;
 
-	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
+	const imageUrl = !siteOrProjectOrAppConfig.removeOpenGraphImage
 		? getImageUrl({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
-			defaultImg: appOrSiteConfig.seoImage,
-			defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled,
+			defaultImg: siteOrProjectOrAppConfig.seoImage,
+			defaultImgPrescaled: siteOrProjectOrAppConfig.seoImageIsPrescaled,
 			siteOrNull,
 		})
 		: null;
 
-	const twitterImageUrl = !appOrSiteConfig.removeTwitterImage
+	const twitterImageUrl = !siteOrProjectOrAppConfig.removeTwitterImage
 		? getImageUrl({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
-			defaultImg: appOrSiteConfig.seoImage,
+			defaultImg: siteOrProjectOrAppConfig.seoImage,
 			siteOrNull,
 		})
 		: null;
 
 	const params: MetaDataModel = {
-		blockRobots: appOrSiteConfig.blockRobots || getBlockRobots(content),
+		blockRobots: siteOrProjectOrAppConfig.blockRobots || getBlockRobots(content),
 		canonicalUrl,
 		description: getMetaDescription({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
 			siteOrNull
 		}),
@@ -137,10 +137,10 @@ export function getMetaData({
 		siteName: siteOrNull?.displayName,
 		siteVerification,
 		title: pageTitle,
-		twitterUserName: appOrSiteConfig.twitterUsername,
+		twitterUserName: siteOrProjectOrAppConfig.twitterUsername,
 		twitterImageUrl,
 		type: isFrontpage ? "website" : "article",
-		url: appOrSiteConfig.removeOpenGraphUrl ? null : absoluteUrl,
+		url: siteOrProjectOrAppConfig.removeOpenGraphUrl ? null : absoluteUrl,
 	};
 
 	if (returnType === 'html') {

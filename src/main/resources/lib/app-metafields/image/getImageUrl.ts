@@ -6,16 +6,18 @@ import type {
 } from '/lib/app-metafields/types';
 
 
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {get as getContentByKey} from '/lib/xp/content';
 import {
 	attachmentUrl,
 	imageUrl
 } from '/lib/xp/portal';
+import {DEBUG} from '/lib/app-metafields/constants';
 import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInContent';
 
 
 interface GetImageUrlParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	siteOrProjectOrAppConfig: MetafieldsSiteConfig
 	content: Content
 	defaultImg?: ImageId
 	defaultImgPrescaled?: boolean
@@ -42,6 +44,8 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 	}>>({
 		key: imageOpts.id
 	});
+	DEBUG && log.debug('_imageUrlFromId imageContent:%s', toStr(imageContent));
+
 	let mimeType = null;
 	if (imageContent) {
 		if (imageContent.data.media) {
@@ -54,28 +58,37 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 		imageOpts.format = null;
 	}
 
+	DEBUG && log.debug('_imageUrlFromId imageOpts:%s', toStr(imageOpts));
 	return imageOpts.id ? imageUrl(imageOpts) : null;
 }
 
 
 export const getImageUrl = ({
-	appOrSiteConfig,
+	siteOrProjectOrAppConfig,
 	content,
 	defaultImg,
 	defaultImgPrescaled,
 	siteOrNull,
 }: GetImageUrlParams): string|null|undefined => {
+	DEBUG && log.debug('getImageUrl defaultImg:%s defaultImgPrescaled:%s', defaultImg, defaultImgPrescaled);
+
+	if(!siteOrNull) {
+		return undefined; // Cannot run any funtion from /lib/xp/portal without a site
+	}
+
 	// Try to find an image in the content's image or images properties
 	const imageId = findImageIdInContent({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		content,
 	});
 
 	if (imageId || (defaultImg && !defaultImgPrescaled)) {
+		DEBUG && log.debug('getImageUrl imageId:%s defaultImg:%s', imageId, defaultImg);
 		return _imageUrlFromId(imageId || defaultImg)
 	}
 
 	if (defaultImg && defaultImgPrescaled) {
+		DEBUG && log.debug('getImageUrl defaultImg:%s defaultImgPrescaled:%s', defaultImg, defaultImgPrescaled);
 		// Serve pre-optimized image directly
 		return attachmentUrl({
 			id: defaultImg,
@@ -88,7 +101,7 @@ export const getImageUrl = ({
 	}
 
 	const siteImageId = findImageIdInContent({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		content: siteOrNull,
 	});
 	if (siteImageId) {

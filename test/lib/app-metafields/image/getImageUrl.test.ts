@@ -1,20 +1,18 @@
 import type {
-	get as GetContentByKey,
+	Content,
 	Site
 } from '/lib/xp/content';
-import type {
-	MetafieldsSiteConfig,
-	MediaImage
-} from '/lib/app-metafields/types';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 
 import {
 	beforeAll,
 	describe,
 	expect,
-	jest,
+	// jest,
 	test as it,
 } from '@jest/globals';
+import {mockLibXpContent} from '../../../mocks/mockLibXpContent';
 import {mockLibXpContext} from '../../../mocks/mockLibXpContext';
 import {mocklibXpPortal} from '../../../mocks/mockLibXpPortal';
 import {mockContent} from '../../../mocks/mockContent';
@@ -96,34 +94,15 @@ const imageContent4 = mockImage({
 
 describe('getImageUrl', () => {
 	beforeAll(() => {
-		jest.mock(
-			'/lib/xp/content',
-			() => ({
-				get: jest.fn<typeof GetContentByKey<MediaImage>>().mockImplementation(({key}) => {
-					// console.debug('GetContentByKey', key);
-					if (key === 'oneImageContentId') {
-						return imageContent1;
-					}
-					if (key === 'twoImageContentId') {
-						return imageContent2;
-					}
-					if (key === 'threeImageContentId') {
-						return imageContent3;
-					}
-					if (key === 'fourImageContentId') {
-						return imageContent4;
-					}
-					return null;
-				}),
-				getOutboundDependencies: jest.fn().mockReturnValue([]),
-				query: jest.fn().mockReturnValue({
-					count: 0,
-					hits: [],
-					total: 0,
-				})
-			}),
-			{virtual: true}
-		);
+		mockLibXpContent({
+			contents: {
+				'/': {} as Content<unknown>,
+				oneImageContentId: imageContent1,
+				twoImageContentId: imageContent2,
+				threeImageContentId: imageContent3,
+				fourImageContentId: imageContent4,
+			},
+		});
 		mockLibXpContext();
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
@@ -133,7 +112,7 @@ describe('getImageUrl', () => {
 	it('should return undefined when no image found', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
@@ -146,7 +125,7 @@ describe('getImageUrl', () => {
 	it('should return attachmentUrl when defaultImg and defaultImgPrescaled provided', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
@@ -168,7 +147,7 @@ describe('getImageUrl', () => {
 		});
 		// console.info('content', content);
 		const getImageUrlParams = {
-			appOrSiteConfig: metaFieldsSiteConfig,
+			siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 			content,
 			siteOrNull: siteContent
 		};
@@ -180,7 +159,7 @@ describe('getImageUrl', () => {
 	it('should return an url when content has data.pathsImages0', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImage',
 					data: {
@@ -197,7 +176,7 @@ describe('getImageUrl', () => {
 	it('should return an url when content has data.pathsImages1', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImages',
 					data: {
@@ -213,7 +192,7 @@ describe('getImageUrl', () => {
 	it('should return an url when content has data.pathsImages0[0]', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImages',
 					data: {

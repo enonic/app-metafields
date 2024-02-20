@@ -1,8 +1,4 @@
-import type {
-	Content,
-	get as GetContentByKey,
-	// Site
-} from '/lib/xp/content';
+import type {Content} from '/lib/xp/content';
 import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 
@@ -18,9 +14,11 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {mockContent} from '../../../mocks/mockContent';
 import {mockLibThymeleaf} from '../../../mocks/mockLibThymeleaf';
+import {mockLibXpContent} from '../../../mocks/mockLibXpContent';
 import {mockLibXpContext} from '../../../mocks/mockLibXpContext';
 import {mockLibXpNode} from '../../../mocks/mockLibXpNode';
 import {mocklibXpPortal} from '../../../mocks/mockLibXpPortal';
+import {mockImage} from '../../../mocks/mockImage';
 import {mockSite} from '../../../mocks/mockSite';
 
 
@@ -46,29 +44,23 @@ const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	pathsImages: 'pathsImages0,pathsImages1'
 };
 
+const imageContent1 = mockImage({
+	name: 'image1.jpg',
+	prefix: 'one'
+});
 
 describe('getMetaData', () => {
 	beforeEach(() => {
 		jest.resetAllMocks(); // Resets the state of all mocks. Equivalent to calling .mockReset() on every mocked function.
 		jest.resetModules();
-		mockLibXpContext();
 		mockLibThymeleaf();
-		jest.mock(
-			'/lib/xp/content',
-			() => ({
-				get: jest.fn<typeof GetContentByKey<Content>>().mockImplementation(({key}) => {
-					// console.debug('GetContentByKey', key);
-					return null;
-				}),
-				getOutboundDependencies: jest.fn().mockReturnValue([]),
-				query: jest.fn().mockReturnValue({
-					count: 0,
-					hits: [],
-					total: 0,
-				})
-			}),
-			{virtual: true}
-		);
+		mockLibXpContent({
+			contents: {
+				'/': {} as Content<unknown>,
+				oneImageContentId: imageContent1,
+			}
+		});
+		mockLibXpContext();
 	});
 
 	it('should return undefined when content is undefined', () => {
@@ -83,7 +75,7 @@ describe('getMetaData', () => {
 		});
 		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				siteOrNull: site,
 			})).toBeUndefined();
 		}); // import
@@ -106,7 +98,7 @@ describe('getMetaData', () => {
 		});
 		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
@@ -154,7 +146,7 @@ describe('getMetaData', () => {
 				siteConfig: metaFieldsSiteConfig
 			});
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: site,
 				siteOrNull: site,
 			})).toEqual({
@@ -204,14 +196,14 @@ describe('getMetaData', () => {
 				siteConfig
 			});
 			expect(getMetaData({
-				appOrSiteConfig: siteConfig,
+				siteOrProjectOrAppConfig: siteConfig,
 				content: contentWithImage,
 				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
 				description: 'Site description',
-				imageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
+				imageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
@@ -227,7 +219,7 @@ describe('getMetaData', () => {
 				title: 'oneContentDisplayName',
 				type: 'article',
 				twitterUserName: undefined,
-				twitterImageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
+				twitterImageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
 				url: 'oneContentPathabsolutePageUrl',
 			});
 		}); // import
@@ -261,7 +253,7 @@ describe('getMetaData', () => {
 				siteConfig
 			});
 			expect(getMetaData({
-				appOrSiteConfig: siteConfig,
+				siteOrProjectOrAppConfig: siteConfig,
 				content: contentWithImage,
 				siteOrNull: site,
 			})).toEqual({
@@ -284,7 +276,7 @@ describe('getMetaData', () => {
 				title: 'oneContentDisplayName',
 				type: 'article',
 				twitterUserName: undefined,
-				twitterImageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
+				twitterImageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
 				url: 'oneContentPathabsolutePageUrl',
 			});
 		}); // import
@@ -318,14 +310,14 @@ describe('getMetaData', () => {
 				siteConfig
 			});
 			expect(getMetaData({
-				appOrSiteConfig: siteConfig,
+				siteOrProjectOrAppConfig: siteConfig,
 				content: contentWithImage,
 				siteOrNull: site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
 				description: 'Site description',
-				imageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
+				imageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
@@ -364,7 +356,7 @@ describe('getMetaData', () => {
 				siteConfig: metaFieldsSiteConfig
 			});
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
@@ -431,7 +423,7 @@ describe('getMetaData', () => {
 				siteConfig: metaFieldsSiteConfig
 			});
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				siteOrProjectOrAppConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',

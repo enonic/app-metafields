@@ -16,11 +16,12 @@ import {
 	run as runInContext
 } from '/lib/xp/context';
 
+
 import {APP_CONFIG, APP_NAME, DEBUG} from '/lib/app-metafields/constants';
 import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
 
-import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
+import {getSiteOrProjectOrAppConfig} from '/lib/app-metafields/xp/getSiteOrProjectOrAppConfig';
 import {getBlockRobots} from '/lib/app-metafields/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanonicalUrl';
 import {getLang} from '/lib/app-metafields/getLang';
@@ -32,6 +33,7 @@ export const contentMetaFieldsResolver: Resolver<
 	{},
 	Content
 > = (env) => {
+
 	DEBUG && log.debug('contentMetaFieldsResolver env:%s', toStr(env));
 
 	const {
@@ -54,9 +56,10 @@ export const contentMetaFieldsResolver: Resolver<
 
 	const {
 		branch,
-		project,
+		project: projectName,
 		// siteKey // NOTE: Can be undefined when x-guillotine-sitekey is missing
 	} = localContext;
+
 	const {_path} = content;
 
 	const context = getContext();
@@ -75,7 +78,7 @@ export const contentMetaFieldsResolver: Resolver<
 
 	return runInContext({
 		branch,
-		repository: `com.enonic.cms.${project}`,
+		repository: `com.enonic.cms.${projectName}`,
 		// user: {
 		// 	idProvider: userIdProvider,
 		// 	login: userLogin,
@@ -86,22 +89,22 @@ export const contentMetaFieldsResolver: Resolver<
 		const siteOrNull = libsContentGetSite({ key: _path });
 		DEBUG && log.debug('contentMetaFieldsResolver siteOrNull:%s', toStr(siteOrNull));
 
-		const appOrSiteConfig = getAppOrSiteConfig({
+		const siteOrProjectOrAppConfig = getSiteOrProjectOrAppConfig({
 			applicationConfig: APP_CONFIG,
 			applicationKey: APP_NAME,
 			siteOrNull
 		});
-		DEBUG && log.debug('contentMetaFieldsResolver appOrSiteConfig:%s', toStr(appOrSiteConfig));
+		DEBUG && log.debug('contentMetaFieldsResolver siteOrProjectOrAppConfig:%s', toStr(siteOrProjectOrAppConfig));
 
 		const description = getMetaDescription({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
 			siteOrNull
 		});
 		DEBUG && log.debug('contentMetaFieldsResolver description:%s', description);
 
 		const title = getFullTitle({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
 			siteOrNull
 		});
@@ -109,15 +112,15 @@ export const contentMetaFieldsResolver: Resolver<
 
 		const isFrontpage = siteOrNull?._path === _path;
 
-		const blockRobots = appOrSiteConfig.blockRobots || getBlockRobots(content)
+		const blockRobots = siteOrProjectOrAppConfig.blockRobots || getBlockRobots(content)
 		DEBUG && log.debug('contentMetaFieldsResolver blockRobots:%s', blockRobots);
 
 		let canonical: string|null = null;
 		const contentForCanonicalUrl = getContentForCanonicalUrl(content);
 		if (contentForCanonicalUrl) {
-			if (appOrSiteConfig.baseUrl) {
+			if (siteOrProjectOrAppConfig.baseUrl) {
 				canonical = prependBaseUrl({
-					baseUrl: appOrSiteConfig.baseUrl,
+					baseUrl: siteOrProjectOrAppConfig.baseUrl,
 					contentPath: contentForCanonicalUrl._path,
 					sitePath: siteOrNull?._path || ''
 				});
@@ -129,9 +132,9 @@ export const contentMetaFieldsResolver: Resolver<
 			}
 		} // if contentForCanonicalUrl
 
-		const url: string = appOrSiteConfig.baseUrl
+		const url: string = siteOrProjectOrAppConfig.baseUrl
 			? prependBaseUrl({
-				baseUrl: appOrSiteConfig.baseUrl,
+				baseUrl: siteOrProjectOrAppConfig.baseUrl,
 				contentPath: content._path,
 				sitePath: siteOrNull?._path || ''
 			})
@@ -143,7 +146,7 @@ export const contentMetaFieldsResolver: Resolver<
 
 		// return <Partial<GraphQLTypeToResolverResult<GraphQLMetafields>>>{
 		return {
-			_appOrSiteConfig: appOrSiteConfig,
+			_appOrSiteConfig: siteOrProjectOrAppConfig,
 			_content: content,
 			_siteOrNull: siteOrNull,
 			canonical,
@@ -153,8 +156,8 @@ export const contentMetaFieldsResolver: Resolver<
 				siteOrNull
 			}),
 			openGraph: {
-				hideImages: appOrSiteConfig.removeOpenGraphImage,
-				hideUrl: appOrSiteConfig.removeOpenGraphUrl,
+				hideImages: siteOrProjectOrAppConfig.removeOpenGraphImage,
+				hideUrl: siteOrProjectOrAppConfig.removeOpenGraphUrl,
 				type: isFrontpage ? 'website' : 'article', // TODO could be expanded to support more types, see https://ogp.me/
 			},
 			robots: {
@@ -164,11 +167,11 @@ export const contentMetaFieldsResolver: Resolver<
 			siteName: siteOrNull?.displayName,
 			title,
 			twitter: {
-				hideImages: appOrSiteConfig.removeTwitterImage,
-				site: appOrSiteConfig.twitterUsername,
+				hideImages: siteOrProjectOrAppConfig.removeTwitterImage,
+				site: siteOrProjectOrAppConfig.twitterUsername,
 			},
 			verification: {
-				google: appOrSiteConfig.siteVerification || null
+				google: siteOrProjectOrAppConfig.siteVerification || null
 			},
 			url,
 		};

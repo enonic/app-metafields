@@ -1,3 +1,5 @@
+import {toStr} from '@enonic/js-utils/value/toStr';
+import {DEBUG} from '/lib/app-metafields/constants';
 import {isString} from '/lib/app-metafields/string/isString';
 
 
@@ -6,6 +8,8 @@ export function findStringValueInObject(
 	paths: string[],
 	fullPath: boolean
 ): string|null {
+	DEBUG && log.debug('findStringValueInObject object:%s paths:%s fullPath:%s', toStr(object), toStr(paths), fullPath);
+
 	const pathLength = paths.length;
 	let value: string|null = null;
 	let jsonPath: string;

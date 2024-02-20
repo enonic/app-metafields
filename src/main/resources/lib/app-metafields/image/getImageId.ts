@@ -8,20 +8,20 @@ import {ImageIdBuilder} from '/lib/app-metafields/types';
 
 
 interface GetImageUrlParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	siteOrProjectOrAppConfig: MetafieldsSiteConfig
 	content: Content
 	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 
 export function getImageId({
-	appOrSiteConfig,
+	siteOrProjectOrAppConfig,
 	content,
 	siteOrNull,
 }: GetImageUrlParams): ImageId|undefined {
 	// 1. Try to find an image within the content isself
 	const imageId = findImageIdInContent({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		content,
 	});
 	if (imageId) {
@@ -29,9 +29,9 @@ export function getImageId({
 	}
 	// log.info(`getImageId: Didn't find any image on content ${content._path}`);
 
-	// 2. Fallback to appOrSiteConfig image
-	if (appOrSiteConfig.seoImage) {
-		return ImageIdBuilder.from(appOrSiteConfig.seoImage);
+	// 2. Fallback to siteOrProjectOrAppConfig image
+	if (siteOrProjectOrAppConfig.seoImage) {
+		return ImageIdBuilder.from(siteOrProjectOrAppConfig.seoImage);
 	}
 	// log.info(`getImageId: Not even an override image on content ${content._path}`);
 
@@ -46,7 +46,7 @@ export function getImageId({
 
 	// log.info(`getImageId ${content._path} !== ${site._path}`);
 	return findImageIdInContent({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		content: siteOrNull,
 	});
 }

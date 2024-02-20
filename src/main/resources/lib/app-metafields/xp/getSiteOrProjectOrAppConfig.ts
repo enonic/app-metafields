@@ -4,8 +4,11 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 import {isSet} from '@enonic/js-utils/value/isSet';
 import {isString} from '@enonic/js-utils/value/isString';
-// import {toStr} from '@enonic/js-utils/value/toStr';
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
+
+import {DEBUG} from '/lib/app-metafields/constants';
+import {getProjectConfig} from '/lib/app-metafields/project/getProjectConfig';
 import {trimQuotes} from '/lib/app-metafields/string/trimQuotes';
 import {getSiteConfigFromSite} from '/lib/app-metafields/xp/getSiteConfigFromSite';
 
@@ -18,12 +21,12 @@ interface GetTheConfigParams {
 
 
 // The configuration needs to be fetched first from site config (using current content if site context is not available - like for widgets), and lastly we'll check for any config files and use these to overwrite.
-export const getAppOrSiteConfig = ({
+export const getSiteOrProjectOrAppConfig = ({
 	applicationConfig,
 	applicationKey,
 	siteOrNull,
 }: GetTheConfigParams): MetafieldsSiteConfig => {
-	let appOrSiteConfig: MetafieldsSiteConfig = {}
+	let siteOrProjectOrAppConfig: MetafieldsSiteConfig = {}
 
 	if (applicationConfig) {
 		// log.info('applicationConfig:%s', toStr(applicationConfig));
@@ -36,8 +39,16 @@ export const getAppOrSiteConfig = ({
 				if (isString(value)) {
 					value = trimQuotes(value);
 				}
-				(appOrSiteConfig as Record<typeof prop, typeof value>)[prop] = value;
+				(siteOrProjectOrAppConfig as Record<typeof prop, typeof value>)[prop] = value;
 			}
+		}
+	}
+
+	const projectConfig = getProjectConfig();
+	for (let key in projectConfig) {
+		const value = projectConfig[key as keyof typeof projectConfig];
+		if (isSet(value)) {
+			(siteOrProjectOrAppConfig as Record<typeof key, typeof value>)[key] = value;
 		}
 	}
 
@@ -50,18 +61,20 @@ export const getAppOrSiteConfig = ({
 	}
 	// log.info('siteConfig:%s', toStr(siteConfig));
 
+
 	// NOTE: app-metafields can be added directly to a project, outside of a site
 	if (!siteConfig) {
-		return appOrSiteConfig;
+		DEBUG && log.debug('getSiteOrProjectOrAppConfig siteOrProjectOrAppConfig1:%s', toStr(siteOrProjectOrAppConfig));
+		return siteOrProjectOrAppConfig;
 	}
 
 	for (let key in siteConfig) {
 		const value = siteConfig[key as keyof typeof siteConfig];
 		if (isSet(value)) {
-			(appOrSiteConfig as Record<typeof key, typeof value>)[key] = value;
+			(siteOrProjectOrAppConfig as Record<typeof key, typeof value>)[key] = value;
 		}
 	}
 
-	// log.info('config:%s', toStr(config));
-	return appOrSiteConfig;
+	DEBUG && log.debug('getSiteOrProjectOrAppConfig siteOrProjectOrAppConfig2:%s', toStr(siteOrProjectOrAppConfig));
+	return siteOrProjectOrAppConfig;
 };

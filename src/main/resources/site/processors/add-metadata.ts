@@ -6,7 +6,7 @@ import {
 	getContent as getCurrentContent,
 	getSite as libPortalGetSite,
 } from '/lib/xp/portal';
-import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
+import {getSiteOrProjectOrAppConfig} from '/lib/app-metafields/xp/getSiteOrProjectOrAppConfig';
 import {getFixedHtmlAttrsAsString} from '/lib/app-metafields/processor/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/app-metafields/processor/getMetaData'
 import {getTitleHtml} from '/lib/app-metafields/processor/getTitleHtml';
@@ -19,7 +19,7 @@ const XML_MEDIA_TYPES = ['application/xhtml+xml', 'application/xml', 'text/xml']
 export const responseProcessor = (req: Request, res: Response) => {
 	const site = libPortalGetSite();
 	const content = getCurrentContent();
-	const appOrSiteConfig = getAppOrSiteConfig({
+	const siteOrProjectOrAppConfig = getSiteOrProjectOrAppConfig({
 		applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 		applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 		siteOrNull: site
@@ -38,7 +38,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 		// Svg are text/html can have a <title>
 		if (titleHasIndex && htmlIndex > -1) {
 			const titleHtml = getTitleHtml({
-				appOrSiteConfig,
+				siteOrProjectOrAppConfig,
 				content,
 				siteOrNull: site,
 			}) || "";
@@ -63,7 +63,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 	if ( isResponseContentTypeHtml || isResponseContentTypeXml ) {
 		const selfClosingTags = isResponseContentTypeXml;
 		const metadata: string = getMetaData({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
 			returnType: 'html',
 			selfClosingTags,
@@ -74,7 +74,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 
 	if ( !titleAdded ) {
 		const titleHtml = getTitleHtml({
-			appOrSiteConfig,
+			siteOrProjectOrAppConfig,
 			content,
 			siteOrNull: site,
 		}) || "";

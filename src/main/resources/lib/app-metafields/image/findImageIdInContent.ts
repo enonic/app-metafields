@@ -4,34 +4,40 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {
 	getOutboundDependencies,
 	query as queryContent
 } from '/lib/xp/content';
 import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
-import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
+import {APP_NAME_PATH, DEBUG, MIXIN_PATH} from '/lib/app-metafields/constants';
 import {findValueInObject} from '/lib/app-metafields/object/findValueInObject';
 import {isString} from '/lib/app-metafields/string/isString';
 import {
-	CommaSeparatedStringBuilder,
 	ImageIdBuilder,
 } from '/lib/app-metafields/types';
 
 
 export function findImageIdInContent({
-	appOrSiteConfig,
+	siteOrProjectOrAppConfig,
 	content,
 }: {
-	appOrSiteConfig: MetafieldsSiteConfig
+	siteOrProjectOrAppConfig: MetafieldsSiteConfig
 	content: Content
 }): ImageId|undefined {
+	DEBUG && log.debug('findImageIdInContent content: %s', content);
 	if(content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoImage) {
 		return ImageIdBuilder.from(content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as string);
 	}
 
-	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsImages || '');
+	const userDefinedPaths = siteOrProjectOrAppConfig.pathsImages || '';
+	DEBUG && log.debug('findImageIdInContent userDefinedPaths: %s', userDefinedPaths);
+
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
-	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
+	DEBUG && log.debug('findImageIdInContent userDefinedArray: %s', toStr(userDefinedArray));
+
+	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, siteOrProjectOrAppConfig.fullPath) : null;
+	DEBUG && log.debug('findImageIdInContent userDefinedValue: %s', userDefinedValue);
 
 	const firstItem = forceArray(userDefinedValue)[0];
 

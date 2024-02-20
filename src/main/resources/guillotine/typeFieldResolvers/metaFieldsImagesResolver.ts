@@ -71,7 +71,7 @@ export const metaFieldsImagesResolver: Resolver<
 	}, () => {
 
 		const imageId = getImageId({
-			appOrSiteConfig: _appOrSiteConfig,
+			siteOrProjectOrAppConfig: _appOrSiteConfig,
 			content: _content,
 			siteOrNull: _siteOrNull,
 		});

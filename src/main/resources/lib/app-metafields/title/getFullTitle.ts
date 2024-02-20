@@ -3,29 +3,33 @@ import type {Site} from '/lib/xp/portal';
 import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
+import {toStr} from '@enonic/js-utils/value/toStr';
+import {DEBUG} from '/lib/app-metafields/constants';
 import {getAppendix} from '/lib/app-metafields/title/getAppendix';
 import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
 
 
 interface GetFullTitleParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	siteOrProjectOrAppConfig: MetafieldsSiteConfig
 	content: Content
 	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
 
 export function getFullTitle({
-	appOrSiteConfig,
+	siteOrProjectOrAppConfig,
 	content,
 	siteOrNull,
 }: GetFullTitleParams) {
+	DEBUG && log.debug('getFullTitle siteOrProjectOrAppConfig:%s content:%s siteOrNull:%s', toStr(siteOrProjectOrAppConfig), toStr(content), toStr(siteOrNull));
+
 	const isFrontpage = siteOrNull?._path === content._path;
 	const titleAppendix = getAppendix({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		isFrontpage,
 		siteOrNull,
 	});
 	const pageTitle = getPageTitle({
-		appOrSiteConfig,
+		siteOrProjectOrAppConfig,
 		content
 	});
 	return `${pageTitle}${titleAppendix}`;

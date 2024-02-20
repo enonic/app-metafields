@@ -1,6 +1,6 @@
 import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 import type {
-	getSite as ContentGetSite,
+	Content,
 	Site
 } from '/lib/xp/content';
 import type {
@@ -38,8 +38,10 @@ import {
 	GraphQLStringBuilder,
 } from '/lib/app-metafields/types';
 import {mockImage} from '../mocks/mockImage';
+import {mockLibXpContent} from '../mocks/mockLibXpContent';
 import {mockLibXpContext} from '../mocks/mockLibXpContext';
 import {mockLibXpNode} from '../mocks/mockLibXpNode';
+
 
 // @ts-ignore TS2339: Property 'log' does not exist on type 'typeof globalThis'.
 globalThis.log = {
@@ -182,19 +184,12 @@ const graphQL: GraphQL = {
 
 describe('guillotine extensions', () => {
 	beforeAll(() => {
-		jest.mock(
-			'/lib/xp/content',
-			() => ({
-				getSite: jest.fn<typeof ContentGetSite>().mockReturnValue(siteContent),
-				getOutboundDependencies: jest.fn().mockReturnValue([]),
-				query: jest.fn().mockReturnValue({
-					count: 0,
-					hits: [],
-					total: 0,
-				})
-			}),
-			{virtual: true}
-		);
+		mockLibXpContent({
+			contents: {
+				'/': {} as Content<unknown>
+			},
+			siteContent
+		});
 	});
 
 	it("does it's thing", () => {

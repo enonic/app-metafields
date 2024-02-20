@@ -14,7 +14,7 @@ import {render} from '/lib/thymeleaf';
 import {queryForFirstSiteWithAppAndUrl} from '/admin/widgets/seo/queryForFirstSiteWithAppAndUrl';
 
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
-import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
+import {getSiteOrProjectOrAppConfig} from '/lib/app-metafields/xp/getSiteOrProjectOrAppConfig';
 import {getAppendix} from '/lib/app-metafields/title/getAppendix';
 import {getBlockRobots} from '/lib/app-metafields/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanonicalUrl';
@@ -66,25 +66,25 @@ export const get = (req: Request) => {
 			siteUrl: parts[1]
 		}); // Send the first /x/-part of the content's path.
 
-		const appOrSiteConfig = getAppOrSiteConfig({
+		const siteOrProjectOrAppConfig = getSiteOrProjectOrAppConfig({
 			applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
 			applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
 			siteOrNull
 		});
 
-		if (appOrSiteConfig) {
+		if (siteOrProjectOrAppConfig) {
 			const isFrontpage = siteOrNull?._path === content._path;
 			const pageTitle = getPageTitle({
-				appOrSiteConfig,
+				siteOrProjectOrAppConfig,
 				content,
 			});
 			const titleAppendix = getAppendix({
-				appOrSiteConfig,
+				siteOrProjectOrAppConfig,
 				isFrontpage,
 				siteOrNull,
 			});
 			let description = getMetaDescription({
-				appOrSiteConfig,
+				siteOrProjectOrAppConfig,
 				content,
 				siteOrNull
 			});
@@ -94,9 +94,9 @@ export const get = (req: Request) => {
 			const absoluteUrl = pageUrl({ path: content._path, type: "absolute" });
 
 			let ogUrl: string;
-			if (appOrSiteConfig.baseUrl) {
+			if (siteOrProjectOrAppConfig.baseUrl) {
 				ogUrl = prependBaseUrl({
-					baseUrl: appOrSiteConfig.baseUrl,
+					baseUrl: siteOrProjectOrAppConfig.baseUrl,
 					contentPath: content._path,
 					sitePath: siteOrNull?._path || ''
 				});
@@ -108,9 +108,9 @@ export const get = (req: Request) => {
 			let canonical = null;
 			const contentForCanonicalUrl = getContentForCanonicalUrl(content);
 			if (contentForCanonicalUrl) {
-				if (appOrSiteConfig.baseUrl) {
+				if (siteOrProjectOrAppConfig.baseUrl) {
 					canonical = prependBaseUrl({
-						baseUrl: appOrSiteConfig.baseUrl,
+						baseUrl: siteOrProjectOrAppConfig.baseUrl,
 						contentPath: contentForCanonicalUrl
 							? contentForCanonicalUrl._path
 							: content._path,
@@ -126,9 +126,9 @@ export const get = (req: Request) => {
 			}
 
 			const imageUrl = getImageUrl({
-				appOrSiteConfig,
-				defaultImg: appOrSiteConfig.seoImage,
-				defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled,
+				siteOrProjectOrAppConfig,
+				defaultImg: siteOrProjectOrAppConfig.seoImage,
+				defaultImgPrescaled: siteOrProjectOrAppConfig.seoImageIsPrescaled,
 				content,
 				siteOrNull,
 			});
@@ -140,7 +140,7 @@ export const get = (req: Request) => {
 					description: description,
 					image: imageUrl,
 					canonical,
-					blockRobots: (appOrSiteConfig.blockRobots || getBlockRobots(content))
+					blockRobots: (siteOrProjectOrAppConfig.blockRobots || getBlockRobots(content))
 				},
 				og: {
 					type: (isFrontpage ? 'website' : 'article'),
@@ -159,15 +159,15 @@ export const get = (req: Request) => {
 					}
 				},
 				twitter: {
-					active: (appOrSiteConfig.twitterUsername ? true : false),
+					active: (siteOrProjectOrAppConfig.twitterUsername ? true : false),
 					title: pageTitle,
 					description: description,
 					image: imageUrl,
-					site: appOrSiteConfig.twitterUsername || null
+					site: siteOrProjectOrAppConfig.twitterUsername || null
 				}
 			};
 
-		} // if appOrSiteConfig
+		} // if siteOrProjectOrAppConfig
 	} // if content
 
 	return {

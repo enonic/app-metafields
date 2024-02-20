@@ -3,7 +3,7 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 
 interface GetAppendixParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	siteOrProjectOrAppConfig: MetafieldsSiteConfig
 	isFrontpage?: boolean
 	siteOrNull: Site<MetafieldsSiteConfig>|null
 }
@@ -11,7 +11,7 @@ interface GetAppendixParams {
 
 // Concat site title? Trigger if set to true in settings, or if not set at all (default = true)
 export const getAppendix = ({
-	appOrSiteConfig,
+	siteOrProjectOrAppConfig,
 	isFrontpage,
 	siteOrNull,
 }: GetAppendixParams): string => {
@@ -19,10 +19,10 @@ export const getAppendix = ({
 		return '';
 	}
 
-	if (appOrSiteConfig.titleBehaviour || !appOrSiteConfig.hasOwnProperty("titleBehaviour")) {
-		const separator = appOrSiteConfig.titleSeparator || '-';
-		const titleRemoveOnFrontpage = appOrSiteConfig.hasOwnProperty("titleFrontpageBehaviour")
-			? appOrSiteConfig.titleFrontpageBehaviour
+	if (siteOrProjectOrAppConfig.titleBehaviour || !siteOrProjectOrAppConfig.hasOwnProperty("titleBehaviour")) {
+		const separator = siteOrProjectOrAppConfig.titleSeparator || '-';
+		const titleRemoveOnFrontpage = siteOrProjectOrAppConfig.hasOwnProperty("titleFrontpageBehaviour")
+			? siteOrProjectOrAppConfig.titleFrontpageBehaviour
 			: true; // Default true needs to be respected
 		if (!isFrontpage || !titleRemoveOnFrontpage) {
 			return ` ${separator} ${siteOrNull.displayName}`;
