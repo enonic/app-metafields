@@ -6,7 +6,6 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
 import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
 import {findStringValueInObject} from '/lib/app-metafields/object/findStringValueInObject';
-import {CommaSeparatedStringBuilder} from '/lib/app-metafields/types';
 
 
 interface GetMetaDescriptionParams {
@@ -21,7 +20,7 @@ export const getMetaDescription = ({
 	content,
 	siteOrNull,
 }: GetMetaDescriptionParams): string => {
-	const userDefinedPaths = CommaSeparatedStringBuilder.from(appOrSiteConfig.pathsDescriptions || '');
+	const userDefinedPaths = appOrSiteConfig.pathsDescriptions || '';
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
 	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
 
