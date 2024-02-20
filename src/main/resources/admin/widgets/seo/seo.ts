@@ -125,7 +125,7 @@ export const get = (req: Request) => {
 				}
 			}
 
-			const imageUrl = getImageUrl({
+			const imageUrl: string|null = getImageUrl({
 				appOrSiteConfig,
 				defaultImg: appOrSiteConfig.seoImage,
 				defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled,

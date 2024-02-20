@@ -24,6 +24,9 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 					description: {
 						type: graphQL.GraphQLString,
 					},
+					fullTitle: {
+						type: graphQL.nonNull(graphQL.GraphQLString),
+					},
 					locale: {
 						type: graphQL.GraphQLString,
 					},
