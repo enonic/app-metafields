@@ -6,11 +6,13 @@ import type {
 } from '/lib/app-metafields/types';
 
 
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {get as getContentByKey} from '/lib/xp/content';
 import {
 	attachmentUrl,
 	imageUrl
 } from '/lib/xp/portal';
+import {DEBUG} from '/lib/app-metafields/constants';
 import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInContent';
 
 
@@ -42,11 +44,16 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 	}>>({
 		key: imageOpts.id
 	});
+	DEBUG && log.debug('_imageUrlFromId imageContent:%s', toStr(imageContent));
+
+	// Application Config may reference a non-existing image
+	if (!imageContent) {
+		return null;
+	}
+
 	let mimeType = null;
-	if (imageContent) {
-		if (imageContent.data.media) {
-			mimeType = imageContent.attachments[imageContent.data.media.attachment].mimeType; // Get the actual mimeType
-		}
+	if (imageContent.data.media) {
+		mimeType = imageContent.attachments[imageContent.data.media.attachment].mimeType; // Get the actual mimeType
 	}
 	// Reset forced format on SVG to make them servable through portal.imageUrl().
 	if (!mimeType || mimeType === 'image/svg+xml') {
@@ -64,18 +71,22 @@ export const getImageUrl = ({
 	defaultImg,
 	defaultImgPrescaled,
 	siteOrNull,
-}: GetImageUrlParams): string|null|undefined => {
+}: GetImageUrlParams): string|null => {
+	DEBUG && log.debug('getImageUrl defaultImg:%s defaultImgPrescaled:%s', defaultImg, defaultImgPrescaled);
+
 	// Try to find an image in the content's image or images properties
-	const imageId = findImageIdInContent({
+	const imageId: ImageId|null = findImageIdInContent({
 		appOrSiteConfig,
 		content,
 	});
 
 	if (imageId || (defaultImg && !defaultImgPrescaled)) {
+		DEBUG && log.debug('getImageUrl imageId:%s defaultImg:%s', imageId, defaultImg);
 		return _imageUrlFromId(imageId || defaultImg)
 	}
 
 	if (defaultImg && defaultImgPrescaled) {
+		DEBUG && log.debug('getImageUrl defaultImg:%s defaultImgPrescaled:%s', defaultImg, defaultImgPrescaled);
 		// Serve pre-optimized image directly
 		return attachmentUrl({
 			id: defaultImg,
@@ -83,11 +94,11 @@ export const getImageUrl = ({
 		});
 	}
 
-	if (!siteOrNull) {
-		return undefined
+	if (!siteOrNull || content._id === siteOrNull._id) {
+		return null
 	}
 
-	const siteImageId = findImageIdInContent({
+	const siteImageId: ImageId|null = findImageIdInContent({
 		appOrSiteConfig,
 		content: siteOrNull,
 	});
@@ -95,5 +106,5 @@ export const getImageUrl = ({
 		return _imageUrlFromId(siteImageId);
 	}
 
-	return undefined;
+	return null;
 };

@@ -26,6 +26,7 @@ import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanoni
 import {getLang} from '/lib/app-metafields/getLang';
 import {getMetaDescription} from '/lib/app-metafields/getMetaDescription';
 import {getFullTitle} from '/lib/app-metafields/title/getFullTitle';
+import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
 
 
 export const contentMetaFieldsResolver: Resolver<
@@ -100,12 +101,17 @@ export const contentMetaFieldsResolver: Resolver<
 		});
 		DEBUG && log.debug('contentMetaFieldsResolver description:%s', description);
 
-		const title = getFullTitle({
+		const pageTitle = getPageTitle({
+			appOrSiteConfig,
+			content
+		});
+
+		const fullTitle = getFullTitle({
 			appOrSiteConfig,
 			content,
 			siteOrNull
 		});
-		DEBUG && log.debug('contentMetaFieldsResolver title:%s', title);
+		DEBUG && log.debug('contentMetaFieldsResolver fullTitle:%s', fullTitle);
 
 		const isFrontpage = siteOrNull?._path === _path;
 
@@ -148,6 +154,7 @@ export const contentMetaFieldsResolver: Resolver<
 			_siteOrNull: siteOrNull,
 			canonical,
 			description,
+			fullTitle,
 			locale: getLang({
 				content,
 				siteOrNull
@@ -162,7 +169,7 @@ export const contentMetaFieldsResolver: Resolver<
 				index: !blockRobots,
 			},
 			siteName: siteOrNull?.displayName,
-			title,
+			title: pageTitle,
 			twitter: {
 				hideImages: appOrSiteConfig.removeTwitterImage,
 				site: appOrSiteConfig.twitterUsername,

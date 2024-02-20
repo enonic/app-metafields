@@ -81,9 +81,9 @@ export const metaFieldsImagesResolver: Resolver<
 				return imageContent;
 			} else {
 				if (_siteOrNull) {
-					log.error(`content with path:${_content._path} or site with path: ${_siteOrNull?._path} references a non-existing image with key:${imageId}`);
+					log.error(`content with path:${_content._path} or site with path: ${_siteOrNull?._path} or application config references a non-existing image with key:${imageId}`);
 				} else {
-					log.error(`content with path:${_content._path} references a non-existing image with key:${imageId}`);
+					log.error(`content with path:${_content._path} or application config references a non-existing image with key:${imageId}`);
 				}
 			}
 		}

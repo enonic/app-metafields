@@ -130,7 +130,7 @@ describe('getImageUrl', () => {
 		});
 	}); // beforeAll
 
-	it('should return undefined when no image found', () => {
+	it('should return null when no image found', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
 				appOrSiteConfig: metaFieldsSiteConfig,
@@ -139,7 +139,7 @@ describe('getImageUrl', () => {
 					type: 'base:folder',
 				}),
 				siteOrNull: siteContent
-			})).toBeUndefined();
+			})).toBeNull();
 		}); // import
 	}); // it
 

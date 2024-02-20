@@ -14,6 +14,7 @@ export const enum GraphQLTypeName {
 export interface MetaFields {
 	canonical?: string
 	description?: string
+	fullTitle: string
 	image?: MediaImage|null
 	locale?: string
 	openGraph?: {

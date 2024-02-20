@@ -131,6 +131,7 @@ const folderMetaFields: MetaFields = {
 	canonical: null,
 	description: 'seoDescription',
 	// image: imageContent,
+	fullTitle: 'folderContentDisplayName - siteContentDisplayName',
 	locale: 'en_US',
 	openGraph: {
 		hideImages: true,
@@ -142,7 +143,7 @@ const folderMetaFields: MetaFields = {
 		index: false
 	},
 	siteName: 'siteContentDisplayName',
-	title: 'folderContentDisplayName - siteContentDisplayName',
+	title: 'folderContentDisplayName',
 	twitter: {
 		hideImages: true,
 		site: '@twitterUsername',
@@ -218,6 +219,7 @@ describe('guillotine extensions', () => {
 						fields: {
 							canonical: {type: 'string'},
 							description: {type: "string"},
+							fullTitle: {type: "string"},
 							image: {
 								type: imageContent
 							},

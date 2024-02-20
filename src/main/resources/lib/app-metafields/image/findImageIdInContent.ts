@@ -4,12 +4,13 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {
 	getOutboundDependencies,
 	query as queryContent
 } from '/lib/xp/content';
 import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreCommaStringToArray';
-import {APP_NAME_PATH, MIXIN_PATH} from '/lib/app-metafields/constants';
+import {APP_NAME_PATH, DEBUG, MIXIN_PATH} from '/lib/app-metafields/constants';
 import {findValueInObject} from '/lib/app-metafields/object/findValueInObject';
 import {isString} from '/lib/app-metafields/string/isString';
 import {ImageIdBuilder} from '/lib/app-metafields/types';
@@ -21,14 +22,21 @@ export function findImageIdInContent({
 }: {
 	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
-}): ImageId|undefined {
+}): ImageId|null {
+	DEBUG && log.debug('findImageIdInContent content: %s', toStr(content));
+
 	if(content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoImage) {
 		return ImageIdBuilder.from(content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as string);
 	}
 
 	const userDefinedPaths = appOrSiteConfig.pathsImages || '';
+	DEBUG && log.debug('findImageIdInContent userDefinedPaths: %s', userDefinedPaths);
+
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
+	DEBUG && log.debug('findImageIdInContent userDefinedArray: %s', toStr(userDefinedArray));
+
 	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
+	DEBUG && log.debug('findImageIdInContent userDefinedValue: %s', userDefinedValue);
 
 	const firstItem = forceArray(userDefinedValue)[0];
 
@@ -43,17 +51,17 @@ export function findImageIdInContent({
 	// On the site, using outboundDependencies is a bad idea since siteConfig
 	// from various apps may contains images
 	if (type === 'portal:site') {
-		// log.info(`findImageIdInContent: Didn't find any image on site ${content._path}`);
-		return undefined
+		DEBUG && log.debug("findImageIdInContent: Didn't find any image on site: %s", content._path);
+		return null
 	}
 
 	const outboundDependencies = getOutboundDependencies({
 		key: content._id
 	});
 	if (!outboundDependencies?.length) {
-		return undefined;
+		return null;
 	}
-	// log.info('findImageIdInContent outboundDependencies:%s', JSON.stringify(outboundDependencies, null, 4));
+	DEBUG && log.debug('findImageIdInContent outboundDependencies:%s', toStr(outboundDependencies));
 
 	const contentQueryParams = {
 		contentTypes: ['media:image'],
@@ -68,15 +76,15 @@ export function findImageIdInContent({
 			}
 		},
 	};
-	// log.info('findImageIdInContent contentQueryParams:%s', JSON.stringify(contentQueryParams, null, 4));
+	DEBUG && log.debug('findImageIdInContent contentQueryParams:%s', toStr(contentQueryParams));
 
 	const contentQueryRes = queryContent(contentQueryParams);
-	// log.info('findImageIdInContent contentQueryRes:%s', JSON.stringify(contentQueryRes, null, 4));
+	DEBUG && log.debug('findImageIdInContent contentQueryRes:%s', toStr(contentQueryRes));
 
 	const {hits} = contentQueryRes;
 	if (hits.length) {
 		return ImageIdBuilder.from(hits[0]._id);
 	}
 
-	return undefined;
+	return null;
 }
