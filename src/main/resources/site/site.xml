@@ -17,7 +17,7 @@
 					<help-text>Override the vhost domain. Used in canonical. Example: "https://enonic.com"</help-text>
 					<occurrences minimum="0" maximum="1"/>
 					<config>
-						<regexp>^https:\/\/.+$</regexp>
+						<regexp>^https?:\/\/.+$</regexp>
 					</config>
 				</input>
 			</items>
