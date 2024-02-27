@@ -1,18 +1,24 @@
+import type {
+	BaseFolderContent,
+	GraphQL,
+	GraphQLBoolean,
+	GraphQLDate,
+	GraphQLDateTime,
+	GraphQLFloat,
+	GraphQLID,
+	GraphQLInt,
+	GraphQLJson,
+	GraphQLLocalDateTime,
+	GraphQLLocalTime,
+	GraphQLString,
+} from '@enonic-types/guillotine';
 import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 import type {
 	getSite as ContentGetSite,
 	Site
 } from '/lib/xp/content';
-import type {
-	getSiteConfig
-} from '/lib/xp/portal';
-import type {
-	GraphQL,
-	MetaFields,
-} from '/lib/app-metafields/types/guillotine';
-import type {
-	BaseFolder,
-} from '/lib/app-metafields/types'
+import type {getSiteConfig} from '/lib/xp/portal';
+import type {MetafieldsResult} from '/guillotine/guillotine.d';
 
 
 import {
@@ -22,21 +28,6 @@ import {
 	jest,
 	test as it,
 } from '@jest/globals';
-import {
-	GraphQLBooleanBuilder,
-	GraphQLContentBuilder,
-	GraphQLDateBuilder,
-	GraphQLDateTimeBuilder,
-	GraphQLFloatBuilder,
-	GraphQLIDBuilder,
-	GraphQLIntBuilder,
-	GraphQLJsonBuilder,
-	GraphQLLocalDateTimeBuilder,
-	GraphQLLocalTimeBuilder,
-	GraphQLMediaImageBuilder,
-	GraphQLMetaFieldsBuilder,
-	GraphQLStringBuilder,
-} from '/lib/app-metafields/types';
 import {mockImage} from '../mocks/mockImage';
 import {mockLibXpContext} from '../mocks/mockLibXpContext';
 import {mockLibXpNode} from '../mocks/mockLibXpNode';
@@ -91,7 +82,7 @@ const siteContent: Site<MetafieldsSiteConfig> = {
 	x: {},
 }
 
-const folderContent: BaseFolder = {
+const folderContent: BaseFolderContent = {
 	_id: 'folderContentId',
 	_name: 'folderContentName',
 	_path: '/folderContentPath',
@@ -127,7 +118,7 @@ jest.mock(
 	{virtual: true}
 );
 
-const folderMetaFields: MetaFields = {
+const metafieldsResult: MetafieldsResult = {
 	canonical: null,
 	description: 'seoDescription',
 	// image: imageContent,
@@ -154,28 +145,28 @@ const folderMetaFields: MetaFields = {
 	url: '/folderContentPath'
 };
 
-const graphQLContent = GraphQLContentBuilder.from(siteContent);
+const graphQLContent = siteContent as Site<MetafieldsSiteConfig>;
 
-const graphQL: GraphQL = {
-	GraphQLBoolean: GraphQLBooleanBuilder.from(true),
-	GraphQLInt: GraphQLIntBuilder.from(1),
-	GraphQLString: GraphQLStringBuilder.from('string'),
-	GraphQLID: GraphQLIDBuilder.from('id'),
-	GraphQLFloat: GraphQLFloatBuilder.from(1.1),
-	Json: GraphQLJsonBuilder.from('{"json": "value"}'),
-	DateTime: GraphQLDateTimeBuilder.from('2021-01-01T00:00:00Z'),
-	Date: GraphQLDateBuilder.from('2021-01-01'),
-	LocalTime: GraphQLLocalTimeBuilder.from('00:00:00'),
-	LocalDateTime: GraphQLLocalDateTimeBuilder.from('2021-01-01T00:00:00'),
+const graphQL: Partial<GraphQL> = {
+	GraphQLBoolean: true as GraphQLBoolean,
+	GraphQLInt: 1 as GraphQLInt,
+	GraphQLString: 'string' as GraphQLString,
+	GraphQLID: 'id' as GraphQLID,
+	GraphQLFloat: 1.1 as GraphQLFloat,
+	Json: '{"json": "value"}' as GraphQLJson,
+	DateTime: '2021-01-01T00:00:00Z' as GraphQLDateTime,
+	Date: '2021-01-01' as GraphQLDate,
+	LocalTime: '00:00:00' as GraphQLLocalTime,
+	LocalDateTime: '2021-01-01T00:00:00' as GraphQLLocalDateTime,
 	nonNull: (type) => type,
 	list: (type) => [type],
 	reference: (typeName) => {
 		// console.debug('reference typeName', typeName);
 		if (typeName === 'media_Image') {
-			return GraphQLMediaImageBuilder.from(imageContent);
+			return imageContent;
 		}
 		if (typeName === 'MetaFields') {
-			return GraphQLMetaFieldsBuilder.from(folderMetaFields);
+			return metafieldsResult;
 		}
 		return graphQLContent;
 	},
@@ -200,6 +191,7 @@ describe('guillotine extensions', () => {
 
 	it("does it's thing", () => {
 		import('/guillotine/guillotine').then(({extensions}) => {
+			// @ts-expect-error Project types doesn't match @enonic-types/guillotine
 			const res = extensions(graphQL);
 			expect(JSON.parse(JSON.stringify(res))).toEqual({
 				creationCallbacks: {
@@ -251,6 +243,7 @@ describe('guillotine extensions', () => {
 			const params = {
 				addFields: () => null
 			}
+			// @ts-expect-error Project types doesn't match @enonic-types/guillotine
 			expect(contentFunction(params)).toBeUndefined();
 			expect(contentMetaFieldsResolver({
 				args: {},
@@ -263,7 +256,7 @@ describe('guillotine extensions', () => {
 				_appOrSiteConfig: metaFieldsSiteConfig,
 				_content: folderContent,
 				_siteOrNull: siteContent,
-				...folderMetaFields
+				...metafieldsResult
 			});
 			// expect(metaFieldsImagesResolver({}));
 		}); // import

@@ -1,15 +1,24 @@
-// import type {Guillotine} from '@enonic-types/guillotine';
-// import type {MetaFieldFields} from '/guillotine/guillotine.d';
-
 import type {
-	Extensions,
 	GraphQL,
-} from '/lib/app-metafields/types/guillotine';
+	Extensions,
+} from '@enonic-types/guillotine';
 
 
-import {GraphQLFieldName, GraphQLTypeName} from '/lib/app-metafields/types/guillotine';
+import {ObjectTypeName} from '@enonic-types/guillotine';
 import {contentMetaFieldsResolver} from '/guillotine/typeFieldResolvers/contentMetaFieldsResolver';
 import {metaFieldsImagesResolver} from '/guillotine/typeFieldResolvers/metaFieldsImagesResolver';
+
+
+// In type names first letter should be uppercase
+const enum GraphQLTypeName {
+	METAFIELDS = 'MetaFields',
+}
+
+// In fields names first letter should be lowercase
+const enum GraphQLFieldName {
+	IMAGE = 'image',
+	METAFIELDS = 'metaFields',
+}
 
 
 export const extensions = (graphQL: GraphQL): Extensions => {
@@ -17,7 +26,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 		types: {
 			[GraphQLTypeName.METAFIELDS]: {
 				description: 'Meta fields for a content',
-				fields: /*<MetaFieldFields>*/{
+				fields: {
 					canonical: {
 						type: graphQL.GraphQLString,
 					},
@@ -31,7 +40,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 						type: graphQL.GraphQLString,
 					},
 					image: {
-						type: graphQL.reference(GraphQLTypeName.MEDIA_IMAGE),
+						type: graphQL.reference(ObjectTypeName.media_Image),
 					},
 					openGraph: {
 						type: graphQL.Json,
@@ -58,7 +67,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 			}
 		},
 		creationCallbacks: {
-			[GraphQLTypeName.CONTENT]: (params) => {
+			[ObjectTypeName.Content]: (params) => {
 				params.addFields({
 					[GraphQLFieldName.METAFIELDS]: {
 						type: graphQL.reference(GraphQLTypeName.METAFIELDS)
@@ -67,7 +76,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 			}
 		},
 		resolvers: {
-			[GraphQLTypeName.CONTENT]: {
+			[ObjectTypeName.Content]: {
 				[GraphQLFieldName.METAFIELDS]: contentMetaFieldsResolver,
 			},
 			[GraphQLTypeName.METAFIELDS]: {

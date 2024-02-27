@@ -4,7 +4,6 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 
 import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInContent';
-import {ImageIdBuilder} from '/lib/app-metafields/types';
 
 
 interface GetImageUrlParams {
@@ -30,8 +29,8 @@ export function getImageId({
 	// log.info(`getImageId: Didn't find any image on content ${content._path}`);
 
 	// 2. Fallback to appOrSiteConfig image
-	if (appOrSiteConfig.seoImage) {
-		return ImageIdBuilder.from(appOrSiteConfig.seoImage);
+	if (appOrSiteConfig.seoImage) { // Empty string is falsy 👍
+		return appOrSiteConfig.seoImage as ImageId;
 	}
 	// log.info(`getImageId: Not even an override image on content ${content._path}`);
 

@@ -1,8 +1,6 @@
 export type {
-	BaseFolder,
 	CommaSeparatedString,
 	ImageId,
-	MediaImage,
 } from '/lib/app-metafields/types/Content';
 
 

@@ -13,7 +13,6 @@ import {oneOrMoreCommaStringToArray} from '/lib/app-metafields/string/oneOrMoreC
 import {APP_NAME_PATH, DEBUG, MIXIN_PATH} from '/lib/app-metafields/constants';
 import {findValueInObject} from '/lib/app-metafields/object/findValueInObject';
 import {isString} from '/lib/app-metafields/string/isString';
-import {ImageIdBuilder} from '/lib/app-metafields/types';
 
 
 export function findImageIdInContent({
@@ -26,7 +25,7 @@ export function findImageIdInContent({
 	DEBUG && log.debug('findImageIdInContent content: %s', toStr(content));
 
 	if(content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoImage) {
-		return ImageIdBuilder.from(content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as string);
+		return content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as ImageId;
 	}
 
 	const userDefinedPaths = appOrSiteConfig.pathsImages || '';
@@ -43,7 +42,7 @@ export function findImageIdInContent({
 	const hopefullyString = firstItem?.image || firstItem;
 
 	if (isString(hopefullyString)) {
-		return ImageIdBuilder.from(hopefullyString);
+		return hopefullyString as ImageId;
 	}
 
 	const {type} = content;
@@ -83,7 +82,7 @@ export function findImageIdInContent({
 
 	const {hits} = contentQueryRes;
 	if (hits.length) {
-		return ImageIdBuilder.from(hits[0]._id);
+		return hits[0]._id as ImageId;
 	}
 
 	return null;

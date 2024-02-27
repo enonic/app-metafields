@@ -1,47 +1,44 @@
 import type {
-	// GraphQLBoolean,
-	// GraphQLDate,
-	// GraphQLDateTime,
-	// GraphQLFloat,
-	// GraphQLID,
-	// GraphQLInt,
 	GraphQLJson,
-	// GraphQLLocalDateTime,
-	// GraphQLLocalTime,
 	GraphQLReference,
 	GraphQLString,
-	GraphQLTypeToGuillotineFields,
-	Guillotine,
+	MediaImageContent,
 } from '@enonic-types/guillotine';
+import type {Content, Site} from '@enonic-types/lib-content'
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
-export declare interface GraphQLMetafields {
-	canonical?: GraphQLString
-	description?: GraphQLString
-	locale?: GraphQLString
-	//image?: GraphQLReference<GraphQLMediaImage>
-	openGraph?: GraphQLJson
-	robots?: GraphQLJson
-	siteName?: GraphQLString // Can be null
-	title: GraphQLString
-	twitter?: GraphQLJson
-	verification?: GraphQLJson
-	url: GraphQLString
+export declare interface MetafieldsResult {
+	canonical?: string
+	description?: string
+	fullTitle: string
+	locale?: string
+	image?: MediaImageContent|null
+	openGraph?: {
+		hideImages?: boolean
+		hideUrl?: boolean
+		type?: 'website' | 'article'
+	}
+	robots?: {
+		follow?: boolean
+		index?: boolean
+	}
+	siteName?: string // Can be null
+	title: string
+	twitter?: {
+		hideImages?: boolean
+		site?: string
+	}
+	verification?: {
+		google?: string
+	}
+	url: string
 }
 
-export declare type MetaFieldFields = GraphQLTypeToGuillotineFields<GraphQLMetafields>
+export declare type ContentMetaFieldsResolverReturnType = Omit<MetafieldsResult,'image'> & {
+	_appOrSiteConfig: MetafieldsSiteConfig,
+	_content: Content,
+	_siteOrNull: Site<MetafieldsSiteConfig>|null,
+}
 
-
-declare global {
-	interface GraphQLTypesMap {
-		MetaFields: GraphQLMetafields
-	}
-	interface GraphQLTypeFieldsMap {
-		Content: {
-			metaFields: GraphQLMetafields
-		}
-		MetaFields: {
-			image: unknown // GraphQLMediaImage
-		}
-	}
-} // global
+export declare type MetaFieldsImagesResolverReturnType = MediaImageContent|null

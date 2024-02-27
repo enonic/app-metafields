@@ -1,10 +1,6 @@
-// import type {
-// 	// GraphQLTypeToResolverResult,
-// 	Resolver,
-// } from '@enonic-types/guillotine';
+import type {Resolver} from '@enonic-types/guillotine';
 import type {Content} from '/lib/xp/content';
-import type {Resolver} from '/lib/app-metafields/types/guillotine';
-// import type {GraphQLMetafields} from '/guillotine/guillotine.d';
+import type {ContentMetaFieldsResolverReturnType} from '/guillotine/guillotine.d';
 
 
 import {toStr} from '@enonic/js-utils/value/toStr';
@@ -31,7 +27,8 @@ import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
 
 export const contentMetaFieldsResolver: Resolver<
 	{},
-	Content
+	Content,
+	ContentMetaFieldsResolverReturnType
 > = (env) => {
 	DEBUG && log.debug('contentMetaFieldsResolver env:%s', toStr(env));
 
@@ -147,8 +144,7 @@ export const contentMetaFieldsResolver: Resolver<
 			});
 		DEBUG && log.debug('contentMetaFieldsResolver url:%s', url);
 
-		// return <Partial<GraphQLTypeToResolverResult<GraphQLMetafields>>>{
-		return {
+		return <ContentMetaFieldsResolverReturnType>{
 			_appOrSiteConfig: appOrSiteConfig,
 			_content: content,
 			_siteOrNull: siteOrNull,
