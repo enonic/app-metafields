@@ -1,10 +1,8 @@
-import type {Content, Site} from '/lib/xp/content';
-
+import type {Resolver} from '@enonic-types/guillotine';
 import type {
-	// Content,
-	Resolver
-} from '/lib/app-metafields/types/guillotine';
-import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
+	ContentMetaFieldsResolverReturnType,
+	MetaFieldsImagesResolverReturnType
+} from '/guillotine/guillotine.d';
 
 
 import {toStr} from '@enonic/js-utils/value/toStr';
@@ -20,11 +18,8 @@ import {getImageId} from '/lib/app-metafields/image/getImageId';
 
 export const metaFieldsImagesResolver: Resolver<
 	{}, // args
-	{ // source
-		_appOrSiteConfig: MetafieldsSiteConfig
-		_content: Content
-		_siteOrNull: Site<MetafieldsSiteConfig>|null
-	}
+	ContentMetaFieldsResolverReturnType,
+	MetaFieldsImagesResolverReturnType
 > = (env) => {
 	DEBUG && log.debug('metaFieldsImagesResolver env:%s', toStr(env));
 
@@ -78,7 +73,7 @@ export const metaFieldsImagesResolver: Resolver<
 		if (imageId) {
 			const imageContent = getContentByKey({ key: imageId });
 			if (imageContent) {
-				return imageContent;
+				return imageContent as MetaFieldsImagesResolverReturnType;
 			} else {
 				if (_siteOrNull) {
 					log.error(`content with path:${_content._path} or site with path: ${_siteOrNull?._path} or application config references a non-existing image with key:${imageId}`);
@@ -88,6 +83,6 @@ export const metaFieldsImagesResolver: Resolver<
 			}
 		}
 
-		return null;
+		return null as MetaFieldsImagesResolverReturnType;
 	});
 }

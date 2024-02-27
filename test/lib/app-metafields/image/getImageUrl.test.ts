@@ -1,10 +1,11 @@
+import type {MediaImageContent} from '@enonic-types/guillotine'
 import type {
 	get as GetContentByKey,
 	Site
 } from '/lib/xp/content';
 import type {
-	MetafieldsSiteConfig,
-	MediaImage
+	ImageId,
+	MetafieldsSiteConfig
 } from '/lib/app-metafields/types';
 
 
@@ -99,7 +100,7 @@ describe('getImageUrl', () => {
 		jest.mock(
 			'/lib/xp/content',
 			() => ({
-				get: jest.fn<typeof GetContentByKey<MediaImage>>().mockImplementation(({key}) => {
+				get: jest.fn<typeof GetContentByKey<MediaImageContent>>().mockImplementation(({key}) => {
 					// console.debug('GetContentByKey', key);
 					if (key === 'oneImageContentId') {
 						return imageContent1;
@@ -151,7 +152,7 @@ describe('getImageUrl', () => {
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
 				}),
-				defaultImg: 'threeImageContentId',
+				defaultImg: 'threeImageContentId' as ImageId,
 				defaultImgPrescaled: true,
 				siteOrNull: siteContent
 			})).toBe('threeImageContentIdabsoluteAttachmentUrl');

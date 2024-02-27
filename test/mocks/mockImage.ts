@@ -1,4 +1,4 @@
-import type {MediaImage} from '/lib/app-metafields/types';
+import type {MediaImageContent} from '@enonic-types/guillotine';
 
 
 import {mockContent} from './mockContent';
@@ -33,5 +33,5 @@ export function mockImage({
 		},
 		prefix: `${prefix}Image`,
 		type: 'media:image'
-	}) as MediaImage;
+	}) as MediaImageContent;
 }
