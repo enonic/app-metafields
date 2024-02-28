@@ -21,6 +21,6 @@
   "scripts": {
     "build": "npx tsup -d build/resources/main",
     "check": "npx tsc --noEmit",
-    "test": "jest --no-cache --coverage"
+    "test": "npx jest --no-cache --coverage"
   }
 }
