@@ -27,4 +27,7 @@ export default {
 			}
 		]
 	},
+	transformIgnorePatterns: [
+		'/node_modules/(?!(@enonic-types/guillotine)/)'
+	],
 }
