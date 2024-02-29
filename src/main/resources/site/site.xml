@@ -13,8 +13,8 @@
 					<occurrences minimum="0" maximum="1"/>
 				</input>
 				<input name="baseUrl" type="TextLine">
-					<label>baseUrl</label>
-					<help-text>Override the vhost domain. Used in canonical. Example: "https://enonic.com"</help-text>
+					<label>Base URL</label>
+					<help-text>Override the vhost domain. Used in og:url and canonical. Example: "https://enonic.com"</help-text>
 					<occurrences minimum="0" maximum="1"/>
 					<config>
 						<regexp>^https?:\/\/.+$</regexp>
