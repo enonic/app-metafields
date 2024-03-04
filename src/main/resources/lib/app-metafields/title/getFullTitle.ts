@@ -8,24 +8,24 @@ import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
 
 
 interface GetFullTitleParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content: Content
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	site: Site<MetafieldsSiteConfig>
 }
 
 export function getFullTitle({
-	appOrSiteConfig,
+	mergedConfig,
 	content,
-	siteOrNull,
+	site,
 }: GetFullTitleParams) {
-	const isFrontpage = siteOrNull?._path === content._path;
+	const isFrontpage = site._path === content._path;
 	const titleAppendix = getAppendix({
-		appOrSiteConfig,
+		mergedConfig,
 		isFrontpage,
-		siteOrNull,
+		site,
 	});
 	const pageTitle = getPageTitle({
-		appOrSiteConfig,
+		mergedConfig,
 		content
 	});
 	return `${pageTitle}${titleAppendix}`;

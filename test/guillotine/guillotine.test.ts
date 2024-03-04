@@ -1,5 +1,6 @@
 import type {
 	BaseFolderContent,
+	CreateDataFetcherResultParams,
 	GraphQL,
 	GraphQLBoolean,
 	GraphQLDate,
@@ -22,13 +23,14 @@ import type {MetafieldsResult} from '/guillotine/guillotine.d';
 
 
 import {
-	beforeAll,
+	// beforeAll,
 	describe,
 	expect,
 	jest,
 	test as it,
 } from '@jest/globals';
 import {mockImage} from '../mocks/mockImage';
+import {mockLibXpContent} from '../mocks/mockLibXpContent';
 import {mockLibXpContext} from '../mocks/mockLibXpContext';
 import {mockLibXpNode} from '../mocks/mockLibXpNode';
 
@@ -38,6 +40,11 @@ globalThis.log = {
 	warning: console.warn,
 	info: console.info,
 	debug: console.debug,
+}
+
+// @ts-ignore TS2339: Property '__' does not exist on type 'typeof globalThis'.
+globalThis.__ = {
+	toScriptValue: (value) => value
 }
 
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
@@ -103,6 +110,9 @@ const imageContent = mockImage({
 	prefix: 'image'
 });
 
+mockLibXpContent({
+	siteContent
+});
 mockLibXpContext();
 mockLibXpNode({
 	nodes: {
@@ -158,6 +168,10 @@ const graphQL: Partial<GraphQL> = {
 	Date: '2021-01-01' as GraphQLDate,
 	LocalTime: '00:00:00' as GraphQLLocalTime,
 	LocalDateTime: '2021-01-01T00:00:00' as GraphQLLocalDateTime,
+	createDataFetcherResult: ({data, localContext, parentLocalContext}) => ({
+		source: data as any,
+		localContext: {...parentLocalContext, ...localContext}
+	}),
 	nonNull: (type) => type,
 	list: (type) => [type],
 	reference: (typeName) => {
@@ -173,21 +187,21 @@ const graphQL: Partial<GraphQL> = {
 };
 
 describe('guillotine extensions', () => {
-	beforeAll(() => {
-		jest.mock(
-			'/lib/xp/content',
-			() => ({
-				getSite: jest.fn<typeof ContentGetSite>().mockReturnValue(siteContent),
-				getOutboundDependencies: jest.fn().mockReturnValue([]),
-				query: jest.fn().mockReturnValue({
-					count: 0,
-					hits: [],
-					total: 0,
-				})
-			}),
-			{virtual: true}
-		);
-	});
+	// beforeAll(() => {
+	// 	jest.mock(
+	// 		'/lib/xp/content',
+	// 		() => ({
+	// 			getSite: jest.fn<typeof ContentGetSite>().mockReturnValue(siteContent),
+	// 			getOutboundDependencies: jest.fn().mockReturnValue([]),
+	// 			query: jest.fn().mockReturnValue({
+	// 				count: 0,
+	// 				hits: [],
+	// 				total: 0,
+	// 			})
+	// 		}),
+	// 		{virtual: true}
+	// 	);
+	// });
 
 	it("does it's thing", () => {
 		import('/guillotine/guillotine').then(({extensions}) => {
@@ -253,10 +267,14 @@ describe('guillotine extensions', () => {
 				},
 				source: folderContent
 			})).toEqual({
-				_appOrSiteConfig: metaFieldsSiteConfig,
-				_content: folderContent,
-				_siteOrNull: siteContent,
-				...metafieldsResult
+				localContext: {
+					branch: 'master',
+					contentJson: JSON.stringify(folderContent),
+					mergedConfigJson: JSON.stringify(metaFieldsSiteConfig),
+					project: 'project',
+					siteJson: JSON.stringify(siteContent),
+				},
+				source: metafieldsResult,
 			});
 			// expect(metaFieldsImagesResolver({}));
 		}); // import

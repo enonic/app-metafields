@@ -9,20 +9,20 @@ import {findStringValueInObject} from '/lib/app-metafields/object/findStringValu
 
 
 interface GetMetaDescriptionParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content: Content
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	site: Site<MetafieldsSiteConfig>
 }
 
 
 export const getMetaDescription = ({
-	appOrSiteConfig,
+	mergedConfig,
 	content,
-	siteOrNull,
+	site,
 }: GetMetaDescriptionParams): string => {
-	const userDefinedPaths = appOrSiteConfig.pathsDescriptions || '';
+	const userDefinedPaths = mergedConfig.pathsDescriptions || '';
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
-	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
+	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, mergedConfig.fullPath) : null;
 
 	const setWithMixin = content.x[APP_NAME_PATH]
 		&& content.x[APP_NAME_PATH][MIXIN_PATH]
@@ -31,8 +31,8 @@ export const getMetaDescription = ({
 	let metaDescription = (
 		setWithMixin ? content.x[APP_NAME_PATH][MIXIN_PATH].seoDescription // Get from mixin
 			: userDefinedValue
-			|| appOrSiteConfig.seoDescription // Use default for site
-			|| siteOrNull?.data.description // Use site description
+			|| mergedConfig.seoDescription // Use default for site
+			|| site.data.description // Use site description
 			|| '' // Don't crash plugin on clean installs
 	) as string;
 

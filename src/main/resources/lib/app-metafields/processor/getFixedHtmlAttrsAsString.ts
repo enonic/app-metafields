@@ -1,5 +1,9 @@
+import {DEBUG} from '/lib/app-metafields/constants';
+
+
 const OG_ATTRIBUTE = "og: http://ogp.me/ns#";
 const ARTICLE_NAMESPACE = "article: http://ogp.me/ns/article#";
+
 
 export function getFixedHtmlAttrsAsString({
 	htmlTag,
@@ -19,7 +23,7 @@ export function getFixedHtmlAttrsAsString({
 		if (htmlTagAttributes[i].toLowerCase().trim() === "prefix") {
 			prefixFound = true;
 			if (htmlTagAttributes[i + 1].indexOf(OG_ATTRIBUTE) === -1) {
-				// log.info("Before join - " + htmlTagAttributes[i+1]);
+				DEBUG && log.debug("Before join - " + htmlTagAttributes[i+1]);
 				htmlTagAttributes[i + 1] =
 					htmlTagAttributes[i + 1].substr(
 						0,
@@ -29,9 +33,9 @@ export function getFixedHtmlAttrsAsString({
 					OG_ATTRIBUTE +
 					`${isFrontpage ? '' : ` ${ARTICLE_NAMESPACE}`}` +
 					htmlTagAttributes[i + 1].substr(-1);
-				// log.info("After join - " + htmlTagAttributes[i+1]);
+					DEBUG && log.debug("After join - " + htmlTagAttributes[i+1]);
 			} else {
-				// log.info("Already in the tag!");
+				DEBUG && log.debug("Already in the tag!");
 			}
 		}
 	}

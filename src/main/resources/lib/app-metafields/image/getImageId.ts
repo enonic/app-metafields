@@ -3,49 +3,46 @@ import type {ImageId} from '/lib/app-metafields/types';
 import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
+import {DEBUG} from '/lib/app-metafields/constants';
 import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInContent';
 
 
 interface GetImageUrlParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content: Content
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	site: Site<MetafieldsSiteConfig>
 }
 
 
 export function getImageId({
-	appOrSiteConfig,
+	mergedConfig,
 	content,
-	siteOrNull,
+	site,
 }: GetImageUrlParams): ImageId|undefined {
 	// 1. Try to find an image within the content isself
 	const imageId = findImageIdInContent({
-		appOrSiteConfig,
+		mergedConfig,
 		content,
 	});
 	if (imageId) {
 		return imageId;
 	}
-	// log.info(`getImageId: Didn't find any image on content ${content._path}`);
+	DEBUG && log.debug(`getImageId: Didn't find any image on content ${content._path}`);
 
-	// 2. Fallback to appOrSiteConfig image
-	if (appOrSiteConfig.seoImage) { // Empty string is falsy 👍
-		return appOrSiteConfig.seoImage as ImageId;
+	// 2. Fallback to mergedConfig image
+	if (mergedConfig.seoImage) { // Empty string is falsy 👍
+		return mergedConfig.seoImage as ImageId;
 	}
-	// log.info(`getImageId: Not even an override image on content ${content._path}`);
-
-	if (!siteOrNull) {
-		return undefined;
-	}
+	DEBUG && log.debug(`getImageId: Not even an override image on content ${content._path}`);
 
 	// 3. Fallback to image on siteContent
-	if (content._id === siteOrNull?._id) {
+	if (content._id === site._id) {
 		return undefined; // Avoid doing the same thing twice :)
 	}
 
-	// log.info(`getImageId ${content._path} !== ${site._path}`);
+	DEBUG && log.debug(`getImageId ${content._path} !== ${site._path}`);
 	return findImageIdInContent({
-		appOrSiteConfig,
-		content: siteOrNull,
+		mergedConfig,
+		content: site,
 	});
 }

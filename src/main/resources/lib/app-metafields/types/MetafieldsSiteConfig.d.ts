@@ -23,4 +23,5 @@ export declare interface MetafieldsSiteConfig {
 	titleFrontpageBehaviour?: boolean
 	titleSeparator?: string
 	twitterUsername?: string
+	[x: string]: unknown // Hack to satisfy Record<string, unknown>
 }
