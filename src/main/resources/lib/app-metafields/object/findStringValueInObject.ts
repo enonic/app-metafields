@@ -15,7 +15,6 @@ export function findStringValueInObject(
 			jsonPath = (fullPath)
 				? 'object["' + paths[i].split('.').join('"]["') + '"]'
 				: 'object.data["' + paths[i].split('.').join('"]["') + '"]'; // Wrap property so we can have dashes in it
-			// log.info('jsonPath: %s', jsonPath);
 			try {
 				value = eval(jsonPath); // https://esbuild.github.io/link/direct-eval
 				// value = (0, eval)(jsonPath); // This doesn't work!

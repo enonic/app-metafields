@@ -1,3 +1,5 @@
+import {DEBUG} from '/lib/app-metafields/constants';
+
 export const siteRelativePath = ({
 	contentPath,
 	sitePath,
@@ -6,6 +8,6 @@ export const siteRelativePath = ({
 	sitePath: string
 }): string => {
 	const _siteRelativePath = `${contentPath.replace(sitePath, '') || '/'}`;
-	// log.info(`siteRelativePath(%s) => %s`, JSON.stringify({contentPath, sitePath}, null, 4), _siteRelativePath);
+	DEBUG && log.debug(`siteRelativePath(%s) => %s`, JSON.stringify({contentPath, sitePath}, null, 4), _siteRelativePath);
 	return _siteRelativePath;
 };

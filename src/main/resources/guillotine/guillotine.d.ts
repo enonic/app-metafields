@@ -35,10 +35,6 @@ export declare interface MetafieldsResult {
 	url: string
 }
 
-export declare type ContentMetaFieldsResolverReturnType = Omit<MetafieldsResult,'image'> & {
-	_appOrSiteConfig: MetafieldsSiteConfig,
-	_content: Content,
-	_siteOrNull: Site<MetafieldsSiteConfig>|null,
-}
+export declare type ContentMetaFieldsResolverReturnType = Omit<MetafieldsResult,'image'>
 
 export declare type MetaFieldsImagesResolverReturnType = MediaImageContent|null

@@ -9,20 +9,18 @@ import {stringOrNull} from '/lib/app-metafields/string/stringOrNull';
 
 
 interface GetPageTitleParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content: Content
 }
 
 
 export const getPageTitle = ({
-	appOrSiteConfig,
+	mergedConfig,
 	content,
 }: GetPageTitleParams): string => {
-	// log.info('appOrSiteConfig: %s', JSON.stringify(appOrSiteConfig, null, 4));
-
-	const userDefinedPaths = appOrSiteConfig.pathsTitles || '';
+	const userDefinedPaths = mergedConfig.pathsTitles || '';
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
-	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
+	const userDefinedValue = userDefinedPaths ? findStringValueInObject(content, userDefinedArray, mergedConfig.fullPath) : null;
 
 	return content.x?.[APP_NAME_PATH]?.[MIXIN_PATH]?.seoTitle as string
 		|| stringOrNull(userDefinedValue) // json property defined by user as important

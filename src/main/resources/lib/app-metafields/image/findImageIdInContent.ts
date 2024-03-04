@@ -16,10 +16,10 @@ import {isString} from '/lib/app-metafields/string/isString';
 
 
 export function findImageIdInContent({
-	appOrSiteConfig,
+	mergedConfig,
 	content,
 }: {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content: Content
 }): ImageId|null {
 	DEBUG && log.debug('findImageIdInContent content: %s', toStr(content));
@@ -28,13 +28,13 @@ export function findImageIdInContent({
 		return content.x[APP_NAME_PATH][MIXIN_PATH].seoImage as ImageId;
 	}
 
-	const userDefinedPaths = appOrSiteConfig.pathsImages || '';
+	const userDefinedPaths = mergedConfig.pathsImages || '';
 	DEBUG && log.debug('findImageIdInContent userDefinedPaths: %s', userDefinedPaths);
 
 	const userDefinedArray = userDefinedPaths ? oneOrMoreCommaStringToArray(userDefinedPaths) : [];
 	DEBUG && log.debug('findImageIdInContent userDefinedArray: %s', toStr(userDefinedArray));
 
-	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, appOrSiteConfig.fullPath) : null;
+	const userDefinedValue = userDefinedPaths ? findValueInObject(content, userDefinedArray, mergedConfig.fullPath) : null;
 	DEBUG && log.debug('findImageIdInContent userDefinedValue: %s', userDefinedValue);
 
 	const firstItem = forceArray(userDefinedValue)[0];

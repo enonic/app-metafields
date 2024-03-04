@@ -7,23 +7,23 @@ import {getFullTitle} from '/lib/app-metafields/title/getFullTitle';
 
 
 interface GetTitleHtmlParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content?: Content
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	site: Site<MetafieldsSiteConfig>
 }
 
 export function getTitleHtml({
-	appOrSiteConfig,
+	mergedConfig,
 	content=undefined,
-	siteOrNull,
+	site,
 }: GetTitleHtmlParams) {
 	if (!content) {
 		return undefined;
 	}
 
 	return `<title>${getFullTitle({
-		appOrSiteConfig,
+		mergedConfig,
 		content,
-		siteOrNull
+		site,
 	})}</title>`;
 }

@@ -1,3 +1,4 @@
+import {DEBUG} from '/lib/app-metafields/constants';
 import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
 
 
@@ -14,6 +15,6 @@ export const prependBaseUrl = ({
 		contentPath,
 		sitePath,
 	})}`;
-	// log.info(`prependBaseUrl(%s) => %s`, JSON.stringify({baseUrl, contentPath, sitePath}, null, 4), prependedBaseUrl);
+	DEBUG && log.debug(`prependBaseUrl(%s) => %s`, JSON.stringify({baseUrl, contentPath, sitePath}, null, 4), prependedBaseUrl);
 	return prependedBaseUrl
 }

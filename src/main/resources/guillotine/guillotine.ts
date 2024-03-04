@@ -5,7 +5,7 @@ import type {
 
 
 import {ObjectTypeName} from '@enonic-types/guillotine';
-import {contentMetaFieldsResolver} from '/guillotine/typeFieldResolvers/contentMetaFieldsResolver';
+import {buildContentMetaFieldsResolver} from './typeFieldResolvers/buildContentMetaFieldsResolver';
 import {metaFieldsImagesResolver} from '/guillotine/typeFieldResolvers/metaFieldsImagesResolver';
 
 
@@ -77,7 +77,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 		},
 		resolvers: {
 			[ObjectTypeName.Content]: {
-				[GraphQLFieldName.METAFIELDS]: contentMetaFieldsResolver,
+				[GraphQLFieldName.METAFIELDS]: buildContentMetaFieldsResolver(graphQL),
 			},
 			[GraphQLTypeName.METAFIELDS]: {
 				[GraphQLFieldName.IMAGE]: metaFieldsImagesResolver

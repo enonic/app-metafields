@@ -17,11 +17,11 @@ import {findImageIdInContent} from '/lib/app-metafields/image/findImageIdInConte
 
 
 interface GetImageUrlParams {
-	appOrSiteConfig: MetafieldsSiteConfig
 	content: Content
 	defaultImg?: ImageId
 	defaultImgPrescaled?: boolean
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	mergedConfig: MetafieldsSiteConfig
+	site: Site<MetafieldsSiteConfig>
 }
 
 
@@ -66,17 +66,17 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 
 
 export const getImageUrl = ({
-	appOrSiteConfig,
+	mergedConfig,
 	content,
 	defaultImg,
 	defaultImgPrescaled,
-	siteOrNull,
+	site,
 }: GetImageUrlParams): string|null => {
 	DEBUG && log.debug('getImageUrl defaultImg:%s defaultImgPrescaled:%s', defaultImg, defaultImgPrescaled);
 
 	// Try to find an image in the content's image or images properties
 	const imageId: ImageId|null = findImageIdInContent({
-		appOrSiteConfig,
+		mergedConfig,
 		content,
 	});
 
@@ -94,13 +94,13 @@ export const getImageUrl = ({
 		});
 	}
 
-	if (!siteOrNull || content._id === siteOrNull._id) {
+	if (!site || content._id === site._id) {
 		return null
 	}
 
 	const siteImageId: ImageId|null = findImageIdInContent({
-		appOrSiteConfig,
-		content: siteOrNull,
+		mergedConfig,
+		content: site,
 	});
 	if (siteImageId) {
 		return _imageUrlFromId(siteImageId);

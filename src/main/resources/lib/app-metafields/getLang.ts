@@ -4,14 +4,14 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types';
 
 export const getLang = ({
 	content,
-	siteOrNull,
+	site,
 }: {
 	content: Content,
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	site: Site<MetafieldsSiteConfig>
 }): string => {
-	if (content.language || siteOrNull?.language) {
+	if (content.language || site.language) {
 		// Format locale into the ISO format that Open Graph wants.
-		return (content.language || siteOrNull?.language).replace('-', '_');
+		return (content.language || site.language).replace('-', '_');
 	}
 	return 'en_US';
 }

@@ -41,11 +41,11 @@ interface MetaDataModel {
 }
 
 interface GetMetaDataParams {
-	appOrSiteConfig: MetafieldsSiteConfig
+	mergedConfig: MetafieldsSiteConfig
 	content?: Content
 	returnType?: 'json'|'html'
 	selfClosingTags?: boolean
-	siteOrNull: Site<MetafieldsSiteConfig>|null
+	site: Site<MetafieldsSiteConfig>
 }
 
 
@@ -57,75 +57,75 @@ function _resolveMetadata(params: MetaDataModel, selfClosingTags=false) {
 
 
 export function getMetaData({
-	appOrSiteConfig,
+	mergedConfig,
 	content=undefined,
 	returnType="json",
 	selfClosingTags=false,
-	siteOrNull,
+	site,
 }: GetMetaDataParams): MetaDataModel|string|undefined {
 	if (!content) {
 		return undefined;
 	}
 
-	const isFrontpage = siteOrNull?._path === content._path;
+	const isFrontpage = site._path === content._path;
 	const pageTitle = getPageTitle({
-		appOrSiteConfig,
+		mergedConfig,
 		content,
 	});
-	const siteVerification = appOrSiteConfig.siteVerification || null;
+	const siteVerification = mergedConfig.siteVerification || null;
 
-	const absoluteUrl = appOrSiteConfig.baseUrl
+	const absoluteUrl = mergedConfig.baseUrl
 	? prependBaseUrl({
-		baseUrl: appOrSiteConfig.baseUrl,
+		baseUrl: mergedConfig.baseUrl,
 		contentPath: content._path,
-		sitePath: siteOrNull?._path || ''
+		sitePath: site._path
 	})
 	: pageUrl({ path: content._path, type: "absolute" });
 
 	const canonicalContent = getContentForCanonicalUrl(content);
 	const canonicalUrl = canonicalContent
-		? appOrSiteConfig.baseUrl
+		? mergedConfig.baseUrl
 			? prependBaseUrl({
-				baseUrl: appOrSiteConfig.baseUrl,
+				baseUrl: mergedConfig.baseUrl,
 				contentPath: canonicalContent._path,
-				sitePath: siteOrNull?._path || ''
+				sitePath: site._path
 			})
 			: pageUrl({ path: canonicalContent._path, type: "absolute" })
 		: null;
 
-	const imageUrl = !appOrSiteConfig.removeOpenGraphImage
+	const imageUrl = !mergedConfig.removeOpenGraphImage
 		? getImageUrl({
-			appOrSiteConfig,
+			mergedConfig,
 			content,
-			defaultImg: appOrSiteConfig.seoImage,
-			defaultImgPrescaled: appOrSiteConfig.seoImageIsPrescaled,
-			siteOrNull,
+			defaultImg: mergedConfig.seoImage,
+			defaultImgPrescaled: mergedConfig.seoImageIsPrescaled,
+			site,
 		})
 		: null;
 
-	const twitterImageUrl = !appOrSiteConfig.removeTwitterImage
+	const twitterImageUrl = !mergedConfig.removeTwitterImage
 		? getImageUrl({
-			appOrSiteConfig,
+			mergedConfig,
 			content,
-			defaultImg: appOrSiteConfig.seoImage,
-			siteOrNull,
+			defaultImg: mergedConfig.seoImage,
+			site,
 		})
 		: null;
 
 	const params: MetaDataModel = {
-		blockRobots: appOrSiteConfig.blockRobots || getBlockRobots(content),
+		blockRobots: mergedConfig.blockRobots || getBlockRobots(content),
 		canonicalUrl,
 		description: getMetaDescription({
-			appOrSiteConfig,
+			mergedConfig,
 			content,
-			siteOrNull
+			site,
 		}),
 		imageHeight: 630,
 		imageUrl,
 		imageWidth: 1200, // Twice of 600x315, for retina
 		locale: getLang({
 			content,
-			siteOrNull
+			site,
 		}),
 		openGraph: {
 			article: isFrontpage ? null : {
@@ -134,13 +134,13 @@ export function getMetaData({
 				publishedTime: content.publish?.first,
 			}
 		},
-		siteName: siteOrNull?.displayName,
+		siteName: site.displayName,
 		siteVerification,
 		title: pageTitle,
-		twitterUserName: appOrSiteConfig.twitterUsername,
+		twitterUserName: mergedConfig.twitterUsername,
 		twitterImageUrl,
 		type: isFrontpage ? "website" : "article",
-		url: appOrSiteConfig.removeOpenGraphUrl ? null : absoluteUrl,
+		url: mergedConfig.removeOpenGraphUrl ? null : absoluteUrl,
 	};
 
 	if (returnType === 'html') {

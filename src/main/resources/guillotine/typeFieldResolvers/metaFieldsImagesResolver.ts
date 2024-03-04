@@ -18,6 +18,11 @@ import {getImageId} from '/lib/app-metafields/image/getImageId';
 
 export const metaFieldsImagesResolver: Resolver<
 	{}, // args
+	{
+		mergedConfigJson: string
+		contentJson: string
+		siteJson: string
+	}, // localContext
 	ContentMetaFieldsResolverReturnType,
 	MetaFieldsImagesResolverReturnType
 > = (env) => {
@@ -26,20 +31,21 @@ export const metaFieldsImagesResolver: Resolver<
 	const {
 		// args,
 		localContext,
-		source
+		// source
 	} = env;
 
 	const {
+		mergedConfigJson,
 		branch,
-		project,
+		contentJson,
+		project: projectName,
 		// siteKey // NOTE: Can be undefined when x-guillotine-sitekey is missing
+		siteJson,
 	} = localContext;
 
-	const {
-		_appOrSiteConfig,
-		_content,
-		_siteOrNull,
-	} = source;
+	const mergedConfig = JSON.parse(mergedConfigJson);
+	const content = JSON.parse(contentJson);
+	const site = JSON.parse(siteJson);
 
 	const context = getContext();
 	DEBUG && log.debug('metaFieldsImagesResolver context: %s', toStr(context));
@@ -57,7 +63,7 @@ export const metaFieldsImagesResolver: Resolver<
 
 	return runInContext({
 		branch,
-		repository: `com.enonic.cms.${project}`,
+		repository: `com.enonic.cms.${projectName}`,
 		// user: {
 		// 	idProvider: userIdProvider,
 		// 	login: userLogin,
@@ -66,20 +72,16 @@ export const metaFieldsImagesResolver: Resolver<
 	}, () => {
 
 		const imageId = getImageId({
-			appOrSiteConfig: _appOrSiteConfig,
-			content: _content,
-			siteOrNull: _siteOrNull,
+			mergedConfig,
+			content,
+			site,
 		});
 		if (imageId) {
 			const imageContent = getContentByKey({ key: imageId });
 			if (imageContent) {
 				return imageContent as MetaFieldsImagesResolverReturnType;
 			} else {
-				if (_siteOrNull) {
-					log.error(`content with path:${_content._path} or site with path: ${_siteOrNull?._path} or application config references a non-existing image with key:${imageId}`);
-				} else {
-					log.error(`content with path:${_content._path} or application config references a non-existing image with key:${imageId}`);
-				}
+				log.error(`content with path:${content._path} or site with path: ${site._path} or application config references a non-existing image with key:${imageId}`);
 			}
 		}
 

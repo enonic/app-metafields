@@ -1,31 +1,31 @@
 plugins {
-    id 'maven-publish'
-    id 'com.enonic.defaults' version '2.1.5'
-    id 'com.enonic.xp.app' version '3.4.0'
+	id 'maven-publish'
+	id 'com.enonic.defaults' version '2.1.5'
+	id 'com.enonic.xp.app' version '3.4.0'
 	id 'com.github.node-gradle.node' version '7.0.2'
 }
 
 app {
-    name = project.appName
-    displayName = 'SEO Meta Fields'
-    vendorName = 'Enonic AS'
-    vendorUrl = 'https://enonic.com'
-    systemVersion = "${xpVersion}"
+	name = project.appName
+	displayName = 'SEO Meta Fields'
+	vendorName = 'Enonic AS'
+	vendorUrl = 'https://enonic.com'
+	systemVersion = "${xpVersion}"
 }
 
 dependencies {
-    include "com.enonic.xp:lib-admin:${xpVersion}"
-    include "com.enonic.xp:lib-content:${xpVersion}"
-    include "com.enonic.xp:lib-context:${xpVersion}"
+	include "com.enonic.xp:lib-admin:${xpVersion}"
+	include "com.enonic.xp:lib-content:${xpVersion}"
+	include "com.enonic.xp:lib-context:${xpVersion}"
 	include "com.enonic.xp:lib-node:${xpVersion}"
-    include "com.enonic.xp:lib-portal:${xpVersion}"
-    include "com.enonic.lib:lib-thymeleaf:2.1.0"
+	include "com.enonic.xp:lib-portal:${xpVersion}"
+	include "com.enonic.lib:lib-thymeleaf:2.1.0"
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    xp.enonicRepo()
+	mavenLocal()
+	mavenCentral()
+	xp.enonicRepo()
 }
 
 node {

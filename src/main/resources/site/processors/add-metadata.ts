@@ -2,11 +2,14 @@ import type {Request, Response} from '/lib/app-metafields/types';
 
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
+import {toStr} from '@enonic/js-utils/value/toStr';
 import {
 	getContent as getCurrentContent,
 	getSite as libPortalGetSite,
+	getSiteConfig as libPortalGetSiteConfig,
 } from '/lib/xp/portal';
-import {getAppOrSiteConfig} from '/lib/app-metafields/xp/getAppOrSiteConfig';
+import {DEBUG} from '/lib/app-metafields/constants';
+import {getMergedConfig} from '/lib/app-metafields/xp/getMergedConfig';
 import {getFixedHtmlAttrsAsString} from '/lib/app-metafields/processor/getFixedHtmlAttrsAsString';
 import {getMetaData} from '/lib/app-metafields/processor/getMetaData'
 import {getTitleHtml} from '/lib/app-metafields/processor/getTitleHtml';
@@ -17,13 +20,12 @@ const XML_MEDIA_TYPES = ['application/xhtml+xml', 'application/xml', 'text/xml']
 
 
 export const responseProcessor = (req: Request, res: Response) => {
-	const site = libPortalGetSite();
 	const content = getCurrentContent();
-	const appOrSiteConfig = getAppOrSiteConfig({
-		applicationConfig: app.config, // NOTE: Using app.config is fine, since it's outside Guillotine Execution Context
-		applicationKey: app.name, // NOTE: Using app.name is fine, since it's outside Guillotine Execution Context
-		siteOrNull: site
-	});
+	const site = libPortalGetSite();
+	const siteConfig = libPortalGetSiteConfig();
+	DEBUG && log.debug('add-metadata response processor siteConfig:%s', toStr(siteConfig));
+
+	const mergedConfig = getMergedConfig({siteConfig});
 
 	let titleAdded = false;
 	const isResponseContentTypeHtml = res.contentType.indexOf(HTML_MEDIA_TYPE) > -1;
@@ -38,9 +40,9 @@ export const responseProcessor = (req: Request, res: Response) => {
 		// Svg are text/html can have a <title>
 		if (titleHasIndex && htmlIndex > -1) {
 			const titleHtml = getTitleHtml({
-				appOrSiteConfig,
+				mergedConfig,
 				content,
-				siteOrNull: site,
+				site,
 			}) || "";
 			res.body = res.body.replace(/(<title>)(.*?)(<\/title>)/i, titleHtml);
 			titleAdded = true;
@@ -63,20 +65,20 @@ export const responseProcessor = (req: Request, res: Response) => {
 	if ( isResponseContentTypeHtml || isResponseContentTypeXml ) {
 		const selfClosingTags = isResponseContentTypeXml;
 		const metadata: string = getMetaData({
-			appOrSiteConfig,
+			mergedConfig,
 			content,
 			returnType: 'html',
 			selfClosingTags,
-			siteOrNull: site,
+			site,
 		}) as string || "";
 		res.pageContributions.headEnd.push(metadata);
 	}
 
 	if ( !titleAdded ) {
 		const titleHtml = getTitleHtml({
-			appOrSiteConfig,
+			mergedConfig,
 			content,
-			siteOrNull: site,
+			site,
 		}) || "";
 		res.pageContributions.headEnd.push(titleHtml);
 	}

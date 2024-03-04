@@ -57,12 +57,6 @@ describe('getMetaData', () => {
 	beforeEach(() => {
 		jest.resetAllMocks(); // Resets the state of all mocks. Equivalent to calling .mockReset() on every mocked function.
 		jest.resetModules();
-		mockLibXpContent({
-			contents: {
-				'/': {} as Content<unknown>,
-				oneImageContentId: imageContent1,
-			}
-		});
 		mockLibXpContext();
 		mockLibThymeleaf();
 	});
@@ -77,10 +71,17 @@ describe('getMetaData', () => {
 			prefix: 'site',
 			siteConfig: metaFieldsSiteConfig
 		});
+		mockLibXpContent({
+			contents: {
+				'/': {} as Content<unknown>,
+				oneImageContentId: imageContent1,
+			},
+			siteContent: site
+		});
 		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
-				siteOrNull: site,
+				mergedConfig: metaFieldsSiteConfig,
+				site,
 			})).toBeUndefined();
 		}); // import
 	}); // it
@@ -100,14 +101,21 @@ describe('getMetaData', () => {
 			prefix: 'site',
 			siteConfig: metaFieldsSiteConfig
 		});
+		mockLibXpContent({
+			contents: {
+				'/': {} as Content<unknown>,
+				oneImageContentId: imageContent1,
+			},
+			siteContent: site
+		});
 		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
 				}),
-				siteOrNull: site,
+				site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -149,10 +157,17 @@ describe('getMetaData', () => {
 				prefix: 'site',
 				siteConfig: metaFieldsSiteConfig
 			});
+			mockLibXpContent({
+				contents: {
+					'/': {} as Content<unknown>,
+					oneImageContentId: imageContent1,
+				},
+				siteContent: site
+			});
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: site,
-				siteOrNull: site,
+				site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -199,10 +214,17 @@ describe('getMetaData', () => {
 				prefix: 'site',
 				siteConfig
 			});
+			mockLibXpContent({
+				contents: {
+					'/': {} as Content<unknown>,
+					oneImageContentId: imageContent1,
+				},
+				siteContent: site
+			});
 			expect(getMetaData({
-				appOrSiteConfig: siteConfig,
+				mergedConfig: siteConfig,
 				content: contentWithImage,
-				siteOrNull: site,
+				site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -256,10 +278,17 @@ describe('getMetaData', () => {
 				prefix: 'site',
 				siteConfig
 			});
+			mockLibXpContent({
+				contents: {
+					'/': {} as Content<unknown>,
+					oneImageContentId: imageContent1,
+				},
+				siteContent: site
+			});
 			expect(getMetaData({
-				appOrSiteConfig: siteConfig,
+				mergedConfig: siteConfig,
 				content: contentWithImage,
-				siteOrNull: site,
+				site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -313,10 +342,17 @@ describe('getMetaData', () => {
 				prefix: 'site',
 				siteConfig
 			});
+			mockLibXpContent({
+				contents: {
+					'/': {} as Content<unknown>,
+					oneImageContentId: imageContent1,
+				},
+				siteContent: site
+			});
 			expect(getMetaData({
-				appOrSiteConfig: siteConfig,
+				mergedConfig: siteConfig,
 				content: contentWithImage,
-				siteOrNull: site,
+				site,
 			})).toEqual({
 				blockRobots: false,
 				canonicalUrl: null,
@@ -359,13 +395,20 @@ describe('getMetaData', () => {
 				prefix: 'site',
 				siteConfig: metaFieldsSiteConfig
 			});
+			mockLibXpContent({
+				contents: {
+					'/': {} as Content<unknown>,
+					oneImageContentId: imageContent1,
+				},
+				siteContent: site
+			});
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
 				}),
-				siteOrNull: site,
+				site,
 				returnType: 'html',
 				// selfClosingTags: true // Doesn't affect the output in this test
 			})).resolves.toEqual(
@@ -426,13 +469,20 @@ describe('getMetaData', () => {
 				prefix: 'site',
 				siteConfig: metaFieldsSiteConfig
 			});
+			mockLibXpContent({
+				contents: {
+					'/': {} as Content<unknown>,
+					oneImageContentId: imageContent1,
+				},
+				siteContent: site
+			});
 			expect(getMetaData({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
 				}),
-				siteOrNull: site,
+				site,
 				returnType: 'html',
 				selfClosingTags: true // Doesn't affect the output in this test
 			})).resolves.toEqual(

@@ -134,12 +134,12 @@ describe('getImageUrl', () => {
 	it('should return null when no image found', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
 				}),
-				siteOrNull: siteContent
+				site: siteContent
 			})).toBeNull();
 		}); // import
 	}); // it
@@ -147,14 +147,14 @@ describe('getImageUrl', () => {
 	it('should return attachmentUrl when defaultImg and defaultImgPrescaled provided', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithoutImage',
 					type: 'base:folder',
 				}),
 				defaultImg: 'threeImageContentId' as ImageId,
 				defaultImgPrescaled: true,
-				siteOrNull: siteContent
+				site: siteContent
 			})).toBe('threeImageContentIdabsoluteAttachmentUrl');
 		}); // import
 	}); // it
@@ -169,9 +169,9 @@ describe('getImageUrl', () => {
 		});
 		// console.info('content', content);
 		const getImageUrlParams = {
-			appOrSiteConfig: metaFieldsSiteConfig,
+			mergedConfig: metaFieldsSiteConfig,
 			content,
-			siteOrNull: siteContent
+			site: siteContent
 		};
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl(getImageUrlParams)).toBe('fourImageContentIdblock(1200,630)absoluteImageUrl');
@@ -181,7 +181,7 @@ describe('getImageUrl', () => {
 	it('should return an url when content has data.pathsImages0', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImage',
 					data: {
@@ -190,7 +190,7 @@ describe('getImageUrl', () => {
 					},
 					type: 'base:folder',
 				}),
-				siteOrNull: siteContent
+				site: siteContent
 			})).toBe('oneImageContentIdjpg85block(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
@@ -198,7 +198,7 @@ describe('getImageUrl', () => {
 	it('should return an url when content has data.pathsImages1', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImages',
 					data: {
@@ -206,7 +206,7 @@ describe('getImageUrl', () => {
 					},
 					type: 'base:folder',
 				}),
-				siteOrNull: siteContent
+				site: siteContent
 			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
@@ -214,7 +214,7 @@ describe('getImageUrl', () => {
 	it('should return an url when content has data.pathsImages0[0]', () => {
 		import('/lib/app-metafields/image/getImageUrl').then(({getImageUrl}) => {
 			expect(getImageUrl({
-				appOrSiteConfig: metaFieldsSiteConfig,
+				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'articleWithImages',
 					data: {
@@ -222,7 +222,7 @@ describe('getImageUrl', () => {
 					},
 					type: 'base:folder',
 				}),
-				siteOrNull: siteContent
+				site: siteContent
 			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
