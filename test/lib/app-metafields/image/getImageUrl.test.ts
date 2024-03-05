@@ -190,7 +190,7 @@ describe('getImageUrl', () => {
 					type: 'base:folder',
 				}),
 				site: siteContent
-			})).toBe('oneImageContentIdjpg85block(1200,630)absoluteImageUrl');
+			})).toBe('oneImageContentIdblock(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
 
@@ -206,7 +206,7 @@ describe('getImageUrl', () => {
 					type: 'base:folder',
 				}),
 				site: siteContent
-			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
+			})).toBe('twoImageContentIdblock(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
 
@@ -222,7 +222,7 @@ describe('getImageUrl', () => {
 					type: 'base:folder',
 				}),
 				site: siteContent
-			})).toBe('twoImageContentIdjpg85block(1200,630)absoluteImageUrl');
+			})).toBe('twoImageContentIdblock(1200,630)absoluteImageUrl');
 		}); // import
 	}); // it
 }); // describe

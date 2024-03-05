@@ -229,7 +229,7 @@ describe('getMetaData', () => {
 				blockRobots: false,
 				canonicalUrl: null,
 				description: 'Site description',
-				imageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
+				imageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
@@ -245,7 +245,7 @@ describe('getMetaData', () => {
 				title: 'oneContentDisplayName',
 				type: 'article',
 				twitterUserName: undefined,
-				twitterImageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
+				twitterImageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
 				url: 'oneContentPathabsolutePageUrl',
 			});
 		}); // import
@@ -309,7 +309,7 @@ describe('getMetaData', () => {
 				title: 'oneContentDisplayName',
 				type: 'article',
 				twitterUserName: undefined,
-				twitterImageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
+				twitterImageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
 				url: 'oneContentPathabsolutePageUrl',
 			});
 		}); // import
@@ -357,7 +357,7 @@ describe('getMetaData', () => {
 				blockRobots: false,
 				canonicalUrl: null,
 				description: 'Site description',
-				imageUrl: 'oneImageContentIdjpg85block(1200,630)absoluteImageUrl',
+				imageUrl: 'oneImageContentIdblock(1200,630)absoluteImageUrl',
 				imageWidth: 1200,
 				imageHeight: 630,
 				locale: 'en_US',
