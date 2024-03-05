@@ -18,9 +18,6 @@ import {
 } from '/lib/xp/context';
 
 import {DEBUG} from '/lib/app-metafields/constants';
-import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
-import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';
-
 import {getMergedConfig} from '/lib/app-metafields/xp/getMergedConfig';
 import {getBlockRobots} from '/lib/app-metafields/getBlockRobots';
 import {getContentForCanonicalUrl} from '/lib/app-metafields/getContentForCanonicalUrl';
@@ -130,23 +127,6 @@ export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
 		const blockRobots = mergedConfig.blockRobots || getBlockRobots(content)
 		DEBUG && log.debug('contentMetaFieldsResolver blockRobots:%s', blockRobots);
 
-		let canonical: string|null = null;
-		const contentForCanonicalUrl = getContentForCanonicalUrl(content);
-		if (contentForCanonicalUrl) {
-			if (mergedConfig.baseUrl) {
-				canonical = prependBaseUrl({
-					baseUrl: mergedConfig.baseUrl,
-					contentPath: contentForCanonicalUrl._path,
-					sitePath: site._path
-				});
-			} else {
-				canonical = siteRelativePath({
-					contentPath: contentForCanonicalUrl._path,
-					sitePath: site._path
-				});
-			}
-		} // if contentForCanonicalUrl
-
 		return graphQL.createDataFetcherResult<
 			ContentMetaFieldsResolverReturnType,
 			{
@@ -157,7 +137,7 @@ export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
 		>({
 			data: __.toScriptValue<ContentMetaFieldsResolverReturnType>({
 				baseUrl: mergedConfig.baseUrl || null,
-				canonical,
+				canonical: getContentForCanonicalUrl(content),
 				description,
 				fullTitle,
 				locale: getLang({
