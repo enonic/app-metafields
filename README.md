@@ -59,11 +59,11 @@ This app introduces a number of site configurations, which are used across the e
 
 1. General settings
 2. Fallback
-3. Title config
-4. Verification
+3. Title
+4. Open Graph
 5. Twitter Cards
-6. Open Graph
-7. JSON paths
+6. Verification
+7. Advanced options
 
 > **_NOTE:_** You can also set defaults across the entire server using an [application config](application-configuration) file.
 
@@ -82,22 +82,13 @@ When fetching metadata using using Guillotine the metaFields.canonical and metaF
 
 This app tries to figure out which data to use for all the meta fields based on the current content. On some pages, there might not be any custom data set. That's what these settings are for: default fallbacks. Here is where you add a default image to fallback on for Open Graph and Twitter Cards. If you don't set one here, it will try to use the image set or found on the site content.
 
-### Title config
+### Title
 
 With the title configuration you can control how we create the titles for you. If you already have a `<title>` tag in your source html, we will overwrite it and use it's location in the source code. If you do not have this tag already, we will append it at the end of the `<head>`-tag.
 
 The settings here let you control if you want to add the site's name at the end of all pages' titles. You can activate this on all pages, but also control to not do this on the front page. There's also an option for controlling what separator sign to use between page name and site name (defaults to the dash character).
 
 Note: Meta fields for Open Graph and Twitter Cards does not use these settings, it never adds site name to it's title meta field as it is redundant data.
-
-### Verification
-
-**Google Search Console (site verification code)**
-Add meta tag for Google Search Console (formerly known as Google Webmaster Tools). Just fill in your ID here to generate the proper tag on all pages. Consult your Google Search Console login for finding this ID.
-
-### Twitter Cards
-
-For Twitter Cards to work we need a Twitter username (starting with `@`). When that is in place we can generate meta data for improved Twitter sharing called "Twitter Cards". By omitting the username no such meta data will be generated.
 
 ### Open Graph
 
@@ -107,7 +98,16 @@ Checking this will stop the app from generating the open graph url tag
 **Remove the openGraph image tag?**
 Checking this will stop the app from generating the open graph image tag
 
-### JSON paths
+### Twitter Cards
+
+For Twitter Cards to work we need a Twitter username (starting with `@`). When that is in place we can generate meta data for improved Twitter sharing called "Twitter Cards". By omitting the username no such meta data will be generated.
+
+### Verification
+
+**Google Search Console (site verification code)**
+Add meta tag for Google Search Console (formerly known as Google Webmaster Tools). Just fill in your ID here to generate the proper tag on all pages. Consult your Google Search Console login for finding this ID.
+
+### Advanced options
 
 When figuring out what data to put in your meta fields, this app analyzes the current content you're viewing. It will fetch a pre-defined set of fields in a pre-defined order (more on that later in the [waterfall logic](waterfall-logic-for-meta-fields) section). You might however have fields with different names, or want to add more fields, or control in which order the data is evaluated. Then these settings are for you.
 
