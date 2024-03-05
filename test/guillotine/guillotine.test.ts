@@ -175,14 +175,28 @@ const graphQL: Partial<GraphQL> = {
 	nonNull: (type) => type,
 	list: (type) => [type],
 	reference: (typeName) => {
-		// console.debug('reference typeName', typeName);
+		if (typeName === 'Content') {
+			return graphQLContent;
+		}
 		if (typeName === 'media_Image') {
 			return imageContent;
 		}
 		if (typeName === 'MetaFields') {
 			return metafieldsResult;
 		}
-		return graphQLContent;
+		if (typeName === 'MetaFields_OpenGraph') {
+			return metafieldsResult.openGraph;
+		}
+		if (typeName === 'MetaFields_Robots') {
+			return metafieldsResult.robots;
+		}
+		if (typeName === 'MetaFields_Twitter') {
+			return metafieldsResult.twitter;
+		}
+		if (typeName === 'MetaFields_Verification') {
+			return metafieldsResult.verification;
+		}
+		console.error('unhandeled reference typeName', typeName);
 	},
 };
 
@@ -224,21 +238,59 @@ describe('guillotine extensions', () => {
 						description: "Meta fields for a content",
 						fields: {
 							baseUrl: {type: 'string'},
-							canonical: {type: siteContent},
+							canonical: {
+								type: siteContent
+							},
 							description: {type: 'string'},
 							fullTitle: {type: 'string'},
 							image: {
 								type: imageContent
 							},
 							locale: {type: 'string'},
-							openGraph: {type: '{"json": "value"}'},
-							robots: {type: '{"json": "value"}'},
+							openGraph: {
+								type: metafieldsResult.openGraph
+							},
+							robots: {
+								type: metafieldsResult.robots
+							},
 							siteName: {type: 'string'},
 							title: {type: 'string'},
-							twitter: {type: '{"json": "value"}'},
-							verification: {type: '{"json": "value"}'},
+							twitter: {
+								type: metafieldsResult.twitter
+							},
+							verification: {
+								type: metafieldsResult.verification
+							},
 						}
-					} // MetaFields
+					}, // MetaFields,
+					MetaFields_OpenGraph: {
+						description: 'Meta fields for Open Graph',
+						fields: {
+							hideImages: {type: true},
+							hideUrl: {type: true},
+							type: {type: 'string'},
+						}
+					},
+					MetaFields_Robots: {
+						description: 'Meta fields for Robots',
+						fields: {
+							follow: {type: true},
+							index: {type: true},
+						}
+					},
+					MetaFields_Twitter: {
+						description: 'Meta fields for Twitter',
+						fields: {
+							hideImages: {type: true},
+							site: {type: 'string'},
+						}
+					},
+					MetaFields_Verification: {
+						description: 'Meta fields for Verification',
+						fields: {
+							google: {type: 'string'},
+						}
+					},
 				} // types
 			}); // expect
 			const {
