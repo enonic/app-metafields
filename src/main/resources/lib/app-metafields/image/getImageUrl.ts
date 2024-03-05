@@ -29,9 +29,6 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 	// Set basic image options
 	const imageOpts: ImageUrlParams = {
 		id: imageId,
-
-		format: 'jpg',
-		quality: 85,
 		scale: 'block(1200,630)', // Open Graph requires 600x315 for landscape format. Double that for retina display.
 		type: 'absolute'
 	};
@@ -49,16 +46,6 @@ function _imageUrlFromId(imageId: ImageId): string|null {
 	// Application Config may reference a non-existing image
 	if (!imageContent) {
 		return null;
-	}
-
-	let mimeType = null;
-	if (imageContent.data.media) {
-		mimeType = imageContent.attachments[imageContent.data.media.attachment].mimeType; // Get the actual mimeType
-	}
-	// Reset forced format on SVG to make them servable through portal.imageUrl().
-	if (!mimeType || mimeType === 'image/svg+xml') {
-		imageOpts.quality = null;
-		imageOpts.format = null;
 	}
 
 	return imageOpts.id ? imageUrl(imageOpts) : null;

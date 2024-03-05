@@ -32,7 +32,7 @@
 				</input>
 				<input name="seoImageIsPrescaled" type="CheckBox">
 					<label>Use original image, no scaling</label>
-					<help-text>Image will otherwise be scaled to 1200x630px and set to jpg with quality 85</help-text>
+					<help-text>By default the image will be scaled to 1200x630px</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
 				<input name="seoDescription" type="TextArea">
