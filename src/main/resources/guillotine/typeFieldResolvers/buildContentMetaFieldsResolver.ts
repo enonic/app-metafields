@@ -16,7 +16,6 @@ import {
 	get as getContext,
 	run as runInContext
 } from '/lib/xp/context';
-// import {getSiteConfig as libPortalGetSiteConfig} from '/lib/xp/portal';
 
 import {DEBUG} from '/lib/app-metafields/constants';
 import {siteRelativePath} from '/lib/app-metafields/path/siteRelativePath';
@@ -148,20 +147,6 @@ export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
 			}
 		} // if contentForCanonicalUrl
 
-		const url: string = mergedConfig.baseUrl
-			? prependBaseUrl({
-				baseUrl: mergedConfig.baseUrl,
-				contentPath: content._path,
-				sitePath: site._path
-			})
-			: siteRelativePath({
-				contentPath: content._path,
-				sitePath: site._path
-			});
-		DEBUG && log.debug('contentMetaFieldsResolver url:%s', url);
-
-		// return <ContentMetaFieldsResolverReturnType>
-
 		return graphQL.createDataFetcherResult<
 			ContentMetaFieldsResolverReturnType,
 			{
@@ -171,6 +156,7 @@ export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
 			}
 		>({
 			data: __.toScriptValue<ContentMetaFieldsResolverReturnType>({
+				baseUrl: mergedConfig.baseUrl || null,
 				canonical,
 				description,
 				fullTitle,
@@ -196,7 +182,6 @@ export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
 				verification: {
 					google: mergedConfig.siteVerification || null
 				},
-				url,
 			}),
 			localContext: {
 				mergedConfigJson: JSON.stringify(mergedConfig),

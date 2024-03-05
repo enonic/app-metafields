@@ -27,6 +27,9 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 			[GraphQLTypeName.METAFIELDS]: {
 				description: 'Meta fields for a content',
 				fields: {
+					baseUrl: {
+						type: graphQL.GraphQLString,
+					},
 					canonical: {
 						type: graphQL.GraphQLString,
 					},
@@ -56,9 +59,6 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 					},
 					twitter: {
 						type: graphQL.Json,
-					},
-					url: {
-						type: graphQL.nonNull(graphQL.GraphQLString),
 					},
 					verification: {
 						type: graphQL.Json,
