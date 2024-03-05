@@ -14,7 +14,7 @@
 				</input>
 				<input name="baseUrl" type="TextLine">
 					<label>Base URL</label>
-					<help-text>Override the vhost domain. Used in og:url and canonical. Example: "https://enonic.com"</help-text>
+					<help-text>Override baseUrl i.e. https://example.com</help-text>
 					<occurrences minimum="0" maximum="1"/>
 					<config>
 						<regexp>^https?:\/\/.+$</regexp>
@@ -31,7 +31,7 @@
 					<occurrences minimum="0" maximum="1"/>
 				</input>
 				<input name="seoImageIsPrescaled" type="CheckBox">
-					<label>Serve the content fallback image as is. No system scaling.</label>
+					<label>Use original image, no scaling</label>
 					<help-text>Image will otherwise be scaled to 1200x630px and set to jpg with quality 85</help-text>
 					<occurrences minimum="0" maximum="1"/>
 				</input>
@@ -44,7 +44,7 @@
 		</field-set>
 		<!-- Option set - Title handling yes/no -->
 		<field-set>
-			<label>Title config</label>
+			<label>Title</label>
 			<items>
 				<input name="titleBehaviour" type="CheckBox">
 					<label>Append site name to all titles?</label>
@@ -66,13 +66,17 @@
 				</input>
 			</items>
 		</field-set>
+		<!-- Field set for openGraph images (used by facebook) -->
 		<field-set>
-			<label>Verification</label>
+			<label>Open Graph</label>
 			<items>
-				<input name="siteVerification" type="TextLine">
-					<label>Google Search Console (site verification code)</label>
-					<help-text>Do you want to use Google Search Console? Then you need to verify that you own the site. Add verification code in this field to generate the necessary meta field. We will not generate this tag if field is left empty (good if you've already added this field elsewhere).</help-text>
-					<occurrences minimum="0" maximum="1"/>
+				<input name="removeOpenGraphUrl" type="CheckBox">
+					<label>Remove the openGraph Url tag?</label>
+					<help-text>Checking this will stop the app from generating the open graph url tag</help-text>
+				</input>
+				<input name="removeOpenGraphImage" type="CheckBox">
+					<label>Remove the openGraph image tag?</label>
+					<help-text>Checking this will stop the app from generating the open graph image tag</help-text>
 				</input>
 			</items>
 		</field-set>
@@ -94,22 +98,18 @@
 				</input>
 			</items>
 		</field-set>
-		<!-- Field set for openGraph images (used by facebook) -->
 		<field-set>
-			<label>Open Graph</label>
+			<label>Verification</label>
 			<items>
-				<input name="removeOpenGraphUrl" type="CheckBox">
-					<label>Remove the openGraph Url tag?</label>
-					<help-text>Checking this will stop the app from generating the open graph url tag</help-text>
-				</input>
-				<input name="removeOpenGraphImage" type="CheckBox">
-					<label>Remove the openGraph image tag?</label>
-					<help-text>Checking this will stop the app from generating the open graph image tag</help-text>
+				<input name="siteVerification" type="TextLine">
+					<label>Google Search Console (site verification code)</label>
+					<help-text>Do you want to use Google Search Console? Then you need to verify that you own the site. Add verification code in this field to generate the necessary meta field. We will not generate this tag if field is left empty (good if you've already added this field elsewhere).</help-text>
+					<occurrences minimum="0" maximum="1"/>
 				</input>
 			</items>
 		</field-set>
 		<field-set>
-			<label>JSON paths</label><!-- Customized paths yes/no --><!-- +Text about advanced/custom settings needed -->
+			<label>Advanced options</label><!-- Customized paths yes/no --><!-- +Text about advanced/custom settings needed -->
 			<items>
 				<input name="fullPath" type="checkbox">
 					<label>Access the field by the full JSON path?</label>
