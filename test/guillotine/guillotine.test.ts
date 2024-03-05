@@ -48,6 +48,7 @@ globalThis.__ = {
 }
 
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
+	baseUrl: 'https://www.example.com',
 	blockRobots: true,
 	canonical: true,
 	fullPath: true,
@@ -129,6 +130,7 @@ jest.mock(
 );
 
 const metafieldsResult: MetafieldsResult = {
+	baseUrl: 'https://www.example.com',
 	canonical: null,
 	description: 'seoDescription',
 	// image: imageContent,
@@ -152,7 +154,6 @@ const metafieldsResult: MetafieldsResult = {
 	verification: {
 		google: 'siteVerification'
 	},
-	url: '/folderContentPath'
 };
 
 const graphQLContent = siteContent as Site<MetafieldsSiteConfig>;
@@ -223,20 +224,20 @@ describe('guillotine extensions', () => {
 					MetaFields: {
 						description: "Meta fields for a content",
 						fields: {
+							baseUrl: {type: 'string'},
 							canonical: {type: 'string'},
-							description: {type: "string"},
-							fullTitle: {type: "string"},
+							description: {type: 'string'},
+							fullTitle: {type: 'string'},
 							image: {
 								type: imageContent
 							},
-							locale: {type: "string"},
+							locale: {type: 'string'},
 							openGraph: {type: '{"json": "value"}'},
 							robots: {type: '{"json": "value"}'},
-							siteName: {type: "string"},
-							title: {type: "string"},
+							siteName: {type: 'string'},
+							title: {type: 'string'},
 							twitter: {type: '{"json": "value"}'},
 							verification: {type: '{"json": "value"}'},
-							url: {type: 'string'},
 						}
 					} // MetaFields
 				} // types

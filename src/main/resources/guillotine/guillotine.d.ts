@@ -9,6 +9,7 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 
 export declare interface MetafieldsResult {
+	baseUrl?: string
 	canonical?: string
 	description?: string
 	fullTitle: string
@@ -32,7 +33,6 @@ export declare interface MetafieldsResult {
 	verification?: {
 		google?: string
 	}
-	url: string
 }
 
 export declare type ContentMetaFieldsResolverReturnType = Omit<MetafieldsResult,'image'>
