@@ -5,66 +5,27 @@ import type {
 
 
 import {ObjectTypeName} from '@enonic-types/guillotine';
-import {buildContentMetaFieldsResolver} from './typeFieldResolvers/buildContentMetaFieldsResolver';
+import {
+	GraphQLFieldName,
+	GraphQLTypeName,
+} from '/guillotine/constants';
+import {buildContentMetaFieldsResolver} from '/guillotine/typeFieldResolvers/buildContentMetaFieldsResolver';
 import {metaFieldsImagesResolver} from '/guillotine/typeFieldResolvers/metaFieldsImagesResolver';
-
-
-// In type names first letter should be uppercase
-const enum GraphQLTypeName {
-	METAFIELDS = 'MetaFields',
-}
-
-// In fields names first letter should be lowercase
-const enum GraphQLFieldName {
-	IMAGE = 'image',
-	METAFIELDS = 'metaFields',
-}
+import {buildMetaFields} from '/guillotine/types/metaFields';
+import {buildOpenGraph} from '/guillotine/types/openGraph';
+import {buildRobots} from '/guillotine/types/robots';
+import {buildTwitter} from '/guillotine/types/twitter';
+import {buildVerification} from '/guillotine/types/verification';
 
 
 export const extensions = (graphQL: GraphQL): Extensions => {
 	return {
 		types: {
-			[GraphQLTypeName.METAFIELDS]: {
-				description: 'Meta fields for a content',
-				fields: {
-					baseUrl: {
-						type: graphQL.GraphQLString,
-					},
-					canonical: {
-						type: graphQL.reference(ObjectTypeName.Content),
-					},
-					description: {
-						type: graphQL.GraphQLString,
-					},
-					fullTitle: {
-						type: graphQL.nonNull(graphQL.GraphQLString),
-					},
-					locale: {
-						type: graphQL.GraphQLString,
-					},
-					image: {
-						type: graphQL.reference(ObjectTypeName.media_Image),
-					},
-					openGraph: {
-						type: graphQL.Json,
-					},
-					robots: {
-						type: graphQL.Json,
-					},
-					siteName: {
-						type: graphQL.GraphQLString, // can be null
-					},
-					title: {
-						type: graphQL.nonNull(graphQL.GraphQLString),
-					},
-					twitter: {
-						type: graphQL.Json,
-					},
-					verification: {
-						type: graphQL.Json,
-					},
-				}
-			}
+			[GraphQLTypeName.METAFIELDS]: buildMetaFields(graphQL),
+			[GraphQLTypeName.METAFIELDS_OPEN_GRAPH]: buildOpenGraph(graphQL),
+			[GraphQLTypeName.METAFIELDS_ROBOTS]: buildRobots(graphQL),
+			[GraphQLTypeName.METAFIELDS_TWITTER]: buildTwitter(graphQL),
+			[GraphQLTypeName.METAFIELDS_VERIFICATION]: buildVerification(graphQL),
 		},
 		creationCallbacks: {
 			[ObjectTypeName.Content]: (params) => {
