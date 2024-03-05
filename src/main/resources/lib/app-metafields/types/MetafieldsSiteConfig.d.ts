@@ -7,7 +7,6 @@ export type {
 export declare interface MetafieldsSiteConfig {
 	baseUrl?: string
 	blockRobots?: boolean
-	canonical?: boolean
 	fullPath?: boolean
 	pathsDescriptions?: CommaSeparatedString|CommaSeparatedString[]
 	pathsImages?: CommaSeparatedString|CommaSeparatedString[]

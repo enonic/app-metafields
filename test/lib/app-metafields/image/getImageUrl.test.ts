@@ -32,7 +32,6 @@ globalThis.log = {
 
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	blockRobots: true,
-	canonical: true,
 	// fullPath: true,
 	pathsDescriptions: 'pathsDescriptions0,pathsDescriptions1', // with comma
 	pathsImages: 'pathsImages0,pathsImages1', // with comma

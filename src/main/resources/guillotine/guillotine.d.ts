@@ -10,7 +10,7 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 export declare interface MetafieldsResult {
 	baseUrl?: string
-	canonical?: string
+	canonical?: Content|null
 	description?: string
 	fullTitle: string
 	locale?: string

@@ -31,7 +31,7 @@ export const extensions = (graphQL: GraphQL): Extensions => {
 						type: graphQL.GraphQLString,
 					},
 					canonical: {
-						type: graphQL.GraphQLString,
+						type: graphQL.reference(ObjectTypeName.Content),
 					},
 					description: {
 						type: graphQL.GraphQLString,

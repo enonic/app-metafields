@@ -50,7 +50,6 @@ globalThis.__ = {
 const metaFieldsSiteConfig: MetafieldsSiteConfig = {
 	baseUrl: 'https://www.example.com',
 	blockRobots: true,
-	canonical: true,
 	fullPath: true,
 	pathsDescriptions: 'pathsDescriptions', // with comma
 	pathsImages: 'pathsImages', // with comma
@@ -225,7 +224,7 @@ describe('guillotine extensions', () => {
 						description: "Meta fields for a content",
 						fields: {
 							baseUrl: {type: 'string'},
-							canonical: {type: 'string'},
+							canonical: {type: siteContent},
 							description: {type: 'string'},
 							fullTitle: {type: 'string'},
 							image: {
