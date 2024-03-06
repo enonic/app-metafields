@@ -1,6 +1,5 @@
 import type {
 	BaseFolderContent,
-	CreateDataFetcherResultParams,
 	GraphQL,
 	GraphQLBoolean,
 	GraphQLDate,
@@ -14,16 +13,12 @@ import type {
 	GraphQLString,
 } from '@enonic-types/guillotine';
 import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
-import type {
-	getSite as ContentGetSite,
-	Site
-} from '/lib/xp/content';
+import type {Site} from '/lib/xp/content';
 import type {getSiteConfig} from '/lib/xp/portal';
 import type {MetafieldsResult} from '/guillotine/guillotine.d';
 
 
 import {
-	// beforeAll,
 	describe,
 	expect,
 	jest,
@@ -201,22 +196,6 @@ const graphQL: Partial<GraphQL> = {
 };
 
 describe('guillotine extensions', () => {
-	// beforeAll(() => {
-	// 	jest.mock(
-	// 		'/lib/xp/content',
-	// 		() => ({
-	// 			getSite: jest.fn<typeof ContentGetSite>().mockReturnValue(siteContent),
-	// 			getOutboundDependencies: jest.fn().mockReturnValue([]),
-	// 			query: jest.fn().mockReturnValue({
-	// 				count: 0,
-	// 				hits: [],
-	// 				total: 0,
-	// 			})
-	// 		}),
-	// 		{virtual: true}
-	// 	);
-	// });
-
 	it("does it's thing", () => {
 		import('/guillotine/guillotine').then(({extensions}) => {
 			// @ts-expect-error Project types doesn't match @enonic-types/guillotine
@@ -328,7 +307,7 @@ describe('guillotine extensions', () => {
 				},
 				source: metafieldsResult,
 			});
-			// expect(metaFieldsImagesResolver({}));
+			// expect(metaFieldsImagesResolver({})); // TODO
 		}); // import
 	}); // it
 }); // describe
