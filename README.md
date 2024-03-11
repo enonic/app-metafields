@@ -24,14 +24,14 @@ The **SEO Meta Fields** app will then be available to add to your websites throu
 ## How to use this app
 
 There are multiple ways to configure this application:
-1. Per content [Content configuration](content-configuration)
-2. Per site [Site configuration](site-configuration)
-3. Across server [Application configuration](application-configuration)
+1. Per content [Content configuration](#content-configuration)
+2. Per site [Site configuration](#site-configuration)
+3. Across server [Application configuration](#application-configuration)
 
 There are two ways of using this application on a site:
 
-1. [Adding meta tags to pages](adding-meta-tags-to-pages)
-2. [Headless integration](headless-integration)
+1. [Adding meta tags to pages](#adding-meta-tags-to-pages)
+2. [Headless integration](#headless-integration)
 
 ### Adding meta tags to pages
 
@@ -65,7 +65,7 @@ This app introduces a number of site configurations, which are used across the e
 6. Verification
 7. Advanced options
 
-> **_NOTE:_** You can also set defaults across the entire server using an [application config](application-configuration) file.
+> **_NOTE:_** You can also set defaults across the entire server using an [application config](#application-configuration) file.
 
 ### General settings
 
@@ -109,7 +109,7 @@ Add meta tag for Google Search Console (formerly known as Google Webmaster Tools
 
 ### Advanced options
 
-When figuring out what data to put in your meta fields, this app analyzes the current content you're viewing. It will fetch a pre-defined set of fields in a pre-defined order (more on that later in the [waterfall logic](waterfall-logic-for-meta-fields) section). You might however have fields with different names, or want to add more fields, or control in which order the data is evaluated. Then these settings are for you.
+When figuring out what data to put in your meta fields, this app analyzes the current content you're viewing. It will fetch a pre-defined set of fields in a pre-defined order (more on that later in the [waterfall logic](#waterfall-logic-for-meta-fields) section). You might however have fields with different names, or want to add more fields, or control in which order the data is evaluated. Then these settings are for you.
 
 Add field names, like `field1`, `field2`, `long-fieldname3`. It will handle dashes and other special characters in your field names. These custom fields will be checked before any other fields. If you add more than one field here, the first match wins. So if we find data in `field2` we won't look in `long-fieldname3`.
 
@@ -192,7 +192,7 @@ In version 2.0.0 the metafields service has been removed in favour of a Guilloti
 
 If you are using the metafields response processor, this doesn't affect you.
 
-If however you are doing external rendering, see [Headless integration](headless-integration).
+If however you are doing external rendering, see [Headless integration](#headless-integration).
 
 #### SiteConfig
 
@@ -202,7 +202,7 @@ Some settings have been removed, some have been added, and the order has also be
 
 ##### Base URL
 
-A `Base URL` textline has been <span style="color:green">added</span>. See [Base URL](base-url)
+A `Base URL` textline has been <span style="color:green">added</span>. See [Base URL](#base-url)
 
 ##### Headless
 
@@ -241,13 +241,13 @@ It will automatically use the image set or found on the site content instead. Se
 
 The `Title fallback` textline has been <span style="color:red">removed</span>.
 
-The `Title fallback` actually never made any sence, since all content has to have a display name. See waterfall logic for [titles](for-titles)
+The `Title fallback` actually never made any sence, since all content has to have a display name. See waterfall logic for [titles](#for-titles)
 
 ##### Description fallback
 
 The `Description fallback` textarea has been <span style="color:red">removed</span>.
 
-It will automatically use the description set or found on the site content instead. See waterfall logic for [descriptions](for-descriptions).
+It will automatically use the description set or found on the site content instead. See waterfall logic for [descriptions](#for-descriptions).
 
 ##### JSON paths
 
