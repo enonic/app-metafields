@@ -41,7 +41,7 @@ If you are doing normal Enonic XP page rendering then the metafields response pr
 
 ### Headless integration
 
-If you are doing external rendering, for example via Next.XP, you need to install a recent version (7.0.3) of App Guillotine, and add it to your site.
+If you are doing external rendering, for example via Next.XP, you need to install a recent version (7.1 or later) of the [Guillotine app](https://market.enonic.com/vendors/enonic/guillotine), and add it to your site.
 
 Then you can fetch the metadata you need from Enonic XP using GraphQL.
 
