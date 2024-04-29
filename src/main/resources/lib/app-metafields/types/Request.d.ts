@@ -8,7 +8,8 @@ export declare type Request<
 		pathParams?: Record<string, string>
 		rawPath?: string
 		remoteAddress?: string
-		// webSocket?: unknown
+		repositoryId?: string
+		webSocket?: boolean
 	}
 > = {
 	branch: 'draft'|'master'
