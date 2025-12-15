@@ -9,7 +9,7 @@
     "@enonic-types/lib-portal": "^7.16.0",
     "@enonic/js-utils": "^1.9.0",
     "@enonic/mock-xp": "^1.0.0",
-    "@swc/core": "^1.15.3",
+    "@swc/core": "^1.15.4",
     "glob": "^13.0.0",
     "jest": "^30.2.0",
     "thymeleaf": "^0.22.0",
