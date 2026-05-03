@@ -1,0 +1,180 @@
+kind: "CMS"
+mixins:
+    -   name: "com.enonic.app.metafields:meta-data"
+        allowContentTypes: "^(?!media:.*|portal:fragment|portal:template|portal:template-folder$).*"
+        optional: true
+form:
+    -   type: "FieldSet"
+        label: "General settings"
+        items:
+            -   type: "CheckBox"
+                name: "blockRobots"
+                label: "Hide site from search engines?"
+                helpText: "Caution: Use this to ask search engines to ignore your entire site!"
+                occurrences:
+                    min: 0
+                    max: 1
+            -   type: "TextLine"
+                name: "baseUrl"
+                label: "Base URL"
+                helpText: "Override baseUrl i.e. https://example.com"
+                occurrences:
+                    min: 0
+                    max: 1
+                regexp: "^https?:\\/\\/.+$"
+    -   type: "FieldSet"
+        label: "Fallback"
+        items:
+            -   type: "ImageSelector"
+                name: "seoImage"
+                label: "Content image fallback"
+                helpText: "If current content image is not found, use this as last resort.\
+          \ Tip: add company logo here!"
+                occurrences:
+                    min: 0
+                    max: 1
+            -   type: "CheckBox"
+                name: "seoImageIsPrescaled"
+                label: "Use original image, no scaling"
+                helpText: "By default the image will be scaled to 1200x630px"
+                occurrences:
+                    min: 0
+                    max: 1
+            -   type: "TextArea"
+                name: "seoDescription"
+                label: "Description fallback"
+                helpText: "A default fallback description to use if current content does not\
+          \ have one. If not used, the site content's description field will be used\
+          \ instead. However, if that also is empty, we'll skip generating this meta\
+          \ field."
+                occurrences:
+                    min: 0
+                    max: 1
+    -   type: "FieldSet"
+        label: "Title"
+        items:
+            -   type: "CheckBox"
+                name: "titleBehaviour"
+                label: "Append site name to all titles?"
+                helpText: "This will add the main site's name/title (displayName on site content\
+          \ in Content Studio) at the end of the title on all pages. So it will look\
+          \ something like \"Current page - My Site\"."
+                occurrences:
+                    min: 0
+                    max: 1
+                default: "checked"
+            -   type: "TextLine"
+                name: "titleSeparator"
+                label: "Separator ('content - site')"
+                helpText: "If site title is added to page title, use this to separate them.\
+          \ Default is a dash, \" - \", making a page title become \"Page title -\
+          \ Site title\"."
+                occurrences:
+                    min: 0
+                    max: 1
+                default: "-"
+            -   type: "CheckBox"
+                name: "titleFrontpageBehaviour"
+                label: "Remove site name on frontpage?"
+                helpText: "On the frontpage, content title and site title is the same, so\
+          \ title result might look duplicate and odd (like \"My Website - My Website\"\
+          , use this setting to remove site name from frontpage title and only use\
+          \ content title."
+                occurrences:
+                    min: 0
+                    max: 1
+                default: "checked"
+    -   type: "FieldSet"
+        label: "Open Graph"
+        items:
+            -   type: "CheckBox"
+                name: "removeOpenGraphUrl"
+                label: "Remove the openGraph Url tag?"
+                helpText: "Checking this will stop the app from generating the open graph\
+          \ url tag"
+                occurrences:
+                    min: 0
+                    max: 1
+            -   type: "CheckBox"
+                name: "removeOpenGraphImage"
+                label: "Remove the openGraph image tag?"
+                helpText: "Checking this will stop the app from generating the open graph\
+          \ image tag"
+                occurrences:
+                    min: 0
+                    max: 1
+    -   type: "FieldSet"
+        label: "Twitter Cards"
+        items:
+            -   type: "TextLine"
+                name: "twitterUsername"
+                label: "Twitter username (must begin with @)"
+                helpText: "Using Twitter? Just add your Twitter username here (starting with\
+          \ the @ symbol) to generate Twitter Card metadata on all pages. It uses\
+          \ the same data used in Open Graph metadata, so no further settings needed."
+                occurrences:
+                    min: 0
+                    max: 1
+                regexp: "^[@]+.*$"
+            -   type: "CheckBox"
+                name: "removeTwitterImage"
+                label: "Remove the twitter image from the card?"
+                helpText: "Removes the twitter image tag if username is provided"
+                occurrences:
+                    min: 0
+                    max: 1
+    -   type: "FieldSet"
+        label: "Verification"
+        items:
+            -   type: "TextLine"
+                name: "siteVerification"
+                label: "Google Search Console (site verification code)"
+                helpText: "Do you want to use Google Search Console? Then you need to verify\
+          \ that you own the site. Add verification code in this field to generate\
+          \ the necessary meta field. We will not generate this tag if field is left\
+          \ empty (good if you've already added this field elsewhere)."
+                occurrences:
+                    min: 0
+                    max: 1
+    -   type: "FieldSet"
+        label: "Advanced options"
+        items:
+            -   type: "CheckBox"
+                name: "fullPath"
+                label: "Access the field by the full JSON path?"
+                helpText: "By default the app will look for the regular fields in your content\
+          \ type (data.myField in the content JSON). If checked you can choose the\
+          \ field setting the entire content JSON structure."
+                occurrences:
+                    min: 0
+                    max: 1
+            -   type: "TextLine"
+                name: "pathsImages"
+                label: "Images"
+                helpText: "Any custom fields in your content types that you want to use for\
+          \ generating metadata for images? Add them here. It's the json paths we're\
+          \ after here, like \"headerImage\" or \"someOtherField\". Check Github readme\
+          \ for detailed explanation."
+                occurrences:
+                    min: 0
+                    max: 0
+            -   type: "TextLine"
+                name: "pathsTitles"
+                label: "Titles"
+                helpText: "Any custom fields in your content types that you want to use for\
+          \ generating metadata for titles? Add them here. It's the json paths we're\
+          \ after here, like \"headerText\", \"myCoolTitle\" or \"mySecondaryTitle\"\
+          . Check Github readme for detailed explanation."
+                occurrences:
+                    min: 0
+                    max: 0
+            -   type: "TextLine"
+                name: "pathsDescriptions"
+                label: "Descriptions"
+                helpText: "Any custom fields in your content types that you want to use for\
+          \ generating metadata for page description? Add them here. It's the json\
+          \ paths we're after here, like \"ingress\" or \"subTitle\". Check Github\
+          \ readme for detailed explanation."
+                occurrences:
+                    min: 0
+                    max: 0

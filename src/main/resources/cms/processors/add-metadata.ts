@@ -3,11 +3,7 @@ import type {Request, Response} from '/lib/app-metafields/types';
 
 import {forceArray} from '@enonic/js-utils/array/forceArray';
 import {toStr} from '@enonic/js-utils/value/toStr';
-import {
-	getContent as getCurrentContent,
-	getSite as libPortalGetSite,
-	getSiteConfig as libPortalGetSiteConfig,
-} from '/lib/xp/portal';
+import {getContent as getCurrentContent, getSite as libPortalGetSite, getSiteConfig as libPortalGetSiteConfig,} from '/lib/xp/portal';
 import {DEBUG, TRACE} from '/lib/app-metafields/constants';
 import {getMergedConfig} from '/lib/app-metafields/xp/getMergedConfig';
 import {getFixedHtmlAttrsAsString} from '/lib/app-metafields/processor/getFixedHtmlAttrsAsString';
@@ -39,7 +35,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 
 	const isResponseContentTypeXml = XML_MEDIA_TYPES.some(xmlMediaType => res.contentType.indexOf(xmlMediaType) > -1);
 
-	if ( isResponseContentTypeHtml && res.body && typeof res.body === "string" ) {
+	if (isResponseContentTypeHtml && res.body && typeof res.body === "string") {
 		const titleHasIndex = res.body.indexOf("<title>") > -1;
 		const htmlIndex = res.body.toLowerCase().indexOf("<html");
 		const endHtmlIndex = res.body.indexOf(">", htmlIndex);
@@ -71,7 +67,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 	res.pageContributions.headEnd = forceArray(res.pageContributions.headEnd);
 
 	// Push metadata if response content type is html or xml
-	if ( isResponseContentTypeHtml || isResponseContentTypeXml ) {
+	if (isResponseContentTypeHtml || isResponseContentTypeXml) {
 		const selfClosingTags = isResponseContentTypeXml;
 		const metadata: string = getMetaData({
 			mergedConfig,
@@ -83,7 +79,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 		res.pageContributions.headEnd.push(metadata);
 	}
 
-	if ( !titleAdded ) {
+	if (!titleAdded) {
 		const titleHtml = getTitleHtml({
 			mergedConfig,
 			content,
@@ -93,7 +89,7 @@ export const responseProcessor = (req: Request, res: Response) => {
 	}
 
 	// Skip other filters
-	if ( req.params && req.params.debug === "true" ) {
+	if (req.params && req.params.debug === "true") {
 		res.applyFilters = false;
 	}
 

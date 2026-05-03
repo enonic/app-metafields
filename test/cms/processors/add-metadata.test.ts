@@ -1,30 +1,12 @@
-import type { Log } from '@enonic/mock-xp';
+import type {Log} from '@enonic/mock-xp';
+import {Server} from '@enonic/mock-xp';
 import type {
 	getContent as libPortalGetContent,
 	getSite as libPortalGetSite,
 	getSiteConfig as libPortalGetSiteConfig
 } from '@enonic-types/lib-portal';
-import type {
-	Request,
-	Response
-} from '/lib/app-metafields/types';
-
-
-import {
-	// LibContent,
-	// LibContext,
-	// LibNode,
-	// LibPortal,
-	// App,
-	// Request as MockRequest,
-	Server
-} from '@enonic/mock-xp';
-import {
-	describe,
-	expect,
-	jest,
-	test as it,
-} from '@jest/globals';
+import type {Request, Response} from '/lib/app-metafields/types';
+import {describe, expect, jest, test as it,} from '@jest/globals';
 
 
 const server = new Server({
@@ -95,7 +77,7 @@ jest.mock('/lib/thymeleaf', () => {
 
 describe('add-metadata', () => {
 	it('should not throw when there is no content', () => {
-		import('/site/processors/add-metadata').then(({responseProcessor}) => {
+		import('/cms/processors/add-metadata').then(({responseProcessor}) => {
 			const request: Request = {
 				"branch": "draft",
 				"method": "GET",

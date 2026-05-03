@@ -6,14 +6,8 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 import {toStr} from '@enonic/js-utils/value/toStr';
 import {startsWith} from '@enonic/js-utils/string/startsWith';
 import {includes as arrayIncludes} from '@enonic/js-utils/array/includes';
-import {
-	get as getContentByKey,
-	getSite as getSiteByKey,
-} from '/lib/xp/content';
-import {
-	getContent as getCurrentContent,
-	pageUrl,
-} from '/lib/xp/portal';
+import {get as getContentByKey, getSite as getSiteByKey,} from '/lib/xp/content';
+import {getContent as getCurrentContent, pageUrl,} from '/lib/xp/portal';
 // @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
 
@@ -43,12 +37,12 @@ TODO: Possibility to click title, desc, image and see the water fall logic and w
 TODO: Grade each data based on amount of text etc. Red, yellow, green. And info about it (best-practise).
 */
 export const get = (req: Request) => {
-/*
-	TODO: Display content settings? If any, then fallbacks.
-	x": {
-     "com-enonic-app-metafields": {
-         "meta-data"
-*/
+	/*
+		TODO: Display content settings? If any, then fallbacks.
+		x": {
+		 "com-enonic-app-metafields": {
+			 "meta-data"
+	*/
 	let contentId = req.params.contentId;
 
 	if (!contentId && getCurrentContent()) {
@@ -62,23 +56,23 @@ export const get = (req: Request) => {
 		};
 	}
 
-	const content = getContentByKey({ key: contentId });
+	const content = getContentByKey({key: contentId});
 	DEBUG && log.debug('seo widget content:%s', toStr(content));
 
 	if (!content) {
 		return {
-			body: render( resolve('seo.html'), {}),
+			body: render(resolve('seo.html'), {}),
 			contentType: CONTENT_TYPE
 		};
 	}
 
 	if (
-		startsWith(content.type,'media:')
+		startsWith(content.type, 'media:')
 		|| arrayIncludes([
 			'portal:fragment',
 			'portal:template',
 			'portal:template-folder'
-		],(content.type))
+		], (content.type))
 	) {
 		return {
 			body: `<widget class='error'>No metafields for contentType:${content.type}</widget>`,
@@ -86,7 +80,7 @@ export const get = (req: Request) => {
 		};
 	}
 
-	const site: Site<MetafieldsSiteConfig>|null = getSiteByKey<MetafieldsSiteConfig>({ key: content._path });
+	const site: Site<MetafieldsSiteConfig> | null = getSiteByKey<MetafieldsSiteConfig>({key: content._path});
 	DEBUG && log.debug('seo widget site:%s', toStr(site));
 
 	if (!site) {
@@ -100,7 +94,7 @@ export const get = (req: Request) => {
 	DEBUG && log.debug('seo widget siteConfig:%s', toStr(siteConfig));
 	if (!siteConfig) {
 		return {
-			body: render( resolve('seo.html'), {}),
+			body: render(resolve('seo.html'), {}),
 			contentType: CONTENT_TYPE
 		};
 	}
@@ -110,7 +104,7 @@ export const get = (req: Request) => {
 
 	if (!mergedConfig) {
 		return {
-			body: render( resolve('seo.html'), {}),
+			body: render(resolve('seo.html'), {}),
 			contentType: CONTENT_TYPE
 		};
 	}
@@ -132,10 +126,12 @@ export const get = (req: Request) => {
 		content,
 		site,
 	});
-	if (description === '') description = null;
+	if (description === '') {
+		description = null;
+	}
 
-	const frontpageUrl = pageUrl({ path: site._path, type: "absolute" });
-	const absoluteUrl = pageUrl({ path: content._path, type: "absolute" });
+	const frontpageUrl = pageUrl({path: site._path, type: "absolute"});
+	const absoluteUrl = pageUrl({path: content._path, type: "absolute"});
 
 	let ogUrl: string;
 	if (mergedConfig.baseUrl) {
@@ -145,7 +141,7 @@ export const get = (req: Request) => {
 			sitePath: site._path
 		});
 	} else {
-		const justThePath = absoluteUrl.replace(frontpageUrl,'');
+		const justThePath = absoluteUrl.replace(frontpageUrl, '');
 		ogUrl = `[SITE_URL]${justThePath}`;
 	}
 
@@ -156,20 +152,20 @@ export const get = (req: Request) => {
 			canonical = prependBaseUrl({
 				baseUrl: mergedConfig.baseUrl,
 				contentPath: contentForCanonicalUrl
-					? contentForCanonicalUrl._path
-					: content._path,
+							 ? contentForCanonicalUrl._path
+							 : content._path,
 				sitePath: site._path
 			});
 		} else {
 			const canonicalUrl = contentForCanonicalUrl
-				? pageUrl({ path: contentForCanonicalUrl._path, type: "absolute" })
-				: absoluteUrl;
-			const canonicalJustThePath = canonicalUrl.replace(frontpageUrl,'');
+								 ? pageUrl({path: contentForCanonicalUrl._path, type: "absolute"})
+								 : absoluteUrl;
+			const canonicalJustThePath = canonicalUrl.replace(frontpageUrl, '');
 			canonical = `[SITE_URL]${canonicalJustThePath}`;
 		}
 	}
 
-	const imageUrl: string|null = getImageUrl({
+	const imageUrl: string | null = getImageUrl({
 		mergedConfig,
 		defaultImg: mergedConfig.seoImage,
 		defaultImgPrescaled: mergedConfig.seoImageIsPrescaled,
@@ -213,7 +209,7 @@ export const get = (req: Request) => {
 	DEBUG && log.debug('seo widget params:%s', toStr(params));
 
 	return {
-		body: render( resolve('seo.html'), params),
+		body: render(resolve('seo.html'), params),
 		contentType: CONTENT_TYPE
 	};
 };

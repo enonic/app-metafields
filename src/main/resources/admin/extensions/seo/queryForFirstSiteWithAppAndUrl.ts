@@ -1,14 +1,14 @@
 import type {Site} from '/lib/xp/portal';
-import type { MetafieldsSiteConfig } from '/lib/app-metafields/types/MetafieldsSiteConfig';
+import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSiteConfig';
 
 
 import {query} from '/lib/xp/content';
 
 
 export const queryForFirstSiteWithAppAndUrl = ({
-	applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context
-	siteUrl
-} : {
+												   applicationKey, // Avoid app.name so it can be used in Guillotine Extension Context
+												   siteUrl
+											   }: {
 	applicationKey: string
 	siteUrl: string
 }) => {

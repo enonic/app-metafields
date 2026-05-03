@@ -1,0 +1,5 @@
+kind: "AdminExtension"
+title: "SEO Meta Fields"
+description: "Optimize content for search engines"
+interfaces:
+    - "contentstudio.contextpanel"
