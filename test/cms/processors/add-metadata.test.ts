@@ -95,7 +95,7 @@ jest.mock('/lib/thymeleaf', () => {
 
 describe('add-metadata', () => {
 	it('should not throw when there is no content', () => {
-		import('/site/processors/add-metadata').then(({responseProcessor}) => {
+		import('/cms/processors/add-metadata').then(({responseProcessor}) => {
 			const request: Request = {
 				"branch": "draft",
 				"method": "GET",

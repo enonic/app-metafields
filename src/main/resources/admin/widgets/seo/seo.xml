@@ -1,7 +1,0 @@
-<widget>
-	<display-name>SEO Meta Fields</display-name>
-	<description>Optimize content for search engines</description>
-	<interfaces>
-		<interface>contentstudio.contextpanel</interface>
-	</interfaces>
-</widget>
