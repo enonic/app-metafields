@@ -1,0 +1,4 @@
+kind: "Site"
+processors:
+  - name: "add-metadata"
+    order: 10
