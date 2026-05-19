@@ -14,7 +14,6 @@ import {
 	getContent as getCurrentContent,
 	pageUrl,
 } from '/lib/xp/portal';
-// @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
 
 import {DEBUG} from '/lib/app-metafields/constants';

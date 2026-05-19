@@ -4,7 +4,6 @@ import type {MetafieldsSiteConfig} from '/lib/app-metafields/types/MetafieldsSit
 
 
 import {pageUrl} from '/lib/xp/portal';
-// @ts-expect-error // No types yet
 import {render} from '/lib/thymeleaf';
 
 import {prependBaseUrl} from '/lib/app-metafields/url/prependBaseUrl';

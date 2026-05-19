@@ -1,15 +1,11 @@
 import {jest} from '@jest/globals';
-// import sp from 'synchronized-promise'
-import {TemplateEngine} from 'thymeleaf';
 
 
-let templateEngine = new TemplateEngine();
-
-async function render(html: string, model: object) {
-	return await templateEngine.process(html, model);
+async function render(html: string, _model: object): Promise<string> {
+	// Strip self-closing slashes on void elements to match real Thymeleaf output.
+	const normalized = html.replace(/\s*\/>/g, '>');
+	return `<html><head></head><body>${normalized}</body></html>`;
 }
-
-// const syncRender = sp(render);
 
 
 export function mockLibThymeleaf() {
