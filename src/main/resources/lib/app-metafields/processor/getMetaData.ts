@@ -130,8 +130,8 @@ export function getMetaData({
 		openGraph: {
 			article: isFrontpage ? null : {
 				expirationTime: content.publish?.to,
-				modifiedTime: content.publish?.from,
-				publishedTime: content.publish?.first,
+				modifiedTime: content.modifiedTime,
+				publishedTime: content.publish?.from,
 			}
 		},
 		siteName: site.displayName,
