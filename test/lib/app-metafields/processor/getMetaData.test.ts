@@ -78,8 +78,8 @@ describe('getMetaData', () => {
 			},
 			siteContent: site
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
-			expect(getMetaData({
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+			return expect(getMetaData({
 				mergedConfig: metaFieldsSiteConfig,
 				site,
 			})).toBeUndefined();
@@ -108,12 +108,17 @@ describe('getMetaData', () => {
 			},
 			siteContent: site
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			expect(getMetaData({
 				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
 					type: 'base:folder',
+					modifiedTime: '2024-03-04T05:06:07Z',
+					publish: {
+						from: '2023-01-02T03:04:05Z',
+						to: '2025-12-31T23:59:59Z',
+					},
 				}),
 				site,
 			})).toEqual({
@@ -126,9 +131,9 @@ describe('getMetaData', () => {
 				locale: 'en_US',
 				openGraph: {
 					article: {
-						expirationTime: undefined,
-						modifiedTime: undefined,
-						publishedTime: undefined
+						expirationTime: '2025-12-31T23:59:59Z',
+						modifiedTime: '2024-03-04T05:06:07Z',
+						publishedTime: '2023-01-02T03:04:05Z',
 					}
 				},
 				siteName: 'siteContentDisplayName',
@@ -151,7 +156,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const site = mockSite({
 				description: 'Site description',
 				prefix: 'site',
@@ -200,7 +205,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
@@ -265,7 +270,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
@@ -329,7 +334,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const contentWithImage = mockContent({
 				prefix: 'one',
 				data: {
@@ -389,7 +394,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const site = mockSite({
 				description: 'Site description',
 				prefix: 'site',
@@ -402,7 +407,7 @@ describe('getMetaData', () => {
 				},
 				siteContent: site
 			});
-			expect(getMetaData({
+			return expect(getMetaData({
 				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
@@ -463,7 +468,7 @@ describe('getMetaData', () => {
 		mocklibXpPortal({
 			siteConfig: metaFieldsSiteConfig
 		});
-		import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
+		return import('/lib/app-metafields/processor/getMetaData').then(({getMetaData}) => {
 			const site = mockSite({
 				description: 'Site description',
 				prefix: 'site',
@@ -476,7 +481,7 @@ describe('getMetaData', () => {
 				},
 				siteContent: site
 			});
-			expect(getMetaData({
+			return expect(getMetaData({
 				mergedConfig: metaFieldsSiteConfig,
 				content: mockContent({
 					prefix: 'one',
