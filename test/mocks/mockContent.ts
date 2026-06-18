@@ -7,12 +7,16 @@ import type {
 export function mockContent({
 	attachments = {},
 	data = {},
+	modifiedTime,
 	prefix,
+	publish,
 	type
 }: {
 	attachments?: Record<string, Attachment>
 	data?: Record<string, unknown>
+	modifiedTime?: string
 	prefix: string
+	publish?: Content['publish']
 	type: string
 }): Content {
 	return {
@@ -24,7 +28,9 @@ export function mockContent({
 		createdTime: '2021-01-01T00:00:00Z',
 		data,
 		displayName: `${prefix}ContentDisplayName`,
+		...(modifiedTime ? {modifiedTime} : {}),
 		owner: 'user:system:owner',
+		...(publish ? {publish} : {}),
 		type,
 		hasChildren: false,
 		valid: true,
