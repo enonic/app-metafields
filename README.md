@@ -1,6 +1,6 @@
 # SEO Meta Fields app for Enonic XP
 
-This Enonic XP application adds a multitude of helpful meta fields for your [Enonic XP](https://github.com/enonic/xp) site. Like [Open Graph](http://ogp.me/) meta fields, [Twitter Cards](https://dev.twitter.com/cards/overview) meta fields, [Google Search Console](https://www.google.com/webmasters/tools) meta tag, and more! It also let's you better customize your site's and contents' title tag and meta description information. By applying mixin-fields to each content you can easily fine tune your sites' SEO and social sharing!
+This Enonic XP application adds a multitude of helpful meta fields for your [Enonic XP](https://github.com/enonic/xp) site. Like [Open Graph](http://ogp.me/) meta fields, [X Cards](https://dev.x.com/cards/overview) meta fields, [Google Search Console](https://www.google.com/webmasters/tools) meta tag, and more! It also let's you better customize your site's and contents' title tag and meta description information. By applying mixin-fields to each content you can easily fine tune your sites' SEO and social sharing!
 
 This app will add the following functionality to your site:
 
@@ -8,7 +8,7 @@ This app will add the following functionality to your site:
 2. SEO meta description
 3. Social media sharing image (custom per content)
 4. Open Graph meta data
-5. Twitter Cards meta data
+5. X Cards meta data
 6. Google Search Console meta tag
 7. Canonical meta tag
 8. Robots.txt exclude setting
@@ -61,7 +61,7 @@ This app introduces a number of site configurations, which are used across the e
 2. Fallback
 3. Title
 4. Open Graph
-5. Twitter Cards
+5. X Cards
 6. Verification
 7. Advanced options
 
@@ -98,9 +98,9 @@ Checking this will stop the app from generating the open graph url tag
 **Remove the openGraph image tag?**
 Checking this will stop the app from generating the open graph image tag
 
-### Twitter Cards
+### X Cards
 
-For Twitter Cards to work we need a Twitter username (starting with `@`). When that is in place we can generate meta data for improved Twitter sharing called "Twitter Cards". By omitting the username no such meta data will be generated.
+For X Cards to work we need a username (starting with `@`). When that is in place we can generate meta data for improved X sharing called "X Cards". By omitting the username no such meta data will be generated.
 
 ### Verification
 
@@ -150,7 +150,7 @@ You can find this example file in the root directory of this repo.
 
 ## Waterfall logic for meta fields
 
-We will always add the meta fields for title and description, and most of the meta fields for Open Graph. However, if we cannot find any image to use, we won't add the meta fields for Open Graph image or Twitter Cards image.
+We will always add the meta fields for title and description, and most of the meta fields for Open Graph. However, if we cannot find any image to use, we won't add the meta fields for Open Graph image or X Cards image.
 
 It's important to understand the waterfall logic we use when evaluating which data to use for our meta fields (with the first match overwriting all the following ones):
 
