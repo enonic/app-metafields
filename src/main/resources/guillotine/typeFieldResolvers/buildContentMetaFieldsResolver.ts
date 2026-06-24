@@ -25,7 +25,7 @@ import {getLang} from '/lib/app-metafields/getLang';
 import {getMetaDescription} from '/lib/app-metafields/getMetaDescription';
 import {getFullTitle} from '/lib/app-metafields/title/getFullTitle';
 import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
-import {getSiteConfigOrNullFromContentKey} from '/lib/app-metafields/xp/getSiteConfigOrNullFromContentKey';
+import {getSiteConfigFromSite} from '/lib/app-metafields/xp/getSiteConfigFromSite';
 
 
 export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
@@ -92,7 +92,7 @@ export const buildContentMetaFieldsResolver = (graphQL: GraphQL): Resolver<
 			return null;
 		}
 
-		const siteConfig = getSiteConfigOrNullFromContentKey(_path);
+		const siteConfig = getSiteConfigFromSite(site);
 		DEBUG && log.debug('contentMetaFieldsResolver _path:%s siteSiteConfig:%s', _path, toStr(siteConfig));
 
 		// Return null when app-metafields is not added to the site.

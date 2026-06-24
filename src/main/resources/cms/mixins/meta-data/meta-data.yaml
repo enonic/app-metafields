@@ -23,7 +23,7 @@ form:
     name: "seoImage"
     label: "Override image"
     helpText: "Customize the image used for this content when shared on social media\
-      \ (Facebook, Twitter). Leave empty to let the app automatically find an image\
+      \ (Facebook, X). Leave empty to let the app automatically find an image\
       \ for you."
     occurrences:
       min: 0

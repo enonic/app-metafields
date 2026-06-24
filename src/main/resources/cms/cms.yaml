@@ -104,13 +104,13 @@ form:
           min: 0
           max: 1
   - type: "FieldSet"
-    label: "Twitter Cards"
+    label: "X Cards"
     items:
       - type: "TextLine"
         name: "twitterUsername"
-        label: "Twitter username (must begin with @)"
-        helpText: "Using Twitter? Just add your Twitter username here (starting with\
-          \ the @ symbol) to generate Twitter Card metadata on all pages. It uses\
+        label: "X username (must begin with @)"
+        helpText: "Using X? Just add your username here (starting with\
+          \ the @ symbol) to generate X Card metadata on all pages. It uses\
           \ the same data used in Open Graph metadata, so no further settings needed."
         occurrences:
           min: 0
@@ -118,8 +118,8 @@ form:
         regexp: "^[@]+.*$"
       - type: "CheckBox"
         name: "removeTwitterImage"
-        label: "Remove the twitter image from the card?"
-        helpText: "Removes the twitter image tag if username is provided"
+        label: "Remove the X image from the card?"
+        helpText: "Removes the X image tag if username is provided"
         occurrences:
           min: 0
           max: 1

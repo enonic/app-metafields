@@ -10,6 +10,7 @@ import {
 	get as getContentByKey,
 	getSite as getSiteByKey,
 } from '/lib/xp/content';
+import {run as runInContext} from '/lib/xp/context';
 import {
 	getContent as getCurrentContent,
 	pageUrl,
@@ -26,7 +27,7 @@ import {getImageUrl} from '/lib/app-metafields/image/getImageUrl';
 import {getLang} from '/lib/app-metafields/getLang';
 import {getMetaDescription} from '/lib/app-metafields/getMetaDescription';
 import {getPageTitle} from '/lib/app-metafields/title/getPageTitle';
-import {getSiteConfigOrNullFromContentKey} from '/lib/app-metafields/xp/getSiteConfigOrNullFromContentKey';
+import {getSiteConfigFromSite} from '/lib/app-metafields/xp/getSiteConfigFromSite';
 
 
 const CONTENT_TYPE = 'text/html';
@@ -61,6 +62,13 @@ export const get = (req: Request) => {
 		};
 	}
 
+	return runInContext({
+		repository: req.params.repository,
+		branch: 'draft',
+	}, () => buildResponse(contentId));
+};
+
+const buildResponse = (contentId: string) => {
 	const content = getContentByKey({ key: contentId });
 	DEBUG && log.debug('seo widget content:%s', toStr(content));
 
@@ -95,7 +103,7 @@ export const get = (req: Request) => {
 		};
 	}
 
-	const siteConfig = getSiteConfigOrNullFromContentKey(content._path)
+	const siteConfig = getSiteConfigFromSite(site);
 	DEBUG && log.debug('seo widget siteConfig:%s', toStr(siteConfig));
 	if (!siteConfig) {
 		return {
