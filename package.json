@@ -8,7 +8,7 @@
     "@enonic-types/lib-node": "^8",
     "@enonic-types/lib-portal": "^8",
     "@enonic/js-utils": "^2.0.0",
-    "@enonic/mock-xp": "^2.0.0",
+    "@enonic/mock-xp": "^2.0.1",
     "@swc/core": "^1.15.43",
     "glob": "^13.0.6",
     "jest": "^30.4.2",
