@@ -33,7 +33,7 @@ const server = new Server({
 
 // Avoid type errors below.
 // eslint-disable-next-line @typescript-eslint/no-namespace
-declare module globalThis {
+declare namespace globalThis {
 	let log: Log
 }
 
