@@ -15,18 +15,12 @@ export default {
 		'/lib/app-metafields/(.*)': '<rootDir>/src/main/resources/lib/app-metafields/$1',
 		'/cms/(.*)': '<rootDir>/src/main/resources/cms/$1',
 	},
-	preset: 'ts-jest/presets/js-with-babel-legacy',
 	testEnvironment: 'node',
 	testMatch: [
 		'<rootDir>/test/**/*.(spec|test).{ts,tsx}'
 	],
 	transform: {
-		'^.+\\.(js|jsx|ts|tsx)$': [
-			'ts-jest',
-			{
-				tsconfig: './test/tsconfig.json',
-			}
-		]
+		'^.+\\.(js|jsx|ts|tsx)$': '@swc/jest'
 	},
 	transformIgnorePatterns: [
 		'/node_modules/(?!(@enonic-types/guillotine)/)'

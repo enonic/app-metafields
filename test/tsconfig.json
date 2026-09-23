@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"baseUrl": "../",
 		"esModuleInterop": true,
-		"moduleResolution": "node",
 		"paths": { // This only affects the code editor, not the test-runner :(
-			"/lib/xp/*": ["node_modules/@enonic-types/lib-*"],
-			"/*": ["src/main/resources/*"], // So one can import local files using absolute path (same as Enonic does during runtime).
+			"/lib/xp/*": ["../node_modules/@enonic-types/lib-*"],
+			"/*": ["../src/main/resources/*"], // So one can import local files using absolute path (same as Enonic does during runtime).
 		},
 		"sourceMap": true, // Needed to get correct Uncovered Line numbers in coverage report
+		"resolvePackageJsonExports": false,
 		"skipLibCheck": true,
+		"strict": false,
 		"types": [
 			"@enonic-types/global",
 			"jest"
