@@ -13,7 +13,7 @@
     "@swc/jest": "^0.2.39",
     "glob": "^13.0.6",
     "jest": "^30.5.2",
-    "tsup": "^8.5.1",
+    "tsup": "^9.0.0",
     "typescript": "^7.0.2"
   },
   "private": true,
